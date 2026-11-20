@@ -1,0 +1,1105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parcours Étude de fonction</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Polices et MathJax sont dans assets/ : le site fonctionne sans connexion. */
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/caveat-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/caveat-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Kalam';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/kalam-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Kalam';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/kalam-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/source-sans-3-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/source-sans-3-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/source-sans-3-latin-700-normal.woff2) format('woff2')}
+/* Mise en page : un cahier de cours. Sommaire à gauche (les étapes dans l'ordre), une étape à la fois à droite.
+   Clair = page de cahier quadrillée (encre bleue, titres rouges, stylo vert du prof). Sombre = tableau noir et craies. */
+:root{
+  --paper:#f7f9fc; --surface:#ffffff; --ink:#1b2440; --muted:#586381; --line:#d6ddec; --grid:#e3e9f5;
+  --pen:#1c3bb0; --pen-bg:#eef2fd; --rouge:#bd1f2b; --rouge-bg:#fdf2f2; --prof:#0a7441; --prof-bg:#e9f5ee;
+  --btn-fg:#ffffff;
+  --f-body:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-hand:'Caveat','Segoe Print','Bradley Hand',cursive;
+  --f-prof:'Kalam','Comic Sans MS','Segoe Print',cursive;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141d1a; --surface:#1b2723; --ink:#eef2ea; --muted:#a6b5ab; --line:#33453d; --grid:#22302b;
+    --pen:#a9c4ff; --pen-bg:#202d45; --rouge:#ff9d92; --rouge-bg:#372422; --prof:#8fe0ae; --prof-bg:#1e3329;
+    --btn-fg:#10201a; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141d1a; --surface:#1b2723; --ink:#eef2ea; --muted:#a6b5ab; --line:#33453d; --grid:#22302b;
+  --pen:#a9c4ff; --pen-bg:#202d45; --rouge:#ff9d92; --rouge-bg:#372422; --prof:#8fe0ae; --prof-bg:#1e3329;
+  --btn-fg:#10201a; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;margin:0}
+a{color:var(--pen)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:310px minmax(0,1fr);min-height:100%}
+
+/* ---------- sommaire ---------- */
+.side{background:var(--surface);border-right:1px solid var(--line);position:sticky;top:0;align-self:start;height:100vh;height:100dvh;overflow-y:auto;
+  padding-block:20px 28px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:18px}
+.brand{font-family:var(--f-hand);font-weight:700;font-size:1.9rem;line-height:1.05;color:var(--rouge);margin:0 0 2px}
+.brand-sub{margin:0 0 14px;color:var(--muted);font-size:.92rem}
+.prog{margin:0 0 18px}
+.prog-bar{height:8px;border-radius:4px;background:var(--grid);overflow:hidden}
+.prog-fill{height:100%;width:0;background:var(--prof);transition:width .3s}
+.prog-txt{margin:6px 0 0;font-size:.88rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.nav-part{margin:16px 0 6px;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.nav-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.nav-list a{display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;align-items:start;padding:7px 8px;border-radius:4px;text-decoration:none;color:var(--ink);font-size:.95rem;line-height:1.3}
+.nav-list a:hover{background:var(--pen-bg)}
+.nav-list a[aria-current="page"]{background:var(--pen-bg);color:var(--pen);font-weight:700}
+.nav-n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);font-size:.78rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.nav-list a.done .nav-n{background:var(--prof);border-color:var(--prof);color:var(--btn-fg)}
+
+/* ---------- barre mobile ---------- */
+.topbar{display:none}
+.scrim{display:none}
+
+/* ---------- étape ---------- */
+.main{min-width:0;padding-block:0 60px}
+.lesson{max-width:860px;margin:0 auto;padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px))}
+.lhead{padding:30px 0 16px;margin:0 0 6px;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;
+  border-bottom:2px solid var(--rouge)}
+.eyebrow{margin:0 0 4px;font-size:.84rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;display:flex;gap:12px;flex-wrap:wrap;align-items:baseline}
+.eyebrow .meta{letter-spacing:0;text-transform:none;font-weight:600;color:var(--prof)}
+.lhead h2{font-family:var(--f-hand);font-weight:700;font-size:clamp(2.1rem,5.2vw,3rem);line-height:1.05;margin:0;color:var(--rouge);text-wrap:balance}
+.lbody{display:flex;flex-direction:column;gap:14px;padding-top:16px}
+.lbody > p,.lbody > ul,.lbody > ol{margin:0;max-width:70ch}
+.lbody ul,.lbody ol{padding-left:1.3em}
+.lbody li{margin:4px 0}
+.lbody h3{font-size:1.22rem;margin:14px 0 0;line-height:1.25;text-wrap:balance}
+.lead{font-size:1.15rem}
+.objectif{font-size:1.08rem;color:var(--muted);font-weight:600}
+.objectif::before{content:"Objectif : ";color:var(--pen);font-weight:700}
+
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%;padding:4px 0;margin:.5em 0 !important}
+mjx-container{color:inherit}
+
+.lab{margin:0 0 6px;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;font-family:var(--f-body)}
+.retenir{border:2px solid var(--rouge);border-radius:4px;background:var(--rouge-bg);padding:12px 16px}
+.retenir .lab{color:var(--rouge)}
+.retenir p,.retenir ul,.retenir ol{margin:6px 0}
+.retenir ul,.retenir ol{padding-left:1.3em}
+.prof{background:var(--prof-bg);border-radius:4px;padding:12px 16px;color:var(--prof);font-family:var(--f-prof);font-size:1rem;line-height:1.55}
+.prof .lab{color:var(--prof)}
+.prof p,.prof ul{margin:4px 0}
+.prof ul{padding-left:1.2em}
+.copie{border:1px solid var(--line);border-radius:3px;padding:14px 16px 12px;color:var(--pen);font-family:var(--f-hand);font-size:1.42rem;line-height:1.5;min-width:0;
+  background-color:var(--surface);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+.copie .lab{color:var(--muted)}
+.copie p{margin:4px 0}
+.copie mjx-container{font-size:.82em}
+.copie u{text-decoration-thickness:1.5px;text-underline-offset:3px}
+
+.video{margin:6px 0;display:flex;flex-direction:column;gap:6px}
+.video video{width:100%;max-width:100%;aspect-ratio:16/9;background:#101614;border-radius:4px;border:1px solid var(--line);display:block}
+.video figcaption{font-size:.95rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.tag{font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:var(--btn-fg);background:var(--pen);padding:2px 7px;border-radius:3px}
+.dur{font-variant-numeric:tabular-nums}
+
+.table-wrap{overflow-x:auto;max-width:100%}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.98rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--pen-bg);font-weight:700}
+
+.exos-h{border-top:1px solid var(--line);padding-top:18px;margin-top:18px !important}
+.exo{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.exo-n{margin:0;font-weight:700;color:var(--pen);font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+.exo-q p{margin:4px 0}
+.exo details{display:flex;flex-direction:column;gap:10px}
+.exo summary{cursor:pointer;font-weight:700;color:var(--pen);padding:6px 0;width:max-content;max-width:100%}
+.exo details[open] summary{margin-bottom:8px}
+.exo details > * + *{margin-top:10px}
+
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.howto > div{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:12px 14px}
+.howto p{margin:0}
+.howto .num{font-family:var(--f-hand);font-weight:700;font-size:2rem;line-height:1;color:var(--rouge);margin-bottom:4px}
+
+.chrono{border:2px solid var(--pen);border-radius:4px;background:var(--pen-bg);padding:14px 16px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.chrono-lab{margin:0;font-weight:700}
+.chrono-t{margin:0;font-size:3rem;line-height:1;font-weight:700;font-variant-numeric:tabular-nums;color:var(--pen)}
+.chrono-b{display:flex;gap:10px;flex-wrap:wrap}
+.chrono-end{margin:0;font-weight:700;color:var(--rouge)}
+
+.btn{border:1.5px solid var(--pen);background:var(--pen);color:var(--btn-fg);font-weight:700;padding:10px 16px;border-radius:4px;cursor:pointer;text-decoration:none;display:inline-block;line-height:1.2}
+.btn.ghost{background:transparent;color:var(--pen)}
+.btn[disabled]{opacity:.45;cursor:default}
+.pager{max-width:860px;margin:30px auto 0;padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px));display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.pager .right{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.done-note{color:var(--prof);font-weight:700;margin:0}
+
+@media (max-width: 880px){
+  .app{display:block}
+  .topbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+    padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));gap:12px;align-items:center;justify-content:space-between}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+  .topbar .brand{font-size:1.45rem;margin:0}
+  .topbar .mini{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;margin:0}
+  .side{position:fixed;inset:0 auto 0 0;width:min(88vw,330px);z-index:40;transform:translateX(-102%);transition:transform .22s;height:auto;
+    padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+  .side.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.35)}
+  .scrim{display:block;position:fixed;inset:0;z-index:30;background:rgba(10,16,30,.45)}
+  .lesson,.pager{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .lhead{padding-top:20px}
+  body{font-size:16.5px}
+  .copie{font-size:1.3rem;padding:12px 12px 10px}
+  .pager .btn{flex:1 1 auto;text-align:center}
+}
+@media (prefers-reduced-motion: reduce){.side,.prog-fill{transition:none}}
+</style>
+<style>
+/* ---------- ajouts : logo, graphiques interactifs, plan ---------- */
+.brand-row{display:grid;grid-template-columns:54px minmax(0,1fr);gap:12px;align-items:center;margin:0 0 14px}
+.brand-row img{width:54px;height:54px;border-radius:8px;display:block}
+.brand-row .brand{font-size:1.6rem;margin:0}
+.brand-row .brand-sub{margin:2px 0 0}
+.topbar img{width:32px;height:32px;border-radius:6px;display:block}
+.topbar .tb-mid{display:flex;gap:8px;align-items:center;min-width:0}
+
+.graphfig{margin:6px 0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.graphfig figcaption{font-size:.95rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.graph{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.g-cv{width:100%;height:300px;display:block;border-radius:3px}
+.g-ctl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center}
+.g-ctl label{font-weight:700;color:var(--pen);font-size:.92rem}
+.g-ctl input[type=range]{width:100%;accent-color:var(--pen);min-width:0;height:28px}
+.g-read{margin:0;font-variant-numeric:tabular-nums;font-weight:600;color:var(--ink);white-space:pre-line;font-size:.98rem;min-height:1.6em;overflow-wrap:anywhere}
+.g-opts{display:flex;gap:8px;flex-wrap:wrap}
+.g-opt{border:1.5px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:600}
+.g-opt[aria-pressed="true"]{border-color:var(--pen);background:var(--pen-bg);color:var(--pen)}
+
+.plan{display:flex;flex-direction:column;gap:8px;list-style:none;margin:0;padding:0 !important;max-width:none !important}
+.plan li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:baseline;border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:10px 14px;margin:0}
+.plan p{margin:0}
+.plan .what{color:var(--muted);font-size:.95rem}
+.badge{font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;padding:2px 8px;border-radius:3px;white-space:nowrap}
+.badge.ok{background:var(--prof-bg);color:var(--prof)}
+.badge.soon{background:var(--grid);color:var(--muted)}
+.methode{counter-reset:m;list-style:none;padding:0 !important;display:flex;flex-direction:column;gap:8px}
+.methode li{counter-increment:m;position:relative;padding-left:34px;margin:0}
+.methode li::before{content:counter(m);position:absolute;left:0;top:-2px;font-family:var(--f-hand);font-weight:700;font-size:1.7rem;line-height:1.1;color:var(--rouge)}
+.lbody p{overflow-x:auto;overflow-y:hidden}
+td.c,th.c{text-align:center}
+@media (max-width: 880px){ .g-cv{height:250px} .brand-row .brand{font-size:1.45rem} }
+
+</style>
+
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <button type="button" class="btn ghost" id="menu-btn" aria-controls="side" aria-expanded="false">Sommaire</button>
+    <div class="tb-mid"><img src="assets/img/logo-mathnexus.png" alt=""><p class="brand">Étude de fonction</p></div>
+    <p class="mini" id="mini-prog"></p>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <nav class="side" id="side" aria-label="Sommaire du parcours">
+    <div class="brand-row">
+      <img src="assets/img/logo-mathnexus.png" alt="Logo Mathnexus">
+      <div><p class="brand">Parcours Étude de fonction</p><p class="brand-sub">Terminale S2 · Mathnexus Education</p></div>
+    </div>
+    <p class="brand-sub"><a href="index.html">← Accueil Terminale S2</a><br><a href="nombres-complexes.html">Parcours Nombres complexes →</a></p>
+    <div class="prog">
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+      <p class="prog-txt" id="prog-txt"></p>
+    </div>
+    <div id="nav"></div>
+  </nav>
+
+  <main class="main" id="main">
+<section class="lesson" id="accueil" data-part="" data-title="Comment utiliser ce parcours" hidden><header class="lhead"><p class="eyebrow">Bienvenue</p><h2>Comment utiliser ce parcours</h2></header><div class="lbody">
+<p class="lead">Ce parcours reprend <strong>toute l'étude d'une fonction</strong>, du domaine de définition jusqu'à la courbe de la réciproque, dans l'ordre où les questions tombent dans un devoir. Si tu le travailles en entier, tu sauras traiter n'importe quel problème d'étude de fonction.</p>
+
+<div class="howto">
+  <div><p class="num">1</p><p><strong>Lis l'explication.</strong> Les encadrés rouges sont à connaître par cœur.</p></div>
+  <div><p class="num">2</p><p><strong>Manipule le graphique</strong> quand il y en a un : déplace le curseur et regarde ce que deviennent les nombres.</p></div>
+  <div><p class="num">3</p><p><strong>Fais les exercices sur une feuille</strong>, puis ouvre la correction et compare ligne à ligne.</p></div>
+  <div><p class="num">4</p><p><strong>Valide l'étape</strong> avec le bouton du bas. Ta progression est gardée sur cet appareil.</p></div>
+</div>
+
+<h3>Le plan</h3>
+<ul class="plan">
+  <li><div><p><strong>Partie 1 · Domaine et limites</strong></p><p class="what">Domaine de définition, limites aux bornes, formes indéterminées, asymptotes, branches infinies.</p></div><span class="badge ok">Disponible</span></li>
+  <li><div><p><strong>Partie 2 · Continuité</strong></p><p class="what">Continuité en un point, prolongement, valeurs intermédiaires, bijection, équation \(f(x)=0\).</p></div><span class="badge soon">Bientôt</span></li>
+  <li><div><p><strong>Partie 3 · Dérivabilité et variations</strong></p><p class="what">Nombre dérivé, demi-tangentes et interprétations, calcul de dérivées, tableau de variation, fonction auxiliaire.</p></div><span class="badge soon">Bientôt</span></li>
+  <li><div><p><strong>Partie 4 · La courbe</strong></p><p class="what">Symétries, positions relatives, point d'inflexion, tracé.</p></div><span class="badge soon">Bientôt</span></li>
+  <li><div><p><strong>Partie 5 · La réciproque</strong></p><p class="what">Restriction, bijection, dérivée de \(h^{-1}\) en un point et sur un intervalle, courbe de \(h^{-1}\).</p></div><span class="badge soon">Bientôt</span></li>
+  <li><div><p><strong>Pour finir</strong></p><p class="what">Ce que le correcteur attend, deux évaluations de 15 minutes, trois problèmes complets (partie A, partie B, partie C).</p></div><span class="badge soon">Bientôt</span></li>
+</ul>
+
+<h3>Les fonctions étudiées</h3>
+<p>Fonctions polynômes, rationnelles, irrationnelles (avec des racines carrées), fonctions définies par morceaux et quelques fonctions trigonométriques. Les fonctions logarithme et exponentielle feront l'objet d'un autre parcours.</p>
+
+<div class="prof"><p class="lab">Le mot du prof</p><p>Ne passe pas à l'étape suivante tant que les exercices ne sont pas réussis <em>sans regarder la correction</em>. Dans une étude de fonction, chaque question sert à la suivante : une erreur sur le domaine ou sur une limite se paie jusqu'à la courbe.</p></div>
+</div></section>
+<section class="lesson" id="carte" data-part="Partie 1 · Domaine et limites" data-title="La carte d&#x27;un problème" hidden><header class="lhead"><p class="eyebrow">Partie 1 · Domaine et limites · Étape 1<span class="meta">6 min</span></p><h2>La carte d'un problème</h2></header><div class="lbody">
+<p class="objectif">Savoir comment un problème d'étude de fonction est construit, pour reconnaître chaque question dès la lecture du sujet.</p>
+
+<h3>Un problème a presque toujours trois parties</h3>
+<p>Les questions arrivent toujours dans le même ordre. Quand tu connais cet ordre, tu sais à l'avance ce qu'on va te demander et quel outil sortir.</p>
+
+<div class="table-wrap"><table>
+<thead><tr><th>Partie</th><th>Ce qu'on te demande</th><th>Ce qu'il faut savoir faire</th></tr></thead>
+<tbody>
+<tr><td><strong>A. La fonction auxiliaire \(g\)</strong></td><td>Étudier une fonction simple \(g\) (souvent un polynôme), montrer que \(g(x)=0\) a une unique solution \(\alpha\), donner le signe de \(g(x)\).</td><td>Limites, dérivée, tableau de variation, théorème de la bijection, encadrement de \(\alpha\).</td></tr>
+<tr><td><strong>B. La fonction \(f\)</strong></td><td>
+1. Domaine de définition \(D_f\).<br>
+2. Limites aux bornes de \(D_f\).<br>
+3. Asymptotes et branches infinies.<br>
+4. Continuité et dérivabilité en un point, avec l'interprétation graphique.<br>
+5. Calcul de \(f'(x)\), souvent en fonction de \(g(x)\).<br>
+6. Signe de \(f'(x)\) et tableau de variation.<br>
+7. Tangentes, points particuliers, tracé de la courbe.</td><td>Tout le parcours, dans cet ordre.</td></tr>
+<tr><td><strong>C. La réciproque</strong></td><td>Une restriction \(h\) de \(f\) à un intervalle : montrer que \(h\) est une bijection, étudier \(h^{-1}\), calculer \((h^{-1})'\) en un point, tracer la courbe de \(h^{-1}\).</td><td>Théorème de la bijection, dérivée de la réciproque, symétrie par rapport à la droite \(y=x\).</td></tr>
+</tbody>
+</table></div>
+
+<h3>Pourquoi la partie A existe</h3>
+<p>La dérivée de \(f\) est souvent compliquée : son signe dépend d'une expression qu'on ne sait pas étudier directement. Le sujet te fait donc étudier cette expression <strong>avant</strong>, sous le nom de \(g\). Plus loin, tu trouveras par exemple \(f'(x)=\dfrac{x\,g(x)}{(x^2+1)^2}\), et le signe de \(g\) trouvé en partie A te donnera le signe de \(f'\).</p>
+
+<div class="retenir"><p class="lab">À retenir</p><ul>
+<li>Chaque question utilise les précédentes. L'expression « <strong>en déduire</strong> » veut dire : utilise le résultat que tu viens de trouver.</li>
+<li>Après chaque limite et chaque calcul de dérivabilité, on attend une <strong>phrase d'interprétation</strong> : asymptote, branche parabolique, tangente, demi-tangente.</li>
+<li>Si tu n'arrives pas à démontrer un résultat donné par l'énoncé, <strong>admets-le</strong> et continue : tu peux l'utiliser dans les questions suivantes.</li>
+</ul></div>
+
+<h3>Les limites aux bornes, puis leur interprétation</h3>
+<p>Dans la partie 1 du parcours, tu apprends les trois premières questions de la partie B : le domaine, les limites aux bornes, puis ce que chaque limite veut dire pour la courbe.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Ce que tu trouves</th><th>Ce que tu écris</th></tr></thead>
+<tbody>
+<tr><td>\(\dlim_{x\to a}f(x)=\pm\infty\)</td><td>La droite d'équation \(x=a\) est asymptote verticale à \(\Cf\).</td></tr>
+<tr><td>\(\dlim_{x\to\pm\infty}f(x)=b\)</td><td>La droite d'équation \(y=b\) est asymptote horizontale à \(\Cf\).</td></tr>
+<tr><td>\(\dlim_{x\to\pm\infty}\big[f(x)-(ax+b)\big]=0\)</td><td>La droite d'équation \(y=ax+b\) est asymptote oblique à \(\Cf\).</td></tr>
+<tr><td>\(\dlim_{x\to\pm\infty}f(x)=\pm\infty\), sans asymptote</td><td>\(\Cf\) admet une branche parabolique : on étudie \(\dfrac{f(x)}{x}\).</td></tr>
+</tbody>
+</table></div>
+
+<h3 class="exos-h">Vérifie que tu as compris</h3>
+<article class="exo"><p class="exo-n">Exercice 1</p><div class="exo-q"><p>Un sujet commence par : « Soit \(g(x)=x^3+3x+2\). Étudier les variations de \(g\). Montrer que l'équation \(g(x)=0\) admet une unique solution \(\alpha\). En déduire le signe de \(g(x)\). » Plus loin on lit : « Montrer que \(f'(x)=\dfrac{x\,g(x)}{(x^2+1)^2}\). »</p><p>À quoi sert la première partie ?</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>\(g\) est la fonction auxiliaire. Le signe de \(f'(x)\) dépend du signe de \(x\) et du signe de \(g(x)\), car \((x^2+1)^2>0\).</p><p>La partie A donne le signe de \(g(x)\) : on s'en sert pour dresser le tableau de variation de \(f\).</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 2</p><div class="exo-q"><p>Range ces questions dans l'ordre où elles apparaissent dans un problème :</p><p><strong>a.</strong> Dresser le tableau de variation de \(f\). <strong>b.</strong> Déterminer \(D_f\). <strong>c.</strong> Calculer \((h^{-1})'(2)\). <strong>d.</strong> Étudier les branches infinies de \(\Cf\). <strong>e.</strong> Calculer les limites aux bornes de \(D_f\). <strong>f.</strong> Étudier la dérivabilité de \(f\) en \(0\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>b, e, d, f, a, c.</p><p>Le domaine, puis les limites, puis leur interprétation. Ensuite la dérivabilité, les variations, et enfin la réciproque.</p></div></details></article>
+</div></section>
+<section class="lesson" id="domaine" data-part="Partie 1 · Domaine et limites" data-title="Le domaine de définition" hidden><header class="lhead"><p class="eyebrow">Partie 1 · Domaine et limites · Étape 2<span class="meta">12 min</span></p><h2>Le domaine de définition</h2></header><div class="lbody">
+<p class="objectif">Savoir déterminer \(D_f\) pour chaque type de fonction, et comprendre à quoi il sert pour la suite.</p>
+
+<h3>Ce que c'est</h3>
+<p>Le domaine de définition \(D_f\) est l'ensemble des réels \(x\) pour lesquels on peut calculer \(f(x)\). C'est toujours la <strong>première question</strong>, parce que tout le reste en dépend : les limites se calculent aux bornes de \(D_f\).</p>
+
+<div class="retenir"><p class="lab">À connaître par cœur</p>
+<div class="table-wrap"><table>
+<thead><tr><th>La fonction</th><th>\(f(x)\) existe si et seulement si…</th></tr></thead>
+<tbody>
+<tr><td>Polynôme</td><td>toujours : \(D_f=\R\)</td></tr>
+<tr><td>Rationnelle \(\dfrac{P(x)}{Q(x)}\)</td><td>\(Q(x)\neq0\)</td></tr>
+<tr><td>\(\sqrt{u(x)}\)</td><td>\(u(x)\geq0\)</td></tr>
+<tr><td>\(\dfrac{1}{\sqrt{u(x)}}\)</td><td>\(u(x)&gt;0\)</td></tr>
+<tr><td>\(\sin x\), \(\cos x\)</td><td>toujours</td></tr>
+<tr><td>\(\tan x\)</td><td>\(\cos x\neq0\), c'est-à-dire \(x\neq\dfrac{\pi}{2}+k\pi\) (\(k\) entier)</td></tr>
+<tr><td>Fonction définie par morceaux</td><td>chaque formule existe <strong>sur son intervalle</strong></td></tr>
+</tbody>
+</table></div>
+</div>
+<p>Quand plusieurs conditions apparaissent, il faut qu'elles soient vraies <strong>en même temps</strong>.</p>
+
+<h3>Exemple rédigé</h3>
+<p>Avec \(f(x)=\dfrac{\sqrt{x^2-4}}{x-3}\).</p>
+<div class="copie"><p class="lab">Sur la copie</p><p>\(f(x)\) existe si et seulement si \(x^2-4\geq0\) et \(x-3\neq0\).</p>
+<p>\(x^2-4=(x-2)(x+2)\) est positif à l'extérieur des racines : \(x^2-4\geq0\iff x\leq-2\) ou \(x\geq2\).</p>
+<p>\(x-3\neq0\iff x\neq3\).</p>
+<p><u>Donc \(D_f=\,]-\infty\,;-2]\cup[2\,;3[\,\cup\,]3\,;+\infty[\).</u></p></div>
+<figure class="graphfig"><div class="graph" data-fig="domaine" data-alt="Courbe de f avec les zones où f existe et où elle n'existe pas"></div><figcaption><span class="tag">À toi</span> Déplace \(x\). En bleu, les zones où \(f(x)\) existe ; en rouge, celle où la racine n'existe pas. La droite en pointillés est la valeur interdite \(x=3\).</figcaption></figure>
+
+<h3>Ce que le domaine annonce</h3>
+<p>Lis les bornes de \(D_f=\,]-\infty\,;-2]\cup[2\,;3[\,\cup\,]3\,;+\infty[\) : elles te donnent le travail de la question suivante.</p>
+<ul>
+<li><strong>Borne ouverte</strong> (\(-\infty\), \(3\), \(+\infty\)) : on calcule une <strong>limite</strong>. En \(3\), il en faut deux : à gauche et à droite.</li>
+<li><strong>Borne fermée</strong> (\(-2\) et \(2\)) : la fonction y est définie, on calcule simplement l'<strong>image</strong> : \(f(-2)=0\) et \(f(2)=0\).</li>
+</ul>
+<div class="prof"><p class="lab">Pièges</p><ul>
+<li>\(\sqrt{\dfrac{u}{v}}\) et \(\dfrac{\sqrt u}{\sqrt v}\) n'ont pas le même domaine : dans le premier cas, \(u\) et \(v\) peuvent être négatifs tous les deux.</li>
+<li>Pour un trinôme sous une racine, on fait un tableau de signes. On ne « résout » pas \(x^2\geq4\) en écrivant \(x\geq2\).</li>
+<li>On écrit le domaine avec des intervalles, pas seulement « \(x\neq3\) ».</li>
+</ul></div>
+
+<h3 class="exos-h">Vérifie que tu as compris</h3>
+<article class="exo"><p class="exo-n">Exercice 1</p><div class="exo-q"><p>Détermine le domaine de définition de chaque fonction.</p><p>\(f(x)=\dfrac{2x+1}{x^2-x-2}\) &nbsp;&nbsp; \(g(x)=\sqrt{3-x}\) &nbsp;&nbsp; \(h(x)=\dfrac{x}{\sqrt{x^2-1}}\)</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>\(f(x)\) existe ssi \(x^2-x-2\neq0\). Or \(\Delta=9\), les racines sont \(-1\) et \(2\).</p><p>Donc \(D_f=\,]-\infty\,;-1[\,\cup\,]-1\,;2[\,\cup\,]2\,;+\infty[\).</p>
+<p>\(g(x)\) existe ssi \(3-x\geq0\iff x\leq3\). Donc \(D_g=\,]-\infty\,;3]\).</p>
+<p>\(h(x)\) existe ssi \(x^2-1&gt;0\iff x&lt;-1\) ou \(x&gt;1\). Donc \(D_h=\,]-\infty\,;-1[\,\cup\,]1\,;+\infty[\).</p></div>
+<div class="prof"><p class="lab">Remarque</p><p>Pour \(h\), l'inégalité est stricte : la racine est au dénominateur, elle ne doit pas être nulle.</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 2</p><div class="exo-q"><p>Compare les domaines de \(f(x)=\sqrt{\dfrac{x+1}{x-2}}\) et de \(k(x)=\dfrac{\sqrt{x+1}}{\sqrt{x-2}}\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>\(f(x)\) existe ssi \(x\neq2\) et \(\dfrac{x+1}{x-2}\geq0\). Tableau de signes : le quotient est positif pour \(x\leq-1\) ou \(x&gt;2\).</p><p>Donc \(D_f=\,]-\infty\,;-1]\,\cup\,]2\,;+\infty[\).</p>
+<p>\(k(x)\) existe ssi \(x+1\geq0\) et \(x-2&gt;0\), c'est-à-dire \(x&gt;2\). Donc \(D_k=\,]2\,;+\infty[\).</p></div>
+<div class="prof"><p class="lab">Remarque</p><p>Par exemple \(f(-3)=\sqrt{\frac25}\) existe, mais \(k(-3)\) n'existe pas.</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 3</p><div class="exo-q"><p>Détermine le domaine de définition de la fonction \(g\) définie par morceaux :</p>\[g(x)=\begin{cases}\dfrac{1}{x+2}&amp;\text{si }x&lt;0\\[6pt]\sqrt{x-1}&amp;\text{si }x\geq0\end{cases}\]</div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>Pour \(x&lt;0\) : \(\dfrac{1}{x+2}\) existe ssi \(x\neq-2\).</p>
+<p>Pour \(x\geq0\) : \(\sqrt{x-1}\) existe ssi \(x\geq1\). Sur \([0\,;1[\), \(g\) n'est donc pas définie.</p>
+<p>Donc \(D_g=\,]-\infty\,;-2[\,\cup\,]-2\,;0[\,\cup\,[1\,;+\infty[\).</p></div>
+<div class="prof"><p class="lab">Remarque</p><p>On teste chaque formule seulement sur l'intervalle où elle s'applique.</p></div></details></article>
+</div></section>
+<section class="lesson" id="regles" data-part="Partie 1 · Domaine et limites" data-title="Limites : les règles de base" hidden><header class="lhead"><p class="eyebrow">Partie 1 · Domaine et limites · Étape 3<span class="meta">14 min</span></p><h2>Limites : les règles de base</h2></header><div class="lbody">
+<p class="objectif">Connaître les limites de référence et savoir conclure tout de suite quand il n'y a pas d'indétermination.</p>
+
+<h3>Les limites de référence</h3>
+<div class="retenir"><p class="lab">À connaître par cœur</p><ul>
+<li>\(\dlim_{x\to+\infty}x^n=+\infty\). En \(-\infty\) : \(+\infty\) si \(n\) est pair, \(-\infty\) si \(n\) est impair.</li>
+<li>\(\dlim_{x\to\pm\infty}\dfrac{1}{x^n}=0\) &nbsp;et&nbsp; \(\dlim_{x\to+\infty}\sqrt{x}=+\infty\).</li>
+<li>\(\dlim_{x\to0^+}\dfrac1x=+\infty\) &nbsp;et&nbsp; \(\dlim_{x\to0^-}\dfrac1x=-\infty\).</li>
+</ul></div>
+
+<h3>Polynômes et fonctions rationnelles, à l'infini</h3>
+<div class="retenir"><p class="lab">À connaître par cœur</p><ul>
+<li>À l'infini, un <strong>polynôme</strong> a la même limite que son terme de plus haut degré.</li>
+<li>À l'infini, une <strong>fonction rationnelle</strong> a la même limite que le quotient des termes de plus haut degré.</li>
+</ul></div>
+\[\lim_{x\to-\infty}(-3x^3+2x+1)=\lim_{x\to-\infty}(-3x^3)=+\infty\qquad\lim_{x\to+\infty}\frac{2x^2-x}{x^2+1}=\lim_{x\to+\infty}\frac{2x^2}{x^2}=2\]
+<div class="prof"><p class="lab">Piège</p><p>Cette règle ne marche qu'<strong>en \(+\infty\) et en \(-\infty\)</strong>. En un réel, on remplace d'abord \(x\) par sa valeur.</p></div>
+
+<h3>La forme « un nombre non nul sur zéro »</h3>
+<p>Quand le numérateur tend vers un réel \(a\neq0\) et le dénominateur vers \(0\), la limite est <strong>infinie</strong>. Pour savoir si c'est \(+\infty\) ou \(-\infty\), il faut le <strong>signe du dénominateur</strong>, et on sépare la gauche et la droite.</p>
+<p>Avec \(f(x)=\dfrac{2x-1}{x-3}\) en \(3\) :</p>
+<div class="copie"><p class="lab">Sur la copie</p><p>\(\dlim_{x\to3}(2x-1)=5\) et \(\dlim_{x\to3}(x-3)=0\).</p>
+<p>Si \(x&lt;3\), alors \(x-3&lt;0\) : \(\dlim_{x\to3^-}f(x)=\dfrac{5}{0^-}=-\infty\).</p>
+<p>Si \(x&gt;3\), alors \(x-3&gt;0\) : \(\dlim_{x\to3^+}f(x)=\dfrac{5}{0^+}=+\infty\).</p></div>
+<figure class="graphfig"><div class="graph" data-fig="limite-infinie" data-alt="Courbe de (2x-1)/(x-3) près de la valeur interdite 3"></div><figcaption><span class="tag">À toi</span> Rapproche \(x\) de \(3\), d'un côté puis de l'autre. À gauche \(f(x)\) plonge vers \(-\infty\), à droite elle monte vers \(+\infty\).</figcaption></figure>
+
+<h3>Les quatre formes indéterminées</h3>
+<div class="retenir"><p class="lab">À connaître par cœur</p><p>On ne peut pas conclure directement devant :</p>
+\[+\infty-\infty\qquad 0\times\infty\qquad\frac{\infty}{\infty}\qquad\frac00\]
+<p>Il faut alors <strong>transformer l'écriture</strong> : factoriser, simplifier, utiliser la quantité conjuguée. Ce sont les étapes suivantes.</p></div>
+<p>Tout le reste se calcule avec les règles habituelles : par exemple \(+\infty+\infty=+\infty\), \(\dfrac{a}{\infty}=0\), et pour une racine, si \(u(x)\to\ell\geq0\) alors \(\sqrt{u(x)}\to\sqrt{\ell}\), et si \(u(x)\to+\infty\) alors \(\sqrt{u(x)}\to+\infty\).</p>
+
+<h3 class="exos-h">Vérifie que tu as compris</h3>
+<article class="exo"><p class="exo-n">Exercice 1</p><div class="exo-q"><p>Calcule :</p><p><strong>a.</strong> les limites de \(-2x^3+5x^2-1\) en \(+\infty\) et en \(-\infty\) ; &nbsp; <strong>b.</strong> \(\dlim_{x\to+\infty}\dfrac{3x^2-1}{x^2+x+1}\) ; &nbsp; <strong>c.</strong> \(\dlim_{x\to-\infty}\dfrac{x^3+1}{x^2-4}\) ; &nbsp; <strong>d.</strong> \(\dlim_{x\to+\infty}\dfrac{2x+1}{x^2+3}\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>a. \(\dlim_{x\to+\infty}(-2x^3)=-\infty\) et \(\dlim_{x\to-\infty}(-2x^3)=+\infty\).</p>
+<p>b. \(\dlim_{x\to+\infty}\dfrac{3x^2}{x^2}=3\).</p>
+<p>c. \(\dlim_{x\to-\infty}\dfrac{x^3}{x^2}=\dlim_{x\to-\infty}x=-\infty\).</p>
+<p>d. \(\dlim_{x\to+\infty}\dfrac{2x}{x^2}=\dlim_{x\to+\infty}\dfrac2x=0\).</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 2</p><div class="exo-q"><p>Étudie la limite de \(f(x)=\dfrac{x-5}{(x+1)^2}\) en \(-1\), puis celle de \(g(x)=\dfrac{x+2}{x^2-1}\) en \(1\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>\(f\) : le numérateur tend vers \(-6\). Le dénominateur \((x+1)^2\) tend vers \(0\) en restant positif, des deux côtés. Donc \(\dlim_{x\to-1}f(x)=\dfrac{-6}{0^+}=-\infty\).</p>
+<p>\(g\) : le numérateur tend vers \(3\). \(x^2-1=(x-1)(x+1)\) est négatif entre \(-1\) et \(1\), positif après \(1\).</p>
+<p>\(\dlim_{x\to1^-}g(x)=\dfrac{3}{0^-}=-\infty\) et \(\dlim_{x\to1^+}g(x)=\dfrac{3}{0^+}=+\infty\).</p></div>
+<div class="prof"><p class="lab">Remarque</p><p>Un carré au dénominateur donne la même limite des deux côtés.</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 3</p><div class="exo-q"><p>Soit \(f(x)=\sqrt{\dfrac{4x+1}{x-1}}\). Calcule la limite de \(f\) en \(+\infty\), puis en \(1\) à droite.</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>En \(+\infty\) : \(\dlim_{x\to+\infty}\dfrac{4x+1}{x-1}=\dlim_{x\to+\infty}\dfrac{4x}{x}=4\), donc \(\dlim_{x\to+\infty}f(x)=\sqrt4=2\).</p>
+<p>En \(1^+\) : \(4x+1\to5\) et \(x-1\to0^+\), donc \(\dfrac{4x+1}{x-1}\to+\infty\) et \(\dlim_{x\to1^+}f(x)=+\infty\).</p></div></details></article>
+</div></section>
+<section class="lesson" id="factoriser" data-part="Partie 1 · Domaine et limites" data-title="Lever une indétermination en factorisant" hidden><header class="lhead"><p class="eyebrow">Partie 1 · Domaine et limites · Étape 4<span class="meta">12 min</span></p><h2>Lever une indétermination en factorisant</h2></header><div class="lbody">
+<p class="objectif">Savoir lever une forme \(\dfrac00\) pour une fonction rationnelle : on factorise, puis on simplifie.</p>
+
+<h3>L'idée</h3>
+<p>Si le numérateur et le dénominateur s'annulent tous les deux en \(a\), alors ils se factorisent tous les deux par \((x-a)\). On simplifie ce facteur, et l'indétermination disparaît.</p>
+<div class="retenir"><p class="lab">Trois façons de factoriser</p><ul>
+<li>Une identité remarquable : \(x^2-a^2=(x-a)(x+a)\), \(x^3-a^3=(x-a)(x^2+ax+a^2)\).</li>
+<li>Les racines d'un trinôme : \(ax^2+bx+c=a(x-x_1)(x-x_2)\).</li>
+<li>Pour le degré 3, la méthode de Horner (ou la division par \(x-a\)).</li>
+</ul></div>
+
+<h3>Exemple rédigé</h3>
+<p>Calculons \(\dlim_{x\to2}\dfrac{x^2-x-2}{x^2-4}\). En \(2\) : \(4-2-2=0\) et \(4-4=0\), c'est une forme \(\dfrac00\).</p>
+<div class="copie"><p class="lab">Sur la copie</p><p>\(x^2-x-2=(x-2)(x+1)\) et \(x^2-4=(x-2)(x+2)\).</p>
+<p>Pour \(x\neq2\) : \(\dfrac{x^2-x-2}{x^2-4}=\dfrac{(x-2)(x+1)}{(x-2)(x+2)}=\dfrac{x+1}{x+2}\).</p>
+<p>Donc \(\dlim_{x\to2}\dfrac{x^2-x-2}{x^2-4}=\dfrac{2+1}{2+2}=\dfrac34\).</p></div>
+<figure class="graphfig"><div class="graph" data-fig="limite-trou" data-alt="Courbe de (x²-x-2)/(x²-4) avec un trou au point d'abscisse 2"></div><figcaption><span class="tag">À toi</span> Rapproche \(x\) de \(2\). La fonction n'est pas définie en \(2\) (le petit rond vide), mais ses valeurs se rapprochent de \(\frac34\).</figcaption></figure>
+
+<h3>Avec un polynôme de degré 3 : la méthode de Horner</h3>
+<p>Pour \(\dlim_{x\to2}\dfrac{x^3-3x-2}{2x^2-x-6}\), le numérateur s'annule en \(2\). On le divise par \((x-2)\) avec le tableau de Horner. On écrit les coefficients de \(x^3+0x^2-3x-2\) :</p>
+<div class="table-wrap"><table>
+<tbody>
+<tr><th class="c"></th><td class="c">\(1\)</td><td class="c">\(0\)</td><td class="c">\(-3\)</td><td class="c">\(-2\)</td></tr>
+<tr><th class="c">\(2\)</th><td class="c"></td><td class="c">\(2\)</td><td class="c">\(4\)</td><td class="c">\(2\)</td></tr>
+<tr><th class="c"></th><td class="c">\(1\)</td><td class="c">\(2\)</td><td class="c">\(1\)</td><td class="c">\(0\)</td></tr>
+</tbody>
+</table></div>
+<p>On descend le premier coefficient, on multiplie par \(2\), on additionne, et on recommence. Le dernier nombre est \(0\) : c'est normal, \(2\) est une racine. La dernière ligne donne \(x^3-3x-2=(x-2)(x^2+2x+1)=(x-2)(x+1)^2\).</p>
+<div class="copie"><p class="lab">Sur la copie</p><p>\(x^3-3x-2=(x-2)(x+1)^2\) et \(2x^2-x-6=(x-2)(2x+3)\).</p>
+<p>Pour \(x\neq2\) : \(\dfrac{x^3-3x-2}{2x^2-x-6}=\dfrac{(x+1)^2}{2x+3}\), donc la limite vaut \(\dfrac{3^2}{7}=\dfrac97\).</p></div>
+
+<h3>Une différence de fractions</h3>
+<p>Devant une forme \(+\infty-\infty\) avec des fractions, on <strong>réduit au même dénominateur</strong> avant de conclure.</p>
+<div class="prof"><p class="lab">Ce qui rapporte les points</p><ul>
+<li>On commence par dire pourquoi on ne peut pas conclure : « forme indéterminée \(\frac00\) ».</li>
+<li>On écrit « pour \(x\neq2\) » avant de simplifier.</li>
+<li>La fonction n'a pas besoin d'être définie en \(a\) pour avoir une limite en \(a\).</li>
+</ul></div>
+
+<h3 class="exos-h">Vérifie que tu as compris</h3>
+<article class="exo"><p class="exo-n">Exercice 1</p><div class="exo-q"><p>Calcule : <strong>a.</strong> \(\dlim_{x\to3}\dfrac{x^2-9}{x^2-2x-3}\) &nbsp; <strong>b.</strong> \(\dlim_{x\to2}\dfrac{2x^2-3x-2}{x^2-4}\)</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>a. Forme \(\frac00\). \(x^2-9=(x-3)(x+3)\) et \(x^2-2x-3=(x-3)(x+1)\).</p>
+<p>Pour \(x\neq3\), le quotient vaut \(\dfrac{x+3}{x+1}\). La limite est \(\dfrac64=\dfrac32\).</p>
+<p>b. Forme \(\frac00\). \(2x^2-3x-2=(x-2)(2x+1)\) et \(x^2-4=(x-2)(x+2)\).</p>
+<p>Pour \(x\neq2\), le quotient vaut \(\dfrac{2x+1}{x+2}\). La limite est \(\dfrac54\).</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 2</p><div class="exo-q"><p>Calcule : <strong>a.</strong> \(\dlim_{x\to2}\dfrac{x^3-8}{x^2-4}\) &nbsp; <strong>b.</strong> \(\dlim_{x\to1}\dfrac{x^3+x^2-2}{x-1}\)</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>a. \(x^3-8=(x-2)(x^2+2x+4)\) et \(x^2-4=(x-2)(x+2)\).</p>
+<p>Pour \(x\neq2\), le quotient vaut \(\dfrac{x^2+2x+4}{x+2}\). La limite est \(\dfrac{12}{4}=3\).</p>
+<p>b. Horner avec les coefficients \(1\ ;\ 1\ ;\ 0\ ;\ -2\) et la racine \(1\) : on obtient \(1\ ;\ 2\ ;\ 2\ ;\ 0\).</p>
+<p>Donc \(x^3+x^2-2=(x-1)(x^2+2x+2)\). La limite est \(1+2+2=5\).</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 3</p><div class="exo-q"><p>Calcule : <strong>a.</strong> \(\dlim_{x\to+\infty}\left(x-\dfrac{x^2}{x+1}\right)\) &nbsp; <strong>b.</strong> \(\dlim_{x\to1}\left(\dfrac{1}{x-1}-\dfrac{2}{x^2-1}\right)\)</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>a. Forme \(+\infty-\infty\). \(x-\dfrac{x^2}{x+1}=\dfrac{x(x+1)-x^2}{x+1}=\dfrac{x}{x+1}\), donc la limite est \(1\).</p>
+<p>b. \(\dfrac{1}{x-1}-\dfrac{2}{x^2-1}=\dfrac{(x+1)-2}{(x-1)(x+1)}=\dfrac{x-1}{(x-1)(x+1)}=\dfrac{1}{x+1}\) pour \(x\neq1\).</p>
+<p>Donc la limite est \(\dfrac12\).</p></div></details></article>
+</div></section>
+<section class="lesson" id="conjuguee" data-part="Partie 1 · Domaine et limites" data-title="La quantité conjuguée" hidden><header class="lhead"><p class="eyebrow">Partie 1 · Domaine et limites · Étape 5<span class="meta">14 min</span></p><h2>La quantité conjuguée</h2></header><div class="lbody">
+<p class="objectif">Savoir lever une indétermination quand il y a une racine carrée, en un point et à l'infini.</p>
+
+<h3>L'idée</h3>
+<div class="retenir"><p class="lab">À connaître par cœur</p>\[\left(\sqrt{A}-B\right)\left(\sqrt{A}+B\right)=A-B^2\]
+<p>\(\sqrt A+B\) est la <strong>quantité conjuguée</strong> de \(\sqrt A-B\). On multiplie en haut et en bas par elle : la racine disparaît là où elle gênait.</p></div>
+
+<h3>En un point : forme \(\frac00\) avec une racine</h3>
+<p>Calculons \(\dlim_{x\to-1}\dfrac{\sqrt{x+5}-2}{x+1}\). En \(-1\) : \(\sqrt4-2=0\) et \(-1+1=0\).</p>
+<div class="copie"><p class="lab">Sur la copie</p><p>Pour \(x\neq-1\) :</p>
+\[\frac{\sqrt{x+5}-2}{x+1}=\frac{(x+5)-4}{(x+1)\left(\sqrt{x+5}+2\right)}=\frac{x+1}{(x+1)\left(\sqrt{x+5}+2\right)}=\frac{1}{\sqrt{x+5}+2}\]
+<p>Donc la limite vaut \(\dfrac{1}{2+2}=\dfrac14\).</p></div>
+
+<h3>À l'infini : forme \(+\infty-\infty\)</h3>
+<p>Calculons \(\dlim_{x\to+\infty}\left(\sqrt{x^2+x}-x\right)\).</p>
+<div class="copie"><p class="lab">Sur la copie</p>\[\sqrt{x^2+x}-x=\frac{(x^2+x)-x^2}{\sqrt{x^2+x}+x}=\frac{x}{\sqrt{x^2+x}+x}\]
+<p>Pour \(x&gt;0\) : \(\sqrt{x^2+x}=\sqrt{x^2\left(1+\frac1x\right)}=x\sqrt{1+\frac1x}\). Donc</p>
+\[\sqrt{x^2+x}-x=\frac{x}{x\left(\sqrt{1+\frac1x}+1\right)}=\frac{1}{\sqrt{1+\frac1x}+1}\]
+<p>Donc la limite vaut \(\dfrac{1}{1+1}=\dfrac12\).</p></div>
+<figure class="graphfig"><div class="graph" data-fig="conjuguee" data-alt="Courbe de racine de x²+x moins x qui se rapproche de 1/2"></div><figcaption><span class="tag">À toi</span> Fais grandir \(x\) jusqu'à \(1000\). La différence \(\sqrt{x^2+x}-x\) ne part pas vers l'infini : elle se rapproche de \(\frac12\).</figcaption></figure>
+
+<h3>Le piège de \(\sqrt{x^2}\)</h3>
+<div class="retenir"><p class="lab">À connaître par cœur</p><p>\(\sqrt{x^2}=|x|\). Donc \(\sqrt{x^2}=x\) si \(x&gt;0\), mais <strong>\(\sqrt{x^2}=-x\) si \(x&lt;0\)</strong>.</p></div>
+<p>En \(-\infty\), on sort donc \(-x\) de la racine. Calculons \(\dlim_{x\to-\infty}\left(\sqrt{x^2+x}+x\right)\) (forme \(+\infty-\infty\)) :</p>
+<div class="copie"><p class="lab">Sur la copie</p>\[\sqrt{x^2+x}+x=\frac{(x^2+x)-x^2}{\sqrt{x^2+x}-x}=\frac{x}{\sqrt{x^2+x}-x}\]
+<p>Pour \(x&lt;0\) : \(\sqrt{x^2+x}=-x\sqrt{1+\frac1x}\). Donc</p>
+\[\sqrt{x^2+x}+x=\frac{x}{-x\left(\sqrt{1+\frac1x}+1\right)}=\frac{-1}{\sqrt{1+\frac1x}+1}\]
+<p>Donc la limite vaut \(-\dfrac12\).</p></div>
+<div class="prof"><p class="lab">Quand ne pas utiliser la conjuguée</p><p>La conjuguée sert quand les deux termes dominants <strong>se compensent</strong>, comme \(\sqrt{x^2+x}\) et \(x\). Pour \(\sqrt{x^2+1}-2x\) en \(+\infty\), ils ne se compensent pas : on factorise simplement par \(x\).</p>
+<p>\(\sqrt{x^2+1}-2x=x\left(\sqrt{1+\frac1{x^2}}-2\right)\), qui tend vers \(+\infty\times(-1)=-\infty\).</p></div>
+
+<h3 class="exos-h">Vérifie que tu as compris</h3>
+<article class="exo"><p class="exo-n">Exercice 1</p><div class="exo-q"><p>Calcule : <strong>a.</strong> \(\dlim_{x\to2}\dfrac{\sqrt{x+7}-3}{x-2}\) &nbsp; <strong>b.</strong> \(\dlim_{x\to4}\dfrac{\sqrt{2x+1}-3}{x-4}\) &nbsp; <strong>c.</strong> \(\dlim_{x\to1}\dfrac{x-1}{\sqrt{x+3}-2}\)</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>a. \(\dfrac{\sqrt{x+7}-3}{x-2}=\dfrac{x+7-9}{(x-2)(\sqrt{x+7}+3)}=\dfrac{1}{\sqrt{x+7}+3}\), de limite \(\dfrac16\).</p>
+<p>b. \(\dfrac{\sqrt{2x+1}-3}{x-4}=\dfrac{2x+1-9}{(x-4)(\sqrt{2x+1}+3)}=\dfrac{2(x-4)}{(x-4)(\sqrt{2x+1}+3)}=\dfrac{2}{\sqrt{2x+1}+3}\), de limite \(\dfrac26=\dfrac13\).</p>
+<p>c. \(\dfrac{x-1}{\sqrt{x+3}-2}=\dfrac{(x-1)(\sqrt{x+3}+2)}{x+3-4}=\sqrt{x+3}+2\), de limite \(4\).</p></div>
+<div class="prof"><p class="lab">Remarque</p><p>Dans le c., la racine est en bas : on multiplie quand même par la conjuguée du terme qui contient la racine.</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 2</p><div class="exo-q"><p>Calcule en \(+\infty\) : <strong>a.</strong> \(\sqrt{x^2+2x}-x\) &nbsp; <strong>b.</strong> \(\sqrt{x^2+1}-2x\)</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>a. \(\sqrt{x^2+2x}-x=\dfrac{2x}{\sqrt{x^2+2x}+x}=\dfrac{2x}{x\left(\sqrt{1+\frac2x}+1\right)}=\dfrac{2}{\sqrt{1+\frac2x}+1}\), de limite \(\dfrac22=1\).</p>
+<p>b. Les termes dominants ne se compensent pas. \(\sqrt{x^2+1}-2x=x\left(\sqrt{1+\frac{1}{x^2}}-2\right)\).</p>
+<p>La parenthèse tend vers \(1-2=-1\), donc la limite est \(-\infty\).</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 3</p><div class="exo-q"><p>Calcule \(\dlim_{x\to-\infty}\left(\sqrt{x^2+3x}+x\right)\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>Forme \(+\infty-\infty\). \(\sqrt{x^2+3x}+x=\dfrac{(x^2+3x)-x^2}{\sqrt{x^2+3x}-x}=\dfrac{3x}{\sqrt{x^2+3x}-x}\).</p>
+<p>Pour \(x&lt;0\) : \(\sqrt{x^2+3x}=-x\sqrt{1+\frac3x}\), donc le quotient vaut \(\dfrac{3x}{-x\left(\sqrt{1+\frac3x}+1\right)}=\dfrac{-3}{\sqrt{1+\frac3x}+1}\).</p>
+<p>Donc la limite est \(-\dfrac32\).</p></div>
+<div class="prof"><p class="lab">Remarque</p><p>Si tu trouves \(+\frac32\), tu as oublié que \(\sqrt{x^2}=-x\) quand \(x\) est négatif.</p></div></details></article>
+</div></section>
+<section class="lesson" id="trigo" data-part="Partie 1 · Domaine et limites" data-title="Limites trigonométriques et comparaison" hidden><header class="lhead"><p class="eyebrow">Partie 1 · Domaine et limites · Étape 6<span class="meta">14 min</span></p><h2>Limites trigonométriques et comparaison</h2></header><div class="lbody">
+<p class="objectif">Connaître les limites usuelles avec sinus et cosinus, savoir changer de variable, et savoir conclure par encadrement.</p>
+
+<h3>Les limites usuelles en 0</h3>
+<div class="retenir"><p class="lab">À connaître par cœur</p>\[\lim_{x\to0}\frac{\sin x}{x}=1\qquad\lim_{x\to0}\frac{\tan x}{x}=1\qquad\lim_{x\to0}\frac{1-\cos x}{x^2}=\frac12\]</div>
+<figure class="graphfig"><div class="graph" data-fig="sinus" data-alt="Courbe de sin(x)/x qui se rapproche de 1 quand x tend vers 0"></div><figcaption><span class="tag">À toi</span> Rapproche \(x\) de \(0\). Le quotient \(\dfrac{\sin x}{x}\) n'existe pas en \(0\), mais il se rapproche de \(1\).</figcaption></figure>
+
+<h3>Faire apparaître la bonne forme</h3>
+<p>Dans \(\dfrac{\sin(ax)}{ax}\), il faut <strong>la même chose</strong> dans le sinus et au dénominateur. On multiplie et on divise par ce qui manque :</p>
+\[\frac{\sin3x}{x}=3\times\frac{\sin3x}{3x}\xrightarrow[x\to0]{}3\times1=3\]
+<p>(en posant \(X=3x\) : quand \(x\to0\), \(X\to0\) et \(\dfrac{\sin X}{X}\to1\)).</p>
+
+<h3>Ailleurs qu'en 0 : le changement de variable</h3>
+<p>Pour une limite en \(x_0\neq0\), on pose \(X=x-x_0\). Alors \(X\to0\), et on utilise les formules des angles associés.</p>
+<div class="copie"><p class="lab">Sur la copie</p><p>Calcul de \(\dlim_{x\to\frac\pi2}\dfrac{\cos x}{x-\frac\pi2}\) (forme \(\frac00\)). On pose \(X=x-\frac\pi2\), donc \(x=X+\frac\pi2\).</p>
+<p>Quand \(x\to\frac\pi2\), \(X\to0\). Et \(\cos\left(X+\frac\pi2\right)=-\sin X\).</p>
+<p>Donc \(\dfrac{\cos x}{x-\frac\pi2}=\dfrac{-\sin X}{X}\), de limite \(-1\).</p></div>
+
+<h3>Conclure par comparaison</h3>
+<p>\(\sin x\) et \(\cos x\) n'ont <strong>pas de limite</strong> à l'infini : ils oscillent entre \(-1\) et \(1\). Mais ils sont <strong>bornés</strong>, et cela suffit souvent pour conclure.</p>
+<div class="retenir"><p class="lab">À connaître par cœur</p><ul>
+<li><strong>Théorème des gendarmes.</strong> Si \(u(x)\leq f(x)\leq v(x)\) et si \(u\) et \(v\) ont la même limite \(\ell\), alors \(f\) a pour limite \(\ell\).</li>
+<li>Si \(f(x)\geq u(x)\) et \(u(x)\to+\infty\), alors \(f(x)\to+\infty\).</li>
+<li>Si \(f(x)\leq v(x)\) et \(v(x)\to-\infty\), alors \(f(x)\to-\infty\).</li>
+<li>Si \(|f(x)-\ell|\leq u(x)\) et \(u(x)\to0\), alors \(f(x)\to\ell\).</li>
+</ul></div>
+<div class="copie"><p class="lab">Sur la copie</p><p>Calcul de \(\dlim_{x\to+\infty}\dfrac{\sin x}{x}\). Pour \(x&gt;0\) : \(-1\leq\sin x\leq1\), donc \(-\dfrac1x\leq\dfrac{\sin x}{x}\leq\dfrac1x\).</p>
+<p>Or \(\dlim_{x\to+\infty}\left(-\dfrac1x\right)=\dlim_{x\to+\infty}\dfrac1x=0\). D'après le théorème des gendarmes, \(\dlim_{x\to+\infty}\dfrac{\sin x}{x}=0\).</p></div>
+<div class="prof"><p class="lab">Piège</p><p>Ne confonds pas : \(\dfrac{\sin x}{x}\) tend vers \(1\) <strong>en \(0\)</strong> et vers \(0\) <strong>en \(+\infty\)</strong>. Et on n'écrit jamais « \(\lim\sin x\) » à l'infini : cette limite n'existe pas, on encadre.</p></div>
+
+<h3 class="exos-h">Vérifie que tu as compris</h3>
+<article class="exo"><p class="exo-n">Exercice 1</p><div class="exo-q"><p>Calcule en \(0\) : <strong>a.</strong> \(\dfrac{\sin5x}{2x}\) &nbsp; <strong>b.</strong> \(\dfrac{\sin3x}{\sin2x}\) &nbsp; <strong>c.</strong> \(\dfrac{1-\cos2x}{x^2}\) &nbsp; <strong>d.</strong> \(\dfrac{\tan2x}{3x}\)</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>a. \(\dfrac{\sin5x}{2x}=\dfrac52\times\dfrac{\sin5x}{5x}\), de limite \(\dfrac52\).</p>
+<p>b. \(\dfrac{\sin3x}{\sin2x}=\dfrac{\sin3x}{3x}\times\dfrac{2x}{\sin2x}\times\dfrac32\), de limite \(1\times1\times\dfrac32=\dfrac32\).</p>
+<p>c. \(\dfrac{1-\cos2x}{x^2}=4\times\dfrac{1-\cos2x}{(2x)^2}\), de limite \(4\times\dfrac12=2\).</p>
+<p>d. \(\dfrac{\tan2x}{3x}=\dfrac23\times\dfrac{\tan2x}{2x}\), de limite \(\dfrac23\).</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 2</p><div class="exo-q"><p>Calcule : <strong>a.</strong> \(\dlim_{x\to\pi}\dfrac{\sin x}{x-\pi}\) &nbsp; <strong>b.</strong> \(\dlim_{x\to\pi}\dfrac{1+\cos x}{(x-\pi)^2}\)</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>On pose \(X=x-\pi\) : quand \(x\to\pi\), \(X\to0\). On a \(\sin(X+\pi)=-\sin X\) et \(\cos(X+\pi)=-\cos X\).</p>
+<p>a. \(\dfrac{\sin x}{x-\pi}=\dfrac{-\sin X}{X}\), de limite \(-1\).</p>
+<p>b. \(\dfrac{1+\cos x}{(x-\pi)^2}=\dfrac{1-\cos X}{X^2}\), de limite \(\dfrac12\).</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 3</p><div class="exo-q"><p>Calcule : <strong>a.</strong> \(\dlim_{x\to+\infty}\left(x^2+x\sin x\right)\) &nbsp; <strong>b.</strong> \(\dlim_{x\to+\infty}\dfrac{2x+\cos x}{x+1}\) &nbsp; <strong>c.</strong> \(\dlim_{x\to0}x\cos\dfrac1x\)</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>a. Pour \(x&gt;0\) : \(\sin x\geq-1\), donc \(x^2+x\sin x\geq x^2-x=x(x-1)\). Or \(x(x-1)\to+\infty\), donc la limite est \(+\infty\).</p>
+<p>b. Pour \(x&gt;0\) : \(\dfrac{2x-1}{x+1}\leq\dfrac{2x+\cos x}{x+1}\leq\dfrac{2x+1}{x+1}\). Les deux côtés tendent vers \(2\). D'après le théorème des gendarmes, la limite est \(2\).</p>
+<p>c. Pour \(x\neq0\) : \(\left|x\cos\dfrac1x\right|\leq|x|\) et \(|x|\to0\). Donc la limite est \(0\).</p></div>
+<div class="prof"><p class="lab">Remarque</p><p>Dans les trois cas, on n'a jamais calculé la limite du sinus ou du cosinus : on a seulement utilisé qu'ils sont entre \(-1\) et \(1\).</p></div></details></article>
+</div></section>
+<section class="lesson" id="bornes" data-part="Partie 1 · Domaine et limites" data-title="Les limites aux bornes du domaine" hidden><header class="lhead"><p class="eyebrow">Partie 1 · Domaine et limites · Étape 7<span class="meta">14 min</span></p><h2>Les limites aux bornes du domaine</h2></header><div class="lbody">
+<p class="objectif">Savoir répondre en entier à la question « calculer les limites de \(f\) aux bornes de \(D_f\) », sans en oublier une.</p>
+
+<h3>La méthode</h3>
+<ol class="methode">
+<li>J'écris \(D_f\) comme une réunion d'intervalles.</li>
+<li>Je fais la liste des bornes. Une borne <strong>ouverte</strong> demande une limite (à gauche et à droite si c'est une valeur interdite). Une borne <strong>fermée</strong> demande seulement l'image.</li>
+<li>Je calcule chaque limite avec les outils des étapes précédentes.</li>
+<li>Je garde les résultats sous les yeux : ils donneront les asymptotes, puis le tableau de variation.</li>
+</ol>
+
+<h3>Exemple 1 : une fonction rationnelle</h3>
+<p>Avec \(f(x)=\dfrac{x^2+3}{x-1}\). Nous retrouverons cette fonction dans plusieurs étapes.</p>
+<div class="copie"><p class="lab">Sur la copie</p><p>\(D_f=\,]-\infty\,;1[\,\cup\,]1\,;+\infty[\). Il y a quatre limites à calculer.</p>
+<p>• En \(-\infty\) et en \(+\infty\) : \(\dlim_{x\to-\infty}f(x)=\dlim_{x\to-\infty}\dfrac{x^2}{x}=\dlim_{x\to-\infty}x=-\infty\), et de même \(\dlim_{x\to+\infty}f(x)=+\infty\).</p>
+<p>• En \(1\) : \(\dlim_{x\to1}(x^2+3)=4\) et \(\dlim_{x\to1}(x-1)=0\).</p>
+<p>Si \(x&lt;1\), \(x-1&lt;0\) : \(\dlim_{x\to1^-}f(x)=\dfrac{4}{0^-}=-\infty\). Si \(x&gt;1\), \(x-1&gt;0\) : \(\dlim_{x\to1^+}f(x)=\dfrac{4}{0^+}=+\infty\).</p></div>
+
+<h3>Exemple 2 : une fonction irrationnelle</h3>
+<p>Avec \(\varphi(x)=x+\sqrt{x^2-1}\).</p>
+<div class="copie"><p class="lab">Sur la copie</p><p>\(\varphi(x)\) existe ssi \(x^2-1\geq0\), donc \(D_\varphi=\,]-\infty\,;-1]\cup[1\,;+\infty[\).</p>
+<p>• Bornes fermées : \(\varphi(-1)=-1\) et \(\varphi(1)=1\).</p>
+<p>• En \(+\infty\) : \(x\to+\infty\) et \(\sqrt{x^2-1}\to+\infty\), donc \(\dlim_{x\to+\infty}\varphi(x)=+\infty\).</p>
+<p>• En \(-\infty\) : forme \(-\infty+\infty\). Avec la quantité conjuguée :</p>
+\[\varphi(x)=\frac{x^2-(x^2-1)}{x-\sqrt{x^2-1}}=\frac{1}{x-\sqrt{x^2-1}}\]
+<p>Le dénominateur tend vers \(-\infty\), donc \(\dlim_{x\to-\infty}\varphi(x)=0\).</p></div>
+
+<h3>Le cas d'une fonction définie par morceaux</h3>
+<p>Au point où la formule change, on calcule la limite à gauche avec la formule de gauche, et la limite à droite avec la formule de droite. Ces deux limites serviront à étudier la continuité.</p>
+
+<div class="prof"><p class="lab">Ce qui rapporte les points</p><ul>
+<li>Autant de limites que de bornes ouvertes. En une valeur interdite : toujours deux limites.</li>
+<li>Devant \(\frac{a}{0}\), on justifie le signe du dénominateur. Écrire directement \(\pm\infty\) ne suffit pas.</li>
+<li>On nomme la forme indéterminée avant de la lever.</li>
+</ul></div>
+
+<h3 class="exos-h">Vérifie que tu as compris</h3>
+<article class="exo"><p class="exo-n">Exercice 1</p><div class="exo-q"><p>Soit \(h(x)=\dfrac{2x+1}{x^2-1}\). Détermine \(D_h\), puis calcule les limites de \(h\) aux bornes de \(D_h\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>\(D_h=\,]-\infty\,;-1[\,\cup\,]-1\,;1[\,\cup\,]1\,;+\infty[\). Il y a six limites.</p>
+<p>• En \(\pm\infty\) : \(\dlim_{x\to\pm\infty}h(x)=\dlim_{x\to\pm\infty}\dfrac{2x}{x^2}=\dlim_{x\to\pm\infty}\dfrac2x=0\).</p>
+<p>• Signe de \(x^2-1\) : positif à l'extérieur de \([-1\,;1]\), négatif à l'intérieur.</p>
+<p>• En \(-1\) : \(2x+1\to-1\). \(\dlim_{x\to-1^-}h(x)=\dfrac{-1}{0^+}=-\infty\) et \(\dlim_{x\to-1^+}h(x)=\dfrac{-1}{0^-}=+\infty\).</p>
+<p>• En \(1\) : \(2x+1\to3\). \(\dlim_{x\to1^-}h(x)=\dfrac{3}{0^-}=-\infty\) et \(\dlim_{x\to1^+}h(x)=\dfrac{3}{0^+}=+\infty\).</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 2</p><div class="exo-q"><p>Soit \(k(x)=\sqrt{x^2+x}-x\). Détermine \(D_k\), puis étudie \(k\) aux bornes de \(D_k\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>\(k(x)\) existe ssi \(x^2+x\geq0\iff x(x+1)\geq0\iff x\leq-1\) ou \(x\geq0\). Donc \(D_k=\,]-\infty\,;-1]\cup[0\,;+\infty[\).</p>
+<p>• Bornes fermées : \(k(-1)=0-(-1)=1\) et \(k(0)=0\).</p>
+<p>• En \(-\infty\) : \(\sqrt{x^2+x}\to+\infty\) et \(-x\to+\infty\), donc \(\dlim_{x\to-\infty}k(x)=+\infty\). Il n'y a pas d'indétermination.</p>
+<p>• En \(+\infty\) : forme \(+\infty-\infty\). \(k(x)=\dfrac{x}{\sqrt{x^2+x}+x}=\dfrac{1}{\sqrt{1+\frac1x}+1}\), donc \(\dlim_{x\to+\infty}k(x)=\dfrac12\).</p></div>
+<div class="prof"><p class="lab">Remarque</p><p>La même écriture donne une forme indéterminée en \(+\infty\) mais pas en \(-\infty\). On regarde toujours avant de sortir la conjuguée.</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 3</p><div class="exo-q"><p>Soit \(f\) définie par \(f(x)=\dfrac{x+1}{x-1}\) si \(x\leq0\) et \(f(x)=\sqrt{x^2+1}-x\) si \(x&gt;0\).</p><p>Détermine \(D_f\), puis calcule les limites de \(f\) en \(-\infty\), en \(+\infty\), et en \(0\) à gauche et à droite.</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>Pour \(x\leq0\), \(x-1\neq0\). Pour \(x&gt;0\), \(x^2+1&gt;0\). Donc \(D_f=\R\).</p>
+<p>• En \(-\infty\) : \(\dlim_{x\to-\infty}\dfrac{x+1}{x-1}=\dlim_{x\to-\infty}\dfrac xx=1\).</p>
+<p>• En \(+\infty\) : \(\sqrt{x^2+1}-x=\dfrac{1}{\sqrt{x^2+1}+x}\), donc \(\dlim_{x\to+\infty}f(x)=0\).</p>
+<p>• En \(0\) : \(\dlim_{x\to0^-}f(x)=\dfrac{0+1}{0-1}=-1\) et \(\dlim_{x\to0^+}f(x)=\sqrt1-0=1\).</p></div>
+<div class="prof"><p class="lab">Remarque</p><p>Les limites à gauche et à droite de \(0\) sont différentes. Tu verras dans la partie 2 ce que cela veut dire : \(f\) n'est pas continue en \(0\).</p></div></details></article>
+</div></section>
+<section class="lesson" id="asymptotes" data-part="Partie 1 · Domaine et limites" data-title="Les asymptotes" hidden><header class="lhead"><p class="eyebrow">Partie 1 · Domaine et limites · Étape 8<span class="meta">14 min</span></p><h2>Les asymptotes</h2></header><div class="lbody">
+<p class="objectif">Savoir interpréter chaque limite par une asymptote, trouver une asymptote oblique et étudier la position de la courbe.</p>
+
+<h3>Une asymptote, c'est une droite dont la courbe se rapproche</h3>
+<div class="retenir"><p class="lab">À connaître par cœur</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Si je trouve…</th><th>alors j'écris…</th></tr></thead>
+<tbody>
+<tr><td>\(\dlim_{x\to a}f(x)=\pm\infty\) (même d'un seul côté)</td><td>La droite d'équation \(x=a\) est <strong>asymptote verticale</strong> à \(\Cf\).</td></tr>
+<tr><td>\(\dlim_{x\to+\infty}f(x)=b\) (ou en \(-\infty\))</td><td>La droite d'équation \(y=b\) est <strong>asymptote horizontale</strong> à \(\Cf\) en \(+\infty\).</td></tr>
+<tr><td>\(\dlim_{x\to+\infty}\big[f(x)-(ax+b)\big]=0\) (ou en \(-\infty\))</td><td>La droite d'équation \(y=ax+b\) est <strong>asymptote oblique</strong> à \(\Cf\) en \(+\infty\).</td></tr>
+</tbody>
+</table></div>
+</div>
+
+<h3>Exemple : \(f(x)=\dfrac{x^2+3}{x-1}\)</h3>
+<p>À l'étape précédente : \(\dlim_{x\to1^-}f(x)=-\infty\) et \(\dlim_{x\to1^+}f(x)=+\infty\). Donc la droite d'équation \(x=1\) est asymptote verticale à \(\Cf\).</p>
+<p>En \(\pm\infty\), \(f(x)\to\pm\infty\) : pas d'asymptote horizontale. On cherche une asymptote oblique. Pour une fonction rationnelle, on écrit \(f(x)\) sous la forme \(ax+b+\dfrac{c}{x-1}\).</p>
+<div class="copie"><p class="lab">Sur la copie</p><p>\(x^2+3=(x-1)(x+1)+4\), donc pour \(x\neq1\) : \(f(x)=x+1+\dfrac{4}{x-1}\).</p>
+<p>\(f(x)-(x+1)=\dfrac{4}{x-1}\) et \(\dlim_{x\to\pm\infty}\dfrac{4}{x-1}=0\).</p>
+<p><u>Donc la droite \((\Delta)\) d'équation \(y=x+1\) est asymptote oblique à \(\Cf\) en \(-\infty\) et en \(+\infty\).</u></p></div>
+
+<h3>La position de la courbe par rapport à l'asymptote</h3>
+<div class="retenir"><p class="lab">À connaître par cœur</p><p>On étudie le <strong>signe de \(f(x)-(ax+b)\)</strong>. S'il est positif, \(\Cf\) est <strong>au-dessus</strong> de la droite ; s'il est négatif, \(\Cf\) est <strong>au-dessous</strong>.</p></div>
+<p>Ici \(f(x)-(x+1)=\dfrac{4}{x-1}\), du signe de \(x-1\). Sur \(]1\,;+\infty[\), \(\Cf\) est au-dessus de \((\Delta)\) ; sur \(]-\infty\,;1[\), elle est au-dessous.</p>
+<figure class="graphfig"><div class="graph" data-fig="asymptote" data-alt="Courbe de (x²+3)/(x-1) avec ses asymptotes x=1 et y=x+1"></div><figcaption><span class="tag">À toi</span> Déplace \(x\) vers la droite, puis vers la gauche. Le trait rouge est l'écart entre la courbe et la droite \(y=x+1\) : il se réduit quand \(x\) s'éloigne.</figcaption></figure>
+
+<h3>Comment trouver \(a\), \(b\) et \(c\)</h3>
+<p>Deux moyens : la division euclidienne de \(x^2+3\) par \(x-1\), ou l'identification. Par identification, on réduit au même dénominateur :</p>
+\[ax+b+\frac{c}{x-1}=\frac{ax^2+(b-a)x+(c-b)}{x-1}\]
+<p>et on compare avec \(x^2+0x+3\) : \(a=1\), \(b-a=0\) donc \(b=1\), \(c-b=3\) donc \(c=4\).</p>
+
+<h3>Avec une racine carrée</h3>
+<p>Pour \(\varphi(x)=x+\sqrt{x^2-1}\), on a trouvé \(\dlim_{x\to-\infty}\varphi(x)=0\) : la droite d'équation \(y=0\) (l'axe des abscisses) est asymptote horizontale à la courbe en \(-\infty\).</p>
+<p>En \(+\infty\), on vérifie que la droite \(y=2x\) est asymptote avec la quantité conjuguée :</p>
+\[\varphi(x)-2x=\sqrt{x^2-1}-x=\frac{-1}{\sqrt{x^2-1}+x}\xrightarrow[x\to+\infty]{}0\]
+<p>Cette différence est négative : la courbe est au-dessous de la droite \(y=2x\). L'étape suivante explique comment on devine le \(2x\).</p>
+<div class="prof"><p class="lab">Ce qui rapporte les points</p><ul>
+<li>Une limite sans phrase d'interprétation ne rapporte que la moitié des points. On écrit l'<strong>équation</strong> de la droite et le mot « asymptote ».</li>
+<li>On précise <strong>où</strong> : « en \(+\infty\) », « en \(-\infty\) ». Une courbe peut avoir deux asymptotes différentes.</li>
+<li>La position se justifie par un signe, pas par un dessin.</li>
+</ul></div>
+
+<h3 class="exos-h">Vérifie que tu as compris</h3>
+<article class="exo"><p class="exo-n">Exercice 1</p><div class="exo-q"><p>Soit \(f(x)=\dfrac{3x-1}{x+2}\). Calcule les limites aux bornes de \(D_f\) et donne les asymptotes de \(\Cf\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>\(D_f=\,]-\infty\,;-2[\,\cup\,]-2\,;+\infty[\).</p>
+<p>\(\dlim_{x\to\pm\infty}f(x)=\dlim_{x\to\pm\infty}\dfrac{3x}{x}=3\). Donc la droite d'équation \(y=3\) est asymptote horizontale à \(\Cf\) en \(-\infty\) et en \(+\infty\).</p>
+<p>En \(-2\) : \(3x-1\to-7\). \(\dlim_{x\to-2^-}f(x)=\dfrac{-7}{0^-}=+\infty\) et \(\dlim_{x\to-2^+}f(x)=\dfrac{-7}{0^+}=-\infty\).</p>
+<p>Donc la droite d'équation \(x=-2\) est asymptote verticale à \(\Cf\).</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 2</p><div class="exo-q"><p>Soit \(f(x)=\dfrac{2x^2-x-6}{x-1}\). <strong>a.</strong> Vérifie que \(f(x)=2x+1-\dfrac{5}{x-1}\). <strong>b.</strong> Déduis-en que \(\Cf\) admet une asymptote oblique \((\Delta)\). <strong>c.</strong> Étudie la position de \(\Cf\) par rapport à \((\Delta)\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>a. \(2x+1-\dfrac{5}{x-1}=\dfrac{(2x+1)(x-1)-5}{x-1}=\dfrac{2x^2-x-1-5}{x-1}=\dfrac{2x^2-x-6}{x-1}=f(x)\).</p>
+<p>b. \(f(x)-(2x+1)=\dfrac{-5}{x-1}\) et \(\dlim_{x\to\pm\infty}\dfrac{-5}{x-1}=0\). Donc la droite \((\Delta)\) d'équation \(y=2x+1\) est asymptote oblique à \(\Cf\) en \(-\infty\) et en \(+\infty\).</p>
+<p>c. \(\dfrac{-5}{x-1}\) est du signe contraire de \(x-1\). Sur \(]-\infty\,;1[\), \(\Cf\) est au-dessus de \((\Delta)\) ; sur \(]1\,;+\infty[\), elle est au-dessous.</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 3</p><div class="exo-q"><p>Soit \(k(x)=\sqrt{x^2+2x}\). Montre que la droite d'équation \(y=x+1\) est asymptote à la courbe de \(k\) en \(+\infty\), et précise la position de la courbe.</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>Pour \(x&gt;0\), avec la quantité conjuguée :</p>
+\[k(x)-(x+1)=\frac{(x^2+2x)-(x+1)^2}{\sqrt{x^2+2x}+x+1}=\frac{-1}{\sqrt{x^2+2x}+x+1}\]
+<p>Le dénominateur tend vers \(+\infty\), donc \(\dlim_{x\to+\infty}\big[k(x)-(x+1)\big]=0\) : la droite d'équation \(y=x+1\) est asymptote oblique à la courbe en \(+\infty\).</p>
+<p>De plus \(k(x)-(x+1)&lt;0\) : la courbe est au-dessous de son asymptote.</p></div></details></article>
+</div></section>
+<section class="lesson" id="branches" data-part="Partie 1 · Domaine et limites" data-title="Les branches infinies" hidden><header class="lhead"><p class="eyebrow">Partie 1 · Domaine et limites · Étape 9<span class="meta">14 min</span></p><h2>Les branches infinies</h2></header><div class="lbody">
+<p class="objectif">Savoir étudier une branche infinie quand \(f(x)\) tend vers l'infini à l'infini : asymptote oblique ou branche parabolique.</p>
+
+<h3>La question</h3>
+<p>Quand \(\dlim_{x\to+\infty}f(x)=\pm\infty\), la courbe part à l'infini. Mais dans quelle <strong>direction</strong> ? On le sait en regardant \(\dfrac{f(x)}{x}\) : c'est la pente de la droite \((OM)\) qui joint l'origine au point \(M\) de la courbe.</p>
+<figure class="graphfig"><div class="graph" data-fig="branche" data-alt="Courbe, point M et droite (OM) dont la pente est f(x)/x"></div><figcaption><span class="tag">À toi</span> Choisis une fonction, puis fais grandir \(x\). Regarde vers quoi tend la pente de \((OM)\), c'est-à-dire \(\dfrac{f(x)}{x}\).</figcaption></figure>
+
+<div class="retenir"><p class="lab">À connaître par cœur</p>
+<p>On suppose \(\dlim_{x\to+\infty}f(x)=\pm\infty\) (même tableau en \(-\infty\)).</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Résultat des limites</th><th>Interprétation</th></tr></thead>
+<tbody>
+<tr><td>\(\dlim\dfrac{f(x)}{x}=0\)</td><td>Branche parabolique de direction <strong>l'axe des abscisses</strong></td></tr>
+<tr><td>\(\dlim\dfrac{f(x)}{x}=\pm\infty\)</td><td>Branche parabolique de direction <strong>l'axe des ordonnées</strong></td></tr>
+<tr><td>\(\dlim\dfrac{f(x)}{x}=a\neq0\) et \(\dlim\big[f(x)-ax\big]=\pm\infty\)</td><td>Branche parabolique de direction <strong>la droite \(y=ax\)</strong></td></tr>
+<tr><td>\(\dlim\dfrac{f(x)}{x}=a\neq0\) et \(\dlim\big[f(x)-ax\big]=b\)</td><td><strong>Asymptote oblique</strong> d'équation \(y=ax+b\)</td></tr>
+</tbody>
+</table></div>
+</div>
+
+<h3>La méthode en deux temps</h3>
+<ol class="methode">
+<li>Je calcule \(\dlim\dfrac{f(x)}{x}\). Si je trouve \(0\) ou \(\pm\infty\), c'est fini : branche parabolique de direction \((Ox)\) ou \((Oy)\).</li>
+<li>Si je trouve un réel \(a\neq0\), je calcule \(\dlim\big[f(x)-ax\big]\). Un réel \(b\) donne l'asymptote \(y=ax+b\). L'infini donne une branche parabolique de direction \(y=ax\).</li>
+</ol>
+
+<h3>Deux exemples rédigés</h3>
+<div class="copie"><p class="lab">Sur la copie</p><p>Pour \(u(x)=x-2\sqrt{x}\) en \(+\infty\) : \(u(x)=x\left(1-\dfrac{2}{\sqrt x}\right)\to+\infty\).</p>
+<p>\(\dfrac{u(x)}{x}=1-\dfrac{2}{\sqrt x}\to1\), puis \(u(x)-x=-2\sqrt x\to-\infty\).</p>
+<p><u>Donc la courbe admet en \(+\infty\) une branche parabolique de direction la droite \(y=x\).</u></p></div>
+<div class="copie"><p class="lab">Sur la copie</p><p>Pour \(\varphi(x)=x+\sqrt{x^2-1}\) en \(+\infty\) : \(\varphi(x)\to+\infty\).</p>
+<p>Pour \(x&gt;0\) : \(\dfrac{\varphi(x)}{x}=1+\sqrt{1-\dfrac{1}{x^2}}\to2\), puis \(\varphi(x)-2x=\sqrt{x^2-1}-x=\dfrac{-1}{\sqrt{x^2-1}+x}\to0\).</p>
+<p><u>Donc la droite d'équation \(y=2x\) est asymptote oblique à la courbe en \(+\infty\).</u></p></div>
+<div class="prof"><p class="lab">Bien comprendre la différence</p><p>Avec une <strong>asymptote</strong>, la courbe se rapproche de la droite. Avec une <strong>branche parabolique de direction \(y=ax\)</strong>, la courbe prend la même direction que la droite mais s'en éloigne de plus en plus.</p>
+<p>Quand l'énoncé donne déjà la droite (« montrer que \(y=ax+b\) est asymptote »), on calcule directement \(\lim[f(x)-(ax+b)]\). La méthode en deux temps sert quand on ne connaît pas la droite.</p></div>
+
+<h3 class="exos-h">Vérifie que tu as compris</h3>
+<article class="exo"><p class="exo-n">Exercice 1</p><div class="exo-q"><p>Étudie les branches infinies de la courbe de \(f(x)=x^3-3x\) (en \(-\infty\) et en \(+\infty\)), puis de \(g(x)=\sqrt{x+2}\) (en \(+\infty\)).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>\(f\) : \(\dlim_{x\to+\infty}f(x)=+\infty\) et \(\dlim_{x\to-\infty}f(x)=-\infty\). \(\dfrac{f(x)}{x}=x^2-3\to+\infty\) en \(-\infty\) et en \(+\infty\).</p>
+<p>Donc la courbe de \(f\) admet, en \(-\infty\) et en \(+\infty\), une branche parabolique de direction l'axe des ordonnées.</p>
+<p>\(g\) : \(\dlim_{x\to+\infty}g(x)=+\infty\). Pour \(x&gt;0\) : \(\dfrac{g(x)}{x}=\sqrt{\dfrac{x+2}{x^2}}=\sqrt{\dfrac1x+\dfrac{2}{x^2}}\to0\).</p>
+<p>Donc la courbe de \(g\) admet en \(+\infty\) une branche parabolique de direction l'axe des abscisses.</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 2</p><div class="exo-q"><p>Étudie la branche infinie en \(+\infty\) de la courbe de \(h(x)=2x+\sqrt{x}\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>\(\dlim_{x\to+\infty}h(x)=+\infty\).</p>
+<p>\(\dfrac{h(x)}{x}=2+\dfrac{1}{\sqrt x}\to2\), puis \(h(x)-2x=\sqrt x\to+\infty\).</p>
+<p>Donc la courbe admet en \(+\infty\) une branche parabolique de direction la droite d'équation \(y=2x\).</p></div></details></article>
+<article class="exo"><p class="exo-n">Exercice 3</p><div class="exo-q"><p>Étudie la branche infinie en \(+\infty\) de la courbe de \(k(x)=\sqrt{4x^2+x}\).</p></div>
+<details class="tex2jax_ignore"><summary>Voir la correction</summary><div class="copie"><p class="lab">Correction</p><p>\(\dlim_{x\to+\infty}k(x)=+\infty\). Pour \(x&gt;0\) : \(\dfrac{k(x)}{x}=\sqrt{4+\dfrac1x}\to2\).</p>
+<p>Puis, avec la quantité conjuguée : \(k(x)-2x=\dfrac{(4x^2+x)-4x^2}{\sqrt{4x^2+x}+2x}=\dfrac{x}{x\left(\sqrt{4+\frac1x}+2\right)}=\dfrac{1}{\sqrt{4+\frac1x}+2}\to\dfrac14\).</p>
+<p>Donc la droite d'équation \(y=2x+\dfrac14\) est asymptote oblique à la courbe en \(+\infty\).</p></div>
+<div class="prof"><p class="lab">Remarque</p><p>Tu peux retrouver ces deux derniers exercices dans le graphique du haut : choisis \(2x+\sqrt x\) puis \(\sqrt{4x^2+x}\), et compare \(f(x)-2x\).</p></div></details></article>
+</div></section>
+    <div class="pager">
+      <a class="btn ghost" id="prev" href="#accueil">← Étape précédente</a>
+      <div class="right">
+        <p class="done-note" id="done-note" hidden>Étape validée</p>
+        <a class="btn" id="next" href="#carte">J'ai compris, étape suivante →</a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']],
+         macros: { R: '\\mathbb{R}', N: '\\mathbb{N}', dlim: '\\displaystyle\\lim', Cf: '\\mathcal{C}_f' } },
+  svg: { fontCache: 'global' },
+  startup: { typeset: false }
+};
+</script>
+<script src="assets/mathjax/tex-svg.js"></script>
+<script>
+/* Graphiques interactifs : un petit traceur sur canvas, une configuration par figure. */
+(function(){
+  function fr(v, d){
+    if (!isFinite(v)) return v > 0 ? '+∞' : (v < 0 ? '−∞' : '?');
+    var s = v.toFixed(d == null ? 3 : d).replace('.', ',');
+    return s.replace('-', '−');
+  }
+  // t dans [-1,1] privé de 0 : x se rapproche de a quand |t| diminue (échelle logarithmique)
+  function approach(a, t, span){
+    var s = t < 0 ? -1 : 1, m = Math.abs(t);
+    if (m < 0.02) m = 0.02;
+    return a + s * span * Math.pow(10, -3.2 * (1 - m));
+  }
+  function sideTxt(t){ return t < 0 ? 'à gauche' : 'à droite'; }
+
+  var FIG = {
+    domaine: {
+      win: function(){ return [-7, 9, -6, 8]; },
+      slider: { min: -6.5, max: 8.5, step: 0.05, init: 4.5, label: 'x' },
+      f: function(x){ return (x*x - 4 < 0 || x === 3) ? NaN : Math.sqrt(x*x - 4) / (x - 3); },
+      draw: function(g, t){
+        g.band(-7, -2, 'ok'); g.band(2, 9, 'ok'); g.band(-2, 2, 'no');
+        g.vline(3, 'rouge', true);
+        g.plot(this.f, 'pen');
+        var y = this.f(t);
+        if (isFinite(y)) g.point(t, y, 'rouge'); else g.point(t, 0, 'rouge', true);
+      },
+      read: function(t){
+        if (Math.abs(t - 3) < 0.026) return 'x = 3 : le dénominateur x − 3 est nul, f(3) n’existe pas.';
+        if (t*t - 4 < 0) return 'x = ' + fr(t, 2) + ' : x² − 4 = ' + fr(t*t - 4, 2) + ' est négatif, la racine n’existe pas.';
+        return 'x = ' + fr(t, 2) + ' : f(x) existe et vaut ' + fr(this.f(t), 3) + '.';
+      }
+    },
+    'limite-infinie': {
+      win: function(){ return [-1, 7, -30, 30]; },
+      slider: { min: -1, max: 1, step: 0.01, init: 0.7, label: 'approche' },
+      f: function(x){ return (2*x - 1) / (x - 3); },
+      draw: function(g, t){
+        var x = approach(3, t, 3.5), y = this.f(x);
+        g.vline(3, 'rouge', true);
+        g.plot(this.f, 'pen', 3);
+        g.point(x, Math.max(-30, Math.min(30, y)), 'rouge', Math.abs(y) > 30);
+      },
+      read: function(t){
+        var x = approach(3, t, 3.5);
+        return 'x = ' + fr(x, 4) + ' (' + sideTxt(t) + ' de 3) : f(x) = ' + fr(this.f(x), 1);
+      }
+    },
+    'limite-trou': {
+      win: function(){ return [-0.5, 4.5, 0, 1.5]; },
+      slider: { min: -1, max: 1, step: 0.01, init: -0.8, label: 'approche' },
+      f: function(x){ return x === 2 ? NaN : (x*x - x - 2) / (x*x - 4); },
+      draw: function(g, t){
+        var x = approach(2, t, 2.2), y = this.f(x);
+        g.hline(0.75, 'prof', true);
+        g.plot(this.f, 'pen');
+        g.point(2, 0.75, 'pen', true);
+        g.point(x, y, 'rouge');
+        g.text('3/4', -0.42, 0.79, 'prof');
+      },
+      read: function(t){
+        var x = approach(2, t, 2.2);
+        return 'x = ' + fr(x, 4) + ' (' + sideTxt(t) + ' de 2) : f(x) = ' + fr(this.f(x), 4) + '   →   3/4 = 0,75';
+      }
+    },
+    conjuguee: {
+      win: function(t){ var X = Math.pow(10, t); return [0, Math.max(6, 1.25 * X), 0, 0.7]; },
+      slider: { min: 0, max: 3, step: 0.01, init: 0.6, label: 'x (de 1 à 1000)' },
+      f: function(x){ return x <= 0 ? NaN : Math.sqrt(x*x + x) - x; },
+      draw: function(g, t){
+        var x = Math.pow(10, t);
+        g.hline(0.5, 'prof', true);
+        g.plot(this.f, 'pen');
+        g.point(x, this.f(x), 'rouge');
+      },
+      read: function(t){
+        var x = Math.pow(10, t);
+        return 'x = ' + fr(x, 1) + ' : √(x² + x) − x = ' + fr(this.f(x), 5) + '   →   1/2';
+      }
+    },
+    sinus: {
+      win: function(){ return [-7, 7, -0.4, 1.3]; },
+      slider: { min: -1, max: 1, step: 0.01, init: 0.85, label: 'approche' },
+      f: function(x){ return x === 0 ? NaN : Math.sin(x) / x; },
+      draw: function(g, t){
+        var x = approach(0, t, 6), y = this.f(x);
+        g.hline(1, 'prof', true);
+        g.plot(this.f, 'pen');
+        g.point(0, 1, 'pen', true);
+        g.point(x, y, 'rouge');
+      },
+      read: function(t){
+        var x = approach(0, t, 6);
+        return 'x = ' + fr(x, 4) + ' : sin(x)/x = ' + fr(this.f(x), 6) + '   →   1';
+      }
+    },
+    asymptote: {
+      win: function(){ return [-9, 11, -12, 16]; },
+      slider: { min: -8.5, max: 10.5, step: 0.05, init: 4, label: 'x' },
+      f: function(x){ return (x*x + 3) / (x - 1); },
+      draw: function(g, t){
+        var x = Math.abs(t - 1) < 0.3 ? (t < 1 ? 0.7 : 1.3) : t, y = this.f(x);
+        g.vline(1, 'rouge', true);
+        g.plot(function(u){ return u + 1; }, 'prof', null, true);
+        g.plot(this.f, 'pen', 1);
+        g.seg(x, x + 1, x, Math.max(-12, Math.min(16, y)), 'rouge');
+        g.point(x, x + 1, 'prof');
+        g.point(x, Math.max(-12, Math.min(16, y)), 'rouge', y > 16 || y < -12);
+        g.text('y = x + 1', 6.2, 5.4, 'prof');
+        g.text('x = 1', 1.3, -10.6, 'rouge');
+      },
+      read: function(t){
+        var x = Math.abs(t - 1) < 0.3 ? (t < 1 ? 0.7 : 1.3) : t, e = 4 / (x - 1);
+        return 'x = ' + fr(x, 2) + ' : écart f(x) − (x + 1) = ' + fr(e, 3) + (e > 0 ? '  (courbe au-dessus)' : '  (courbe au-dessous)');
+      }
+    },
+    branche: {
+      options: [
+        { k: 'carre', lab: 'x²', f: function(x){ return x*x; }, verdict: 'f(x)/x → +∞ : direction (Oy)' },
+        { k: 'racine', lab: '√x', f: function(x){ return x < 0 ? NaN : Math.sqrt(x); }, verdict: 'f(x)/x → 0 : direction (Ox)' },
+        { k: 'mixte', lab: '2x + √x', f: function(x){ return x < 0 ? NaN : 2*x + Math.sqrt(x); }, a: 2, verdict: 'f(x)/x → 2 et f(x) − 2x → +∞ : direction y = 2x' },
+        { k: 'oblique', lab: '√(4x² + x)', f: function(x){ return x < 0 ? NaN : Math.sqrt(4*x*x + x); }, a: 2, verdict: 'f(x)/x → 2 et f(x) − 2x → 1/4 : asymptote y = 2x + 1/4' }
+      ],
+      win: function(t, o){
+        var X = Math.pow(10, t), xm = 1.2 * X, ym = 1.15 * Math.max(o.f(xm), o.f(X), 1);
+        return [0, xm, 0, ym];
+      },
+      slider: { min: 0, max: 3, step: 0.01, init: 0.7, label: 'x (de 1 à 1000)' },
+      draw: function(g, t, o){
+        var x = Math.pow(10, t), y = o.f(x);
+        if (o.a) g.plot(function(u){ return o.a * u; }, 'prof', null, true);
+        g.plot(o.f, 'pen');
+        g.seg(0, 0, x, y, 'rouge');
+        g.point(x, y, 'rouge');
+        g.text('M', x, y, 'rouge', -10, -10);
+      },
+      read: function(t, o){
+        var x = Math.pow(10, t), y = o.f(x);
+        var s = 'x = ' + fr(x, 1) + ' : pente de (OM) = f(x)/x = ' + fr(y / x, 4);
+        if (o.a) s += '   ;   f(x) − ' + o.a + 'x = ' + fr(y - o.a * x, 4);
+        return s + '\n' + o.verdict;
+      }
+    }
+  };
+
+  function niceStep(span){
+    var raw = span / 6, p = Math.pow(10, Math.floor(Math.log10(raw))), r = raw / p;
+    return (r < 1.5 ? 1 : r < 3.5 ? 2 : r < 7.5 ? 5 : 10) * p;
+  }
+  function tickLabel(v, step){
+    var d = step >= 1 ? 0 : Math.min(4, Math.ceil(-Math.log10(step)));
+    return v.toFixed(d).replace('.', ',').replace('-', '−');
+  }
+
+  function Graph(el){
+    var self = this, cfg = FIG[el.dataset.fig];
+    if (!cfg) return;
+    this.el = el; this.cfg = cfg;
+    this.opt = cfg.options ? cfg.options[0] : null;
+    var html = '';
+    if (cfg.options){
+      html += '<div class="g-opts" role="group" aria-label="Choix de la fonction">';
+      cfg.options.forEach(function(o, i){ html += '<button type="button" class="g-opt" data-i="' + i + '" aria-pressed="' + (i === 0) + '">' + o.lab + '</button>'; });
+      html += '</div>';
+    }
+    var id = 'g-' + el.dataset.fig;
+    html += '<canvas class="g-cv" role="img" aria-label="' + (el.dataset.alt || 'Graphique') + '"></canvas>'
+      + '<div class="g-ctl"><label for="' + id + '">' + cfg.slider.label + '</label>'
+      + '<input type="range" id="' + id + '" min="' + cfg.slider.min + '" max="' + cfg.slider.max + '" step="' + cfg.slider.step + '" value="' + cfg.slider.init + '"></div>'
+      + '<p class="g-read" aria-live="polite"></p>';
+    el.innerHTML = html;
+    this.cv = el.querySelector('canvas'); this.inp = el.querySelector('input'); this.out = el.querySelector('.g-read');
+    this.inp.addEventListener('input', function(){ self.render(); });
+    el.querySelectorAll('.g-opt').forEach(function(b){
+      b.addEventListener('click', function(){
+        self.opt = cfg.options[+b.dataset.i];
+        el.querySelectorAll('.g-opt').forEach(function(c){ c.setAttribute('aria-pressed', String(c === b)); });
+        self.render();
+      });
+    });
+  }
+  Graph.prototype.render = function(){
+    var cv = this.cv, W = cv.clientWidth, H = cv.clientHeight;
+    if (!W || !H) return;
+    var dpr = window.devicePixelRatio || 1;
+    if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)){ cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+    var c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+    var cs = getComputedStyle(document.documentElement), col = {};
+    ['ink','muted','line','grid','pen','rouge','prof','surface','pen-bg','rouge-bg'].forEach(function(k){ col[k] = cs.getPropertyValue('--' + k).trim() || '#888'; });
+    var t = parseFloat(this.inp.value), cfg = this.cfg, o = this.opt;
+    var w = cfg.win(t, o), x0 = w[0], x1 = w[1], y0 = w[2], y1 = w[3];
+    var pl = 38, pr = 10, pt = 10, pb = 22;
+    function X(x){ return pl + (x - x0) / (x1 - x0) * (W - pl - pr); }
+    function Y(y){ return H - pb - (y - y0) / (y1 - y0) * (H - pt - pb); }
+    c.font = '12px ' + (cs.getPropertyValue('--f-body') || 'sans-serif'); c.lineJoin = 'round'; c.lineCap = 'round';
+
+    var g = {
+      band: function(a, b, kind){
+        a = Math.max(a, x0); b = Math.min(b, x1); if (b <= a) return;
+        c.fillStyle = kind === 'ok' ? col['pen-bg'] : col['rouge-bg'];
+        c.fillRect(X(a), pt, X(b) - X(a), H - pt - pb);
+      },
+      vline: function(x, k, dash){ c.save(); c.strokeStyle = col[k]; c.lineWidth = 1.5; if (dash) c.setLineDash([6, 5]); c.beginPath(); c.moveTo(X(x), pt); c.lineTo(X(x), H - pb); c.stroke(); c.restore(); },
+      hline: function(y, k, dash){ c.save(); c.strokeStyle = col[k]; c.lineWidth = 1.5; if (dash) c.setLineDash([6, 5]); c.beginPath(); c.moveTo(pl, Y(y)); c.lineTo(W - pr, Y(y)); c.stroke(); c.restore(); },
+      seg: function(xa, ya, xb, yb, k){ c.save(); c.strokeStyle = col[k]; c.lineWidth = 2; c.beginPath(); c.moveTo(X(xa), Y(ya)); c.lineTo(X(xb), Y(yb)); c.stroke(); c.restore(); },
+      plot: function(f, k, pole, dash){
+        c.save(); c.beginPath(); c.rect(pl, pt, W - pl - pr, H - pt - pb); c.clip();
+        c.strokeStyle = col[k]; c.lineWidth = dash ? 1.6 : 2.4; if (dash) c.setLineDash([7, 5]);
+        var n = Math.max(200, Math.round(W * 1.5)), pen = false, py = 0, px = 0; c.beginPath();
+        for (var i = 0; i <= n; i++){
+          var x = x0 + (x1 - x0) * i / n, y = f(x);
+          var jump = pen && (Math.abs(Y(y) - py) > H * 1.2 || (pole != null && (px - pole) * (x - pole) <= 0));
+          if (!isFinite(y) || jump){ pen = false; if (!isFinite(y)) { px = x; continue; } }
+          var yy = Math.max(-4 * H, Math.min(5 * H, Y(y)));
+          if (pen) c.lineTo(X(x), yy); else { c.moveTo(X(x), yy); pen = true; }
+          py = yy; px = x;
+        }
+        c.stroke(); c.restore();
+      },
+      point: function(x, y, k, open){
+        c.save(); c.beginPath(); c.arc(X(x), Y(y), 5, 0, 6.2832);
+        c.fillStyle = open ? col.surface : col[k]; c.fill(); c.lineWidth = 2; c.strokeStyle = col[k]; c.stroke(); c.restore();
+      },
+      text: function(s, x, y, k, dx, dy){ c.save(); c.fillStyle = col[k]; c.font = '600 13px ' + (cs.getPropertyValue('--f-body') || 'sans-serif'); c.textAlign = dx ? 'right' : 'left'; c.fillText(s, X(x) + (dx || 0), Y(y) + (dy || 0)); c.restore(); }
+    };
+
+    // fond, quadrillage, axes
+    c.fillStyle = col.surface; c.fillRect(0, 0, W, H);
+    var sx = niceStep(x1 - x0), sy = niceStep(y1 - y0), v;
+    c.strokeStyle = col.grid; c.lineWidth = 1; c.fillStyle = col.muted;
+    c.textAlign = 'center'; c.textBaseline = 'top';
+    for (v = Math.ceil(x0 / sx) * sx; v <= x1 + 1e-9; v += sx){
+      c.beginPath(); c.moveTo(X(v), pt); c.lineTo(X(v), H - pb); c.stroke();
+      c.fillText(tickLabel(Math.abs(v) < 1e-9 ? 0 : v, sx), X(v), H - pb + 5);
+    }
+    c.textAlign = 'right'; c.textBaseline = 'middle';
+    for (v = Math.ceil(y0 / sy) * sy; v <= y1 + 1e-9; v += sy){
+      c.beginPath(); c.moveTo(pl, Y(v)); c.lineTo(W - pr, Y(v)); c.stroke();
+      c.fillText(tickLabel(Math.abs(v) < 1e-9 ? 0 : v, sy), pl - 5, Y(v));
+    }
+    c.textBaseline = 'alphabetic';
+    c.strokeStyle = col.muted; c.lineWidth = 1.4;
+    if (y0 <= 0 && y1 >= 0){ c.beginPath(); c.moveTo(pl, Y(0)); c.lineTo(W - pr, Y(0)); c.stroke(); }
+    if (x0 <= 0 && x1 >= 0){ c.beginPath(); c.moveTo(X(0), pt); c.lineTo(X(0), H - pb); c.stroke(); }
+
+    cfg.draw(g, t, o);
+    this.out.textContent = cfg.read(t, o);
+  };
+
+  var all = [];
+  document.querySelectorAll('.graph').forEach(function(el){ var g = new Graph(el); if (g.cfg) all.push(g); });
+  function redraw(){ all.forEach(function(g){ g.render(); }); }
+  window.redrawGraphs = redraw;
+  window.addEventListener('resize', redraw);
+  try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redraw); } catch(e){}
+  try { new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] }); } catch(e){}
+})();
+
+</script>
+<script>
+(function(){
+  var lessons = Array.prototype.slice.call(document.querySelectorAll('.lesson'));
+  var ids = lessons.map(function(s){ return s.id; });
+  var KEY = 'parcours-etude-fonction-etapes';
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ done = {}; }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(done)); } catch(e){} }
+
+  // ----- sommaire -----
+  var nav = document.getElementById('nav'), html = '', part = null, n = 0;
+  lessons.forEach(function(s){
+    var p = s.dataset.part || '';
+    if (p !== part){ if (part !== null) html += '</ol>'; html += (p ? '<p class="nav-part">' + p + '</p>' : '') + '<ol class="nav-list">'; part = p; }
+    var num = s.id === 'accueil' ? 'i' : String(++n);
+    html += '<li><a href="#' + s.id + '" data-id="' + s.id + '"><span class="nav-n">' + num + '</span><span>' + s.dataset.title + '</span></a></li>';
+  });
+  nav.innerHTML = html + '</ol>';
+  var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
+  var total = ids.length - 1;
+
+  function refreshProgress(){
+    var c = 0;
+    links.forEach(function(a){
+      var d = !!done[a.dataset.id];
+      a.classList.toggle('done', d);
+      if (d && a.dataset.id !== 'accueil') { c++; a.querySelector('.nav-n').textContent = '✓'; }
+    });
+    document.getElementById('prog-fill').style.width = (100 * c / total) + '%';
+    document.getElementById('prog-txt').textContent = c + ' étape' + (c > 1 ? 's' : '') + ' validée' + (c > 1 ? 's' : '') + ' sur ' + total;
+    document.getElementById('mini-prog').textContent = c + ' / ' + total;
+  }
+
+  // ----- formules : rendues à l'ouverture de l'étape -----
+  var typeset = {};
+  function renderMath(el){
+    if (typeset[el.id] || !window.MathJax || !MathJax.typesetPromise) return;
+    typeset[el.id] = true;
+    MathJax.typesetPromise([el]).catch(function(){ typeset[el.id] = false; });
+  }
+
+  var side = document.getElementById('side'), scrim = document.getElementById('scrim'), menuBtn = document.getElementById('menu-btn');
+  function closeMenu(){ side.classList.remove('open'); scrim.hidden = true; menuBtn.setAttribute('aria-expanded','false'); }
+  menuBtn.addEventListener('click', function(){
+    var o = !side.classList.contains('open');
+    side.classList.toggle('open', o); scrim.hidden = !o; menuBtn.setAttribute('aria-expanded', String(o));
+  });
+  scrim.addEventListener('click', closeMenu);
+
+  var prev = document.getElementById('prev'), next = document.getElementById('next'), doneNote = document.getElementById('done-note');
+  var current = 0;
+  function show(id, scroll){
+    var i = ids.indexOf(id); if (i < 0) i = 0;
+    current = i;
+    document.querySelectorAll('video').forEach(function(v){ try { v.pause(); } catch(e){} });
+    lessons.forEach(function(s, k){ s.hidden = k !== i; });
+    links.forEach(function(a){ if (a.dataset.id === ids[i]) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    renderMath(lessons[i]);
+    if (window.redrawGraphs) window.redrawGraphs();
+    prev.hidden = i === 0;
+    if (i > 0) prev.setAttribute('href', '#' + ids[i-1]);
+    var last = i === ids.length - 1;
+    next.setAttribute('href', last ? '#accueil' : '#' + ids[i+1]);
+    next.textContent = i === 0 ? 'Commencer le parcours →' : (last ? 'Valider et revenir au début' : "J'ai compris, étape suivante →");
+    doneNote.hidden = !done[ids[i]] || i === 0;
+    closeMenu();
+    if (scroll) window.scrollTo(0, 0);
+  }
+  next.addEventListener('click', function(){ if (current > 0){ done[ids[current]] = true; save(); refreshProgress(); } });
+  window.addEventListener('hashchange', function(){ show(location.hash.slice(1), true); });
+
+  // ----- chronomètres -----
+  document.querySelectorAll('.chrono').forEach(function(c){
+    var totalS = (+c.dataset.min || 15) * 60, left = totalS, timer = null;
+    var t = c.querySelector('.chrono-t'), b = c.querySelector('.c-start'), r = c.querySelector('.c-reset'), end = c.querySelector('.chrono-end');
+    function draw(){ var m = Math.floor(left / 60), s = left % 60; t.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s; }
+    function stop(){ clearInterval(timer); timer = null; b.textContent = left === totalS ? 'Démarrer' : 'Reprendre'; }
+    b.addEventListener('click', function(){
+      if (timer){ stop(); return; }
+      if (left === 0) return;
+      end.hidden = true; b.textContent = 'Pause';
+      timer = setInterval(function(){ left--; draw(); if (left <= 0){ left = 0; stop(); b.textContent = 'Terminé'; end.hidden = false; } }, 1000);
+    });
+    r.addEventListener('click', function(){ clearInterval(timer); timer = null; left = totalS; draw(); b.textContent = 'Démarrer'; end.hidden = true; });
+  });
+
+  // corrections : formules rendues à l'ouverture
+  document.querySelectorAll('.exo details').forEach(function(d){
+    d.addEventListener('toggle', function(){
+      if (!d.open || !d.classList.contains('tex2jax_ignore')) return;
+      d.classList.remove('tex2jax_ignore');
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([d]).catch(function(){});
+    });
+  });
+
+  refreshProgress();
+  show(location.hash.slice(1) || 'accueil', false);
+  // si MathJax arrive après le premier affichage
+  var tries = 0, wait = setInterval(function(){
+    if (window.MathJax && MathJax.typesetPromise){ clearInterval(wait); renderMath(lessons[current]); }
+    else if (++tries > 100) clearInterval(wait);
+  }, 150);
+})();
+</script>
+
+</body>
+</html>
