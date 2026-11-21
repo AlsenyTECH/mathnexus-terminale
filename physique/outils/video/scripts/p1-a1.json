@@ -1,0 +1,42 @@
+{
+ "id": "p1-a1",
+ "titre": "Des équations horaires à la trajectoire",
+ "phrases": [
+  [
+   "Des équations horaires à la trajectoire.",
+   "Des équations horaires à la trajectoire"
+  ],
+  [
+   "Un mobile se déplace dans un plan muni d'un repère O, i, j. À chaque date t, sa position est donnée par le vecteur O M, de coordonnées x de t et y de t.",
+   "\\vect{OM}=x(t)\\,\\vec i+y(t)\\,\\vec j"
+  ],
+  [
+   "Ces deux fonctions s'appellent les équations horaires. Prenons x égale deux t, et y égale t au carré moins un.",
+   "x=2t\\qquad y=t^2-1"
+  ],
+  [
+   "Premier réflexe : placer une position. À la date t égale un seconde, x vaut deux et y vaut zéro. Le mobile est au point de coordonnées deux, zéro.",
+   "t=1\\ \\mathrm{s}:\\ M(2\\,;\\,0)"
+  ],
+  [
+   "Maintenant, la trajectoire. On veut une relation entre x et y, sans le temps. Dans la première équation, t égale x sur deux.",
+   "t=\\dfrac{x}{2}"
+  ],
+  [
+   "On remplace t dans la deuxième équation : y égale x sur deux, au carré, moins un, soit x carré sur quatre, moins un.",
+   "y=\\dfrac{x^2}{4}-1"
+  ],
+  [
+   "C'est l'équation d'une parabole. Attention : comme t est positif, x l'est aussi. Le mobile ne décrit que la branche de droite.",
+   "\\text{parabole, }x\\geq 0"
+  ],
+  [
+   "À retenir : on isole t dans l'équation la plus simple, puis on remplace. Pour un cercle, on calcule plutôt x carré plus y carré.",
+   "\\text{isoler }t\\ \\to\\ \\text{remplacer}"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape, sur une feuille.",
+   "À toi de jouer"
+  ]
+ ]
+}

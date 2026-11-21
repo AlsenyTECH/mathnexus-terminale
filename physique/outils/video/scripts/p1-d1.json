@@ -1,0 +1,42 @@
+{
+ "id": "p1-d1",
+ "titre": "Trouver la phase à l'origine",
+ "phrases": [
+  [
+   "Le mouvement rectiligne sinusoïdal : trouver la phase à l'origine.",
+   "Mouvement rectiligne sinusoïdal"
+  ],
+  [
+   "L'équation horaire s'écrit x égale X m cosinus de oméga t plus phi. X m est l'amplitude, oméga la pulsation, phi la phase à l'origine.",
+   "x=X_m\\cos(\\omega t+\\varphi)"
+  ],
+  [
+   "La pulsation se calcule avec la période : oméga égale deux pi sur T. Et l'équation différentielle est x seconde plus oméga carré x égale zéro.",
+   "\\omega=\\dfrac{2\\pi}{T}\\qquad \\ddot x+\\omega^2x=0"
+  ],
+  [
+   "Exemple : amplitude quatre centimètres, période zéro virgule cinq seconde. À t égale zéro, le mobile est à deux centimètres et va dans le sens négatif.",
+   "X_m=4\\ \\mathrm{cm},\\ T=0{,}5\\ \\mathrm s"
+  ],
+  [
+   "D'abord oméga : deux pi sur zéro virgule cinq, soit quatre pi radians par seconde.",
+   "\\omega=4\\pi\\ \\mathrm{rad\\cdot s^{-1}}"
+  ],
+  [
+   "Ensuite la position : deux égale quatre cosinus phi, donc cosinus phi égale un demi. Phi vaut pi sur trois, ou moins pi sur trois.",
+   "\\cos\\varphi=\\tfrac12\\ \\Rightarrow\\ \\varphi=\\pm\\tfrac{\\pi}{3}"
+  ],
+  [
+   "Enfin le sens : v zéro égale moins X m oméga sinus phi. Le mobile va dans le sens négatif, donc v zéro est négatif, et sinus phi est positif. On garde pi sur trois.",
+   "v_0<0\\Rightarrow\\sin\\varphi>0\\Rightarrow\\varphi=\\tfrac{\\pi}{3}"
+  ],
+  [
+   "Résultat : x égale quatre cosinus de quatre pi t plus pi sur trois, en centimètres. Sans le sens du mouvement, on ne peut pas conclure.",
+   "x=4\\cos\\!\\left(4\\pi t+\\tfrac{\\pi}{3}\\right)\\ \\mathrm{cm}"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

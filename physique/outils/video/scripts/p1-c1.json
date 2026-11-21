@@ -1,0 +1,42 @@
+{
+ "id": "p1-c1",
+ "titre": "Deux mobiles qui se rencontrent",
+ "phrases": [
+  [
+   "Le mouvement rectiligne uniforme, et la rencontre de deux mobiles.",
+   "MRU et rencontre"
+  ],
+  [
+   "Un mouvement est rectiligne uniforme quand la trajectoire est une droite et que la vitesse est constante. L'accélération est nulle.",
+   "\\vec a=\\vec 0"
+  ],
+  [
+   "L'équation horaire est x égale v t plus x zéro. La vitesse v est algébrique : positive si le mobile avance dans le sens de l'axe, négative sinon.",
+   "x(t)=vt+x_0"
+  ],
+  [
+   "Exemple : une voiture A part de O à vingt mètres par seconde. Au même instant, une voiture B part du point d'abscisse six cents mètres, à dix mètres par seconde, en sens inverse.",
+   "x_A=20t\\qquad x_B=-10t+600"
+  ],
+  [
+   "Pour B, la vitesse est négative, car B roule vers O. C'est le point qu'on oublie le plus souvent.",
+   "v_B=-10\\ \\mathrm{m\\cdot s^{-1}}"
+  ],
+  [
+   "Les voitures se rencontrent quand elles ont la même abscisse. Vingt t égale moins dix t plus six cents, donc trente t égale six cents, et t égale vingt secondes.",
+   "x_A=x_B\\iff t=20\\ \\mathrm s"
+  ],
+  [
+   "On remplace dans l'une des équations : x égale vingt fois vingt, soit quatre cents mètres. On vérifie avec l'autre : moins deux cents plus six cents, quatre cents. C'est juste.",
+   "x=400\\ \\mathrm m"
+  ],
+  [
+   "À retenir : un seul repère, une seule origine des dates, puis x un égale x deux.",
+   "x_1(t)=x_2(t)"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

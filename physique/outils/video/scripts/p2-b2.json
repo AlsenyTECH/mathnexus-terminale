@@ -1,0 +1,42 @@
+{
+ "id": "p2-b2",
+ "titre": "Le plan incliné",
+ "phrases": [
+  [
+   "Le plan incliné : projeter le théorème sur deux axes.",
+   "Le plan incliné"
+  ],
+  [
+   "Un solide glisse sur un plan incliné d'un angle alpha. On prend un axe x parallèle au plan, vers le bas, et un axe y perpendiculaire au plan.",
+   "(Ox)\\parallel\\text{plan},\\ (Oy)\\perp\\text{plan}"
+  ],
+  [
+   "Le poids se décompose : m g sinus alpha le long du plan, et moins m g cosinus alpha perpendiculairement.",
+   "P_x=mg\\sin\\alpha\\qquad P_y=-mg\\cos\\alpha"
+  ],
+  [
+   "Sur l'axe y, le solide ne décolle pas et ne s'enfonce pas : l'accélération est nulle. Donc la réaction vaut m g cosinus alpha.",
+   "R_N=mg\\cos\\alpha"
+  ],
+  [
+   "Sur l'axe x, sans frottement : m g sinus alpha égale m a. Donc a égale g sinus alpha, quelle que soit la masse.",
+   "a=g\\sin\\alpha"
+  ],
+  [
+   "Exemple : alpha égale trente degrés, g égale dix. L'accélération vaut cinq mètres par seconde carrée.",
+   "a=10\\times\\sin30°=5\\ \\mathrm{m\\cdot s^{-2}}"
+  ],
+  [
+   "Avec une force de frottement f, on la retire : a égale g sinus alpha, moins f sur m.",
+   "a=g\\sin\\alpha-\\dfrac fm"
+  ],
+  [
+   "Le réflexe : vérifier avec alpha égale zéro. Sur un plan horizontal et sans frottement, a est nulle. La formule est cohérente.",
+   "\\alpha=0\\Rightarrow a=0"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

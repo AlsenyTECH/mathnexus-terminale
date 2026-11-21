@@ -1,0 +1,475 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[nowatermark]{mathnexus}
+\usepackage{enumitem}
+\mnsetup{type={Série d'exercices},niveau={Terminale S2},matiere={Physique},chapnum={P1},chapitre={Cinématique du point},auteur={MathNexus},annee={2026--2027}}
+\newgeometry{left=1.4cm,right=1.4cm,top=3.1cm,bottom=1.9cm,headheight=2.0cm,headsep=0.35cm,footskip=0.8cm}
+\fancyhead[L]{\raisebox{-0.35\height}{\includegraphics[height=1.75cm]{logo.png}}}
+\fancyhead[C]{}
+\fancyhead[R]{\sffamily\color{mnnavy}\begin{tabular}{@{}r@{}}{\large\bfseries Terminale S2 \,$\cdot$\, Physique}\\[1pt]
+  {\color{mnblue}Série P1 : Cinématique du point}\\[1pt]
+  {\small\color{mngrey}Année scolaire 2026--2027}\end{tabular}}
+\newcommand{\vect}[1]{\overrightarrow{#1}}
+\newcommand{\U}[1]{\,\mathrm{#1}}
+\providecommand{\ms}{\,\mathrm{m\cdot s^{-1}}}
+\providecommand{\mss}{\,\mathrm{m\cdot s^{-2}}}
+\providecommand{\dd}{\mathrm{d}}
+\newcommand{\Exo}[3]{\par\Needspace{6\baselineskip}\medskip\noindent{\sffamily\bfseries\color{mnblue}Exercice #1 \,·\, #2}\hfill{\sffamily\small\color{mnnavy}\ifx\relax#3\relax\else #3 pts\fi}\par\nointerlineskip{\color{mnblue}\noindent\rule{\linewidth}{0.5pt}}\par\smallskip}
+\setlength{\parskip}{3pt}
+\begin{document}
+\fontsize{12.5}{15.2}\selectfont
+\mntitreserie{P1}{Cinématique du point}
+
+\sujet{Partie A · Repérage, vitesse et accélération}
+
+\Exo{1}{Un cercle}{}
+Un point $M$ a pour équations horaires $x=4\cos(2t)$ et $y=4\sin(2t)$ (SI).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Calculer $x^2+y^2$.
+\item En déduire la nature de la trajectoire et ses caractéristiques.
+\end{enumerate}
+
+\Exo{2}{Lire une parabole}{}
+Un mobile a pour équations horaires $x=t$ et $y=-5t^2+10t$ (SI, $t\geq0$).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Montrer que la trajectoire a pour équation $y=-5x^2+10x$.
+\item Pour quelles valeurs de $x$ le mobile est-il sur l'axe $(Ox)$ ?
+\item Quelle est l'ordonnée maximale atteinte ?
+\end{enumerate}
+
+\Exo{3}{Quand la vitesse s'annule}{}
+Un mobile a pour équations horaires $x=-t^2+4t$ et $y=3$ (SI).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Quelle est la nature de la trajectoire ?
+\item À quelle date la vitesse s'annule-t-elle ? Où est alors le mobile ?
+\item Donner le vecteur accélération.
+\end{enumerate}
+
+\Exo{4}{Le chemin inverse}{}
+Le vecteur vitesse d'un mobile est $\vec v\,(2\,;\,-10t+5)$ (SI). À $t=0$, le mobile est en $O$.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Déterminer les équations horaires $x(t)$ et $y(t)$.
+\item Déterminer le vecteur accélération.
+\end{enumerate}
+
+\Exo{5}{Mouvement dans un plan (synthèse)}{10}
+Dans un repère $(O;\vec i,\vec j)$, un mobile a pour équations horaires $x=2t$ et $y=-t^2+4t$ ($x$, $y$ en m, $t$ en s, $t\geq0$).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Déterminer l'équation de la trajectoire et la nommer.
+\item Déterminer les coordonnées du vecteur vitesse à une date $t$.
+\item À quelle date $t_1$ le vecteur vitesse est-il horizontal ? Donner la position du mobile et la valeur de sa vitesse à cette date.
+\item Déterminer le vecteur accélération et sa valeur.
+\end{enumerate}
+
+\Exo{6}{Retrouver les équations horaires (synthèse)}{10}
+Le vecteur vitesse d'un mobile est $\vec v=4\,\vec i+(-2t+2)\,\vec j$ (SI). À $t=0$, le mobile est au point $M_0(0\,;\,1)$.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Déterminer les équations horaires du mouvement.
+\item Déterminer l'équation de la trajectoire.
+\item Calculer la valeur de la vitesse à $t=0$.
+\item Déterminer le vecteur accélération. À quelle date et en quel point le mobile atteint-il son ordonnée maximale ?
+\end{enumerate}
+
+\sujet{Partie B · La base de Frenet}
+
+\Exo{7}{Un mouvement circulaire}{}
+Équations horaires : $x=2\cos(3t)$, $y=2\sin(3t)$ (SI).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Calculer $v$. Le mouvement est-il uniforme ?
+\item En déduire $a_t$, puis $a_n$ sachant que $a=18\mss$. Calculer $\rho$ et conclure.
+\end{enumerate}
+
+\Exo{8}{À la date t = 0,6 s}{}
+Équations horaires : $x=4t$, $y=-5t^2$ (SI). À $t=0{,}6\U{s}$, calculer $v$, $a_t$, $a_n$ et $\rho$.
+
+
+\Exo{9}{Frenet à une date donnée (synthèse)}{12}
+Un mobile a pour équations horaires $x=4t$ et $y=t^2+1$ (SI).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Déterminer l'équation de la trajectoire.
+\item Calculer les valeurs de la vitesse et de l'accélération à $t=3\U{s}$.
+\item Calculer à cette date les accélérations tangentielle et normale. Le mouvement est-il accéléré ou retardé ?
+\item Calculer le rayon de courbure de la trajectoire au point occupé à $t=3\U{s}$.
+\end{enumerate}
+
+\Exo{10}{Mouvement circulaire uniforme (synthèse)}{8}
+Un point $M$ a pour équations horaires $x=0{,}5\cos(\pi t)$ et $y=0{,}5\sin(\pi t)$ (SI).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Montrer que la trajectoire est un cercle dont on précisera le centre et le rayon.
+\item Calculer la vitesse $v$. Le mouvement est-il uniforme ?
+\item En déduire $a_t$ et $a_n$. Montrer que $\vec a=-\pi^2\,\vect{OM}$ et interpréter.
+\end{enumerate}
+
+\sujet{Partie C · Les mouvements rectilignes}
+
+\Exo{11}{Départs décalés}{}
+Un train passe en $O$ à $t=0$ à $72\U{km/h}$. Un second train part de $O$ à $t=10\U{s}$, dans le même sens, à $30\ms$ (vitesse constante).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Écrire les équations horaires des deux trains (origine des dates commune).
+\item Où et quand le second train rattrape-t-il le premier ?
+\end{enumerate}
+
+\Exo{12}{Deux positions suffisent}{}
+Un mobile en MRU est en $x=10\U{m}$ à $t=2\U{s}$ et en $x=-2\U{m}$ à $t=6\U{s}$.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Calculer sa vitesse. Dans quel sens se déplace-t-il ?
+\item Écrire son équation horaire. À quelle date passe-t-il par l'origine ?
+\end{enumerate}
+
+\Exo{13}{Un démarrage}{}
+Une voiture démarre sans vitesse initiale avec une accélération constante $a=2\mss$.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Au bout de combien de temps atteint-elle $30\ms$ ?
+\item Quelle distance a-t-elle alors parcourue ? Répondre de deux façons.
+\end{enumerate}
+
+\Exo{14}{Aller et retour}{}
+Un mobile part de $O$ avec $v_0=10\ms$ ; son accélération est constante, $a=-2\mss$.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Écrire $v(t)$ et $x(t)$.
+\item Quelle est l'abscisse maximale atteinte ?
+\item À quelle date revient-il en $O$, et avec quelle vitesse ?
+\end{enumerate}
+
+\Exo{15}{Distances égales}{}
+Un enregistrement ($\tau=40\U{ms}$) montre des distances toutes égales à $1{,}5\U{cm}$. Nature du mouvement et vitesse ?
+
+
+\Exo{16}{Lire un graphe v(t)}{}
+La vitesse d'un mobile en ligne droite est donnée par le tableau :
+
+
+\begin{center}\renewcommand{\arraystretch}{1.35}\begin{tabular}{|c|c|c|c|c|c|c|}\hline
+\textbf{$t$ (s)} & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5}\\\hline
+$v$ ($\mathrm{m\cdot s^{-1}}$) & 2 & 4 & 6 & 8 & 8 & 8\\\hline
+\end{tabular}\end{center}
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Décrire les deux phases du mouvement. Calculer l'accélération de la première.
+\item Le mobile part de $O$. Calculer la distance parcourue entre $0$ et $3\U{s}$.
+\end{enumerate}
+
+\Exo{17}{La voiture et le bus (synthèse)}{10}
+Une voiture est arrêtée à un feu rouge. Au moment où le feu passe au vert ($t=0$), elle démarre avec une accélération constante $a=1{,}5\mss$. Au même instant, un bus la dépasse à la vitesse constante de $15\ms$. On prend comme origine la position du feu.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Écrire les équations horaires de la voiture et du bus.
+\item À quelle date et à quelle distance du feu la voiture rattrape-t-elle le bus ? Quelle est alors sa vitesse ?
+\item À quelle date l'écart entre les deux véhicules est-il maximal ? Calculer cet écart.
+\end{enumerate}
+
+\Exo{18}{Un enregistrement (synthèse)}{10}
+On enregistre le mouvement rectiligne d'un mobile avec $\tau=50\U{ms}$ : $M_0M_1=2{,}0\U{cm}$, $M_1M_2=3{,}0\U{cm}$, $M_2M_3=4{,}0\U{cm}$, $M_3M_4=5{,}0\U{cm}$.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Montrer que le mouvement est uniformément varié et calculer son accélération.
+\item Calculer les vitesses aux points $M_1$ et $M_2$. Retrouver l'accélération.
+\item On prend $M_1$ comme origine des espaces et des dates. Écrire l'équation horaire $x(t)$.
+\item Quelle distance le mobile parcourt-il entre $t=0$ et $t=0{,}5\U{s}$ (en supposant le mouvement inchangé) ?
+\end{enumerate}
+
+\sujet{Partie D · Le mouvement rectiligne sinusoïdal}
+
+\Exo{19}{À partir de l'équation différentielle}{}
+Un mobile vérifie $\ddot x+400\,x=0$ (SI). Son amplitude est $3\U{cm}$ et, à $t=0$, il est en $x_0=-3\U{cm}$.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Calculer $\omega$, $T$ et $N$.
+\item Déterminer $\varphi$ et écrire $x(t)$.
+\end{enumerate}
+
+\Exo{20}{Lire une équation horaire}{}
+$x(t)=0{,}02\cos\left(50t+\dfrac{\pi}{6}\right)$ (SI).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Donner $X_m$, $\omega$, $T$ et la longueur du segment parcouru.
+\item Calculer $x$ et $v$ à $t=0$. Dans quel sens part le mobile ?
+\end{enumerate}
+
+\Exo{21}{À partir de la courbe x(t)}{}
+La courbe $x(t)$ d'un mobile est une sinusoïde : elle part de $0$ à $t=0$ en montant, atteint son maximum $2\U{cm}$ à $t=0{,}1\U{s}$, repasse à $0$ à $t=0{,}2\U{s}$ et atteint $-2\U{cm}$ à $t=0{,}3\U{s}$.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Déterminer $X_m$, $T$ et $\omega$.
+\item Déterminer $\varphi$ et écrire $x(t)$.
+\end{enumerate}
+
+\Exo{22}{La droite v² = f(x²)}{}
+Pour un mobile en mouvement rectiligne sinusoïdal, on a établi $v^2=0{,}25-25\,x^2$ (SI).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Justifier l'allure de la courbe $v^2=f(x^2)$.
+\item En déduire $\omega$ et $X_m$.
+\end{enumerate}
+
+\Exo{23}{Équation horaire et tableau de valeurs (synthèse)}{10}
+Un mobile vérifie l'équation différentielle $\ddot x+25\pi^2x=0$ (SI). Son amplitude vaut $X_m=3\U{cm}$. À $t=0$, il passe en $x_0=1{,}5\U{cm}$ en allant dans le sens positif.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Quelle est la nature du mouvement ? Calculer $\omega$ et $T$.
+\item Déterminer $\varphi$ et écrire $x(t)$.
+\item Compléter le tableau : $x$ aux dates $0$, $T/4$, $T/2$, $3T/4$, $T$. Quelle distance le mobile parcourt-il en une période ?
+\item Calculer $v_0$ et $v_{\max}$.
+\end{enumerate}
+
+\Exo{24}{Dates de passage (synthèse)}{10}
+On reprend le mobile précédent : $x(t)=3\cos\left(5\pi t-\dfrac{\pi}{3}\right)$ ($x$ en cm, $t$ en s).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Déterminer les dates des deux premiers passages en $x=-1{,}5\U{cm}$ dans le sens positif.
+\item Calculer la valeur de la vitesse en ce point, de deux façons.
+\item Calculer l'accélération en ce point. Vers où est-elle dirigée ?
+\end{enumerate}
+
+\sujet{Partie E · Les mouvements circulaires}
+
+\Exo{25}{Un point de l'équateur}{}
+La Terre fait un tour sur elle-même en $24\U{h}$ (on prend cette valeur). Le rayon terrestre vaut $6400\U{km}$. Pour un point de l'équateur, calculer $\omega$, $v$ et $a$.
+
+
+\Exo{26}{Une loi horaire angulaire}{}
+Un point décrit un cercle de rayon $0{,}5\U{m}$ avec $\theta(t)=2t+\dfrac{\pi}{4}$ (SI).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Calculer $\omega$ et $v$.
+\item Quel angle et quelle longueur d'arc le point parcourt-il en $3\U{s}$ ? Combien de tours cela fait-il ?
+\end{enumerate}
+
+\Exo{27}{Une loi horaire}{}
+$\theta(t)=0{,}5\,t^2+2t$ (rad, s) pour un point à $R=0{,}2\U{m}$ de l'axe.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Donner $\ddot\theta$ et $\dot\theta(t)$.
+\item À $t=4\U{s}$, calculer $v$, $a_t$ et $a_n$.
+\end{enumerate}
+
+\Exo{28}{Un moteur}{}
+Un moteur passe de $1200\U{tr/min}$ à $3000\U{tr/min}$ en $6\U{s}$, d'un mouvement uniformément varié. Calculer l'accélération angulaire et le nombre de tours effectués.
+
+
+\Exo{29}{Un disque vinyle (synthèse)}{8}
+Un disque tourne à $45\U{tr/min}$ d'un mouvement uniforme. On étudie un point $M$ situé à $12\U{cm}$ de l'axe.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Calculer la vitesse angulaire et la période.
+\item Calculer la vitesse et l'accélération de $M$. Préciser la direction de l'accélération.
+\item Combien de temps faut-il pour faire 10 tours ?
+\end{enumerate}
+
+\Exo{30}{La meule (synthèse)}{12}
+Une meule de rayon $10\U{cm}$, initialement au repos, est mise en rotation avec une accélération angulaire constante $\ddot\theta_1=5\U{rad\cdot s^{-2}}$ pendant $8\U{s}$.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Calculer la vitesse angulaire atteinte à $t=8\U{s}$ et le nombre de tours effectués pendant cette phase.
+\item À $t=8\U{s}$, calculer pour un point de la périphérie : $v$, $a_t$ et $a_n$.
+\item On coupe le moteur : la meule s'arrête après 50 tours, d'un mouvement uniformément retardé. Calculer l'accélération angulaire de freinage et la durée du freinage.
+\end{enumerate}
+
+\newpage
+\mntitreserie{}{Corrigé de la série P1}
+
+\sujet{Partie A · Repérage, vitesse et accélération}
+
+\Exo{1}{Un cercle}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $x^2+y^2=16\cos^2(2t)+16\sin^2(2t)=16\,(\cos^2+\sin^2)=16$.
+\item $x^2+y^2=4^2$ : la trajectoire est le **cercle de centre $O$ et de rayon $4\U{m}$**.
+\end{enumerate}
+
+\Exo{2}{Lire une parabole}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $t=x$, donc $y=-5x^2+10x$.
+\item $y=0\iff x(-5x+10)=0\iff x=0$ ou $x=2\U{m}$.
+\item Le sommet de la parabole est au milieu des racines : $x=1\U{m}$, et $y=-5+10=5\U{m}$.
+\end{enumerate}
+
+\Exo{3}{Quand la vitesse s'annule}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $y=3$ est constant : la trajectoire est la \textbf{droite} d'équation $y=3$, le mouvement est rectiligne.
+\item $v_x=-2t+4$ et $v_y=0$. $v=0\iff t=2\U{s}$. Alors $x=-4+8=4\U{m}$ : le mobile est en $(4\,;\,3)$, il fait demi-tour.
+\item $a_x=-2$, $a_y=0$ : $\vec a=-2\,\vec i$, $a=2\mss$.
+\end{enumerate}
+
+\Exo{4}{Le chemin inverse}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item On cherche des primitives : $x=2t+x_0$ et $y=-5t^2+5t+y_0$. À $t=0$, le mobile est en $O$ : $x_0=y_0=0$. Donc $x=2t$ et $y=-5t^2+5t$.
+\item $a_x=0$ et $a_y=-10$ : $\vec a\,(0\,;\,-10)$, $a=10\mss$.
+\end{enumerate}
+
+\Exo{5}{Mouvement dans un plan (synthèse)}{10}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $t=\dfrac{x}{2}$, donc $y=-\dfrac{x^2}{4}+2x$ : \textbf{parabole} (portion $x\geq0$). \textbf{(2 pts)}
+\item $v_x=2$ et $v_y=-2t+4$. \textbf{(2 pts)}
+\item Vecteur vitesse horizontal $\iff v_y=0\iff t_1=2\U{s}$. Position : $x=4\U{m}$, $y=-4+8=4\U{m}$. Vitesse : $v=\sqrt{2^2+0^2}=2\ms$. \textbf{(4 pts)}
+\item $a_x=0$, $a_y=-2$ : $\vec a=-2\,\vec j$, $a=2\mss$, constant. \textbf{(2 pts)}
+\end{enumerate}
+
+Remarque : au sommet de la parabole, la vitesse n'est pas nulle, elle est horizontale.
+
+
+\Exo{6}{Retrouver les équations horaires (synthèse)}{10}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Primitives : $x=4t+x_0$, $y=-t^2+2t+y_0$. Avec $M_0(0\,;\,1)$ : $x=4t$ et $y=-t^2+2t+1$. \textbf{(3 pts)}
+\item $t=\dfrac{x}{4}$, donc $y=-\dfrac{x^2}{16}+\dfrac{x}{2}+1$ : parabole. \textbf{(2 pts)}
+\item $\vec v_0\,(4\,;\,2)$, $v_0=\sqrt{20}=2\sqrt5\approx4{,}47\ms$. \textbf{(2 pts)}
+\item $\vec a\,(0\,;\,-2)$, $a=2\mss$. L'ordonnée est maximale quand $v_y=0$ : $t=1\U{s}$, au point $(4\,;\,2)$. \textbf{(3 pts)}
+\end{enumerate}
+
+\sujet{Partie B · La base de Frenet}
+
+\Exo{7}{Un mouvement circulaire}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $v_x=-6\sin(3t)$, $v_y=6\cos(3t)$, donc $v=6\ms$ constante : mouvement \textbf{uniforme}.
+\item $a_t=\dfrac{\dd v}{\dd t}=0$, donc $a_n=a=18\mss$ et $\rho=\dfrac{36}{18}=2\U{m}$ : c'est le rayon du cercle décrit ($x^2+y^2=4$).
+\end{enumerate}
+
+\Exo{8}{À la date t = 0,6 s}{}
+$\vec v\,(4\,;\,-10t)$ : à $0{,}6\U{s}$, $\vec v\,(4\,;\,-6)$, $v=\sqrt{52}\approx7{,}21\ms$. $\vec a\,(0\,;\,-10)$, $a=10\mss$.
+
+
+$a_t=\dfrac{4\times0+(-6)(-10)}{7{,}21}\approx8{,}32\mss$ ; $a_n=\dfrac{|4\times(-10)-(-6)\times0|}{7{,}21}\approx5{,}55\mss$.
+
+
+$\rho=\dfrac{52}{5{,}55}\approx9{,}37\U{m}$.
+
+
+\Exo{9}{Frenet à une date donnée (synthèse)}{12}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $t=\dfrac{x}{4}$ donc $y=\dfrac{x^2}{16}+1$ : parabole. \textbf{(2 pts)}
+\item $\vec v\,(4\,;\,2t)$ : à $3\U{s}$, $\vec v\,(4\,;\,6)$, $v=\sqrt{52}\approx7{,}21\ms$. $\vec a\,(0\,;\,2)$, $a=2\mss$. \textbf{(3 pts)}
+\item $a_t=\dfrac{4\times0+6\times2}{7{,}21}\approx1{,}66\mss>0$ : mouvement \textbf{accéléré}. $a_n=\dfrac{|4\times2-6\times0|}{7{,}21}\approx1{,}11\mss$. Vérification : $1{,}66^2+1{,}11^2\approx4=a^2$. \textbf{(5 pts)}
+\item $\rho=\dfrac{v^2}{a_n}=\dfrac{52}{1{,}11}\approx46{,}9\U{m}$. \textbf{(2 pts)}
+\end{enumerate}
+
+\Exo{10}{Mouvement circulaire uniforme (synthèse)}{8}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $x^2+y^2=0{,}25$ : cercle de centre $O$, de rayon $R=0{,}5\U{m}$. \textbf{(2 pts)}
+\item $v_x=-0{,}5\pi\sin(\pi t)$, $v_y=0{,}5\pi\cos(\pi t)$, donc $v=0{,}5\pi\approx1{,}57\ms$ constante : \textbf{uniforme}. \textbf{(2 pts)}
+\item $a_t=0$ ; $a_n=\dfrac{v^2}{R}=\dfrac{0{,}25\pi^2}{0{,}5}=0{,}5\pi^2\approx4{,}93\mss$. $a_x=-0{,}5\pi^2\cos(\pi t)=-\pi^2x$ et $a_y=-\pi^2y$, donc $\vec a=-\pi^2\vect{OM}$ : l'accélération est dirigée vers le centre (\textbf{centripète}). \textbf{(4 pts)}
+\end{enumerate}
+
+\sujet{Partie C · Les mouvements rectilignes}
+
+\Exo{11}{Départs décalés}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $72\U{km/h}=20\ms$. $x_1=20t$ et $x_2=30(t-10)$ pour $t\geq10\U{s}$.
+\item $20t=30t-300\iff t=30\U{s}$. Alors $x=600\U{m}$.
+\end{enumerate}
+
+\Exo{12}{Deux positions suffisent}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $v=\dfrac{-2-10}{6-2}=-3\ms$ : il se déplace dans le sens négatif.
+\item $x=-3t+x_0$ avec $10=-6+x_0$, donc $x_0=16\U{m}$ : $x=-3t+16$. $x=0\iff t=\dfrac{16}{3}\approx5{,}33\U{s}$.
+\end{enumerate}
+
+\Exo{13}{Un démarrage}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $v=2t$ ; $2t=30\iff t=15\U{s}$.
+\item $x=t^2$, donc $x(15)=225\U{m}$. Ou : $30^2-0=2\times2\times d$, donc $d=225\U{m}$.
+\end{enumerate}
+
+\Exo{14}{Aller et retour}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $v=-2t+10$ et $x=-t^2+10t$.
+\item $v=0$ à $t=5\U{s}$ : $x_{\max}=-25+50=25\U{m}$.
+\item $x=0\iff t(-t+10)=0\iff t=10\U{s}$ ; $v=-10\ms$ (même valeur qu'au départ, sens opposé).
+\end{enumerate}
+
+\Exo{15}{Distances égales}{}
+Distances égales pendant des durées égales : \textbf{MRU}. $v=\dfrac{1{,}5\times10^{-2}}{0{,}04}=0{,}375\ms$.
+
+
+\Exo{16}{Lire un graphe v(t)}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item De $0$ à $3\U{s}$, $v$ augmente de $2\ms$ chaque seconde : MRUV, $a=2\mss$. De $3$ à $5\U{s}$, $v=8\ms$ constante : MRU.
+\item $x=t^2+2t$, donc $x(3)=9+6=15\U{m}$.
+\end{enumerate}
+
+\Exo{17}{La voiture et le bus (synthèse)}{10}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Voiture : $x_V=0{,}75\,t^2$. Bus : $x_B=15t$. \textbf{(2 pts)}
+\item $0{,}75t^2=15t\iff t=20\U{s}$ ($t\neq0$). $x=300\U{m}$. Vitesse : $v_V=1{,}5\times20=30\ms$. \textbf{(4 pts)}
+\item L'écart $x_B-x_V$ augmente tant que le bus va plus vite que la voiture : il est maximal quand $v_V=15\ms$, soit $t=10\U{s}$. Écart : $150-75=75\U{m}$. \textbf{(4 pts)}
+\end{enumerate}
+
+\Exo{18}{Un enregistrement (synthèse)}{10}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $\Delta d=1{,}0\U{cm}$ constant : MRUV. $a=\dfrac{10^{-2}}{(0{,}05)^2}=4\mss$. \textbf{(2 pts)}
+\item $v_1=\dfrac{(2+3)\times10^{-2}}{0{,}1}=0{,}5\ms$ ; $v_2=\dfrac{(3+4)\times10^{-2}}{0{,}1}=0{,}7\ms$. $a=\dfrac{0{,}7-0{,}5}{0{,}05}=4\mss$. \textbf{(4 pts)}
+\item $x=\frac12\times4\,t^2+0{,}5\,t=2t^2+0{,}5t$ (SI). \textbf{(2 pts)}
+\item $x(0{,}5)=2\times0{,}25+0{,}25=0{,}75\U{m}$. \textbf{(2 pts)}
+\end{enumerate}
+
+\sujet{Partie D · Le mouvement rectiligne sinusoïdal}
+
+\Exo{19}{À partir de l'équation différentielle}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $\omega^2=400$ donc $\omega=20\U{rad\cdot s^{-1}}$ ; $T=\dfrac{2\pi}{20}=\dfrac{\pi}{10}\approx0{,}314\U{s}$ ; $N\approx3{,}18\U{Hz}$.
+\item $\cos\varphi=-1$ donc $\varphi=\pi$ (le mobile est à une extrémité, sa vitesse est nulle). $x=3\cos(20t+\pi)$ (cm).
+\end{enumerate}
+
+\Exo{20}{Lire une équation horaire}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $X_m=2\U{cm}$, $\omega=50\U{rad\cdot s^{-1}}$, $T=\dfrac{2\pi}{50}\approx0{,}126\U{s}$, segment de $4\U{cm}$.
+\item $x_0=0{,}02\cos\frac{\pi}{6}\approx1{,}73\U{cm}$. $v=-0{,}02\times50\sin(50t+\frac{\pi}{6})$, donc $v_0=-1\times\frac12=-0{,}5\ms$ : il part dans le \textbf{sens négatif}.
+\end{enumerate}
+
+\Exo{21}{À partir de la courbe x(t)}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $X_m=2\U{cm}$. Du départ au retour au même état, il faut $0{,}4\U{s}$ : $T=0{,}4\U{s}$, $\omega=5\pi\U{rad\cdot s^{-1}}$.
+\item $x_0=0$ et la courbe monte ($v_0>0$) : $\varphi=-\dfrac{\pi}{2}$. $x=2\cos\left(5\pi t-\dfrac{\pi}{2}\right)$ (cm).
+\end{enumerate}
+
+\Exo{22}{La droite v² = f(x²)}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $v^2=-\omega^2x^2+\omega^2X_m^2$ est une fonction affine de $x^2$ : droite décroissante.
+\item Pente : $\omega^2=25$, donc $\omega=5\U{rad\cdot s^{-1}}$. Ordonnée à l'origine : $\omega^2X_m^2=0{,}25$, donc $X_m^2=0{,}01$ et $X_m=0{,}1\U{m}$.
+\end{enumerate}
+
+\Exo{23}{Équation horaire et tableau de valeurs (synthèse)}{10}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Équation de la forme $\ddot x+\omega^2x=0$ : mouvement \textbf{rectiligne sinusoïdal}. $\omega=5\pi\U{rad\cdot s^{-1}}$, $T=0{,}4\U{s}$. \textbf{(2 pts)}
+\item $\cos\varphi=\frac12$ et sens positif ($\sin\varphi<0$) : $\varphi=-\dfrac{\pi}{3}$. $x=3\cos\left(5\pi t-\dfrac{\pi}{3}\right)$ (cm). \textbf{(3 pts)}
+\item \textbf{(3 pts)}
+\end{enumerate}
+
+\begin{center}\renewcommand{\arraystretch}{1.35}\begin{tabular}{|c|c|c|c|c|c|}\hline
+\textbf{$t$ (s)} & \textbf{0} & \textbf{0,1} & \textbf{0,2} & \textbf{0,3} & \textbf{0,4}\\\hline
+$x$ (cm) & 1,5 & 2,6 & $-1{,}5$ & $-2{,}6$ & 1,5\\\hline
+\end{tabular}\end{center}
+
+En une période : $4X_m=12\U{cm}$.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=4]\item $v_0=-0{,}03\times5\pi\sin(-\frac{\pi}{3})\approx0{,}408\ms$ ; $v_{\max}=0{,}15\pi\approx0{,}471\ms$. \textbf{(2 pts)}
+\end{enumerate}
+
+\Exo{24}{Dates de passage (synthèse)}{10}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $\cos\theta=-\frac12$ avec $\sin\theta<0$ (sens positif) : $\theta=-\dfrac{2\pi}{3}+2k\pi$. $5\pi t-\frac{\pi}{3}=-\frac{2\pi}{3}+2k\pi$, donc $t=-\dfrac{1}{15}+0{,}4k$. Avec $t\geq0$ : $k=1$, $t_1=\dfrac13\approx0{,}333\U{s}$ ; $k=2$, $t_2\approx0{,}733\U{s}$. \textbf{(5 pts)}
+\item $|v|=\omega\sqrt{X_m^2-x^2}=5\pi\sqrt{9-2{,}25}\approx40{,}8\U{cm\cdot s^{-1}}$. Ou $v(t_1)=-0{,}15\pi\sin(-\frac{2\pi}{3})\approx0{,}408\ms$. \textbf{(3 pts)}
+\item $a=-\omega^2x=25\pi^2\times0{,}015\approx3{,}70\mss$ : positive, dirigée vers le centre $O$. \textbf{(2 pts)}
+\end{enumerate}
+
+\sujet{Partie E · Les mouvements circulaires}
+
+\Exo{25}{Un point de l'équateur}{}
+$\omega=\dfrac{2\pi}{86\,400}\approx7{,}27\times10^{-5}\U{rad\cdot s^{-1}}$ ; $v=R\omega\approx465\ms$ ; $a=R\omega^2\approx3{,}4\times10^{-2}\mss$.
+
+
+\Exo{26}{Une loi horaire angulaire}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $\omega=2\U{rad\cdot s^{-1}}$ ; $v=0{,}5\times2=1\ms$.
+\item $\Delta\theta=6\U{rad}$ ; arc $=R\,\Delta\theta=3\U{m}$ ; $\dfrac{6}{2\pi}\approx0{,}95$ tour.
+\end{enumerate}
+
+\Exo{27}{Une loi horaire}{}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $\ddot\theta=1\U{rad\cdot s^{-2}}$ ; $\dot\theta=t+2$.
+\item $\dot\theta(4)=6\U{rad\cdot s^{-1}}$ ; $v=1{,}2\ms$ ; $a_t=0{,}2\mss$ ; $a_n=0{,}2\times36=7{,}2\mss$.
+\end{enumerate}
+
+\Exo{28}{Un moteur}{}
+$\omega_0=\dfrac{1200\times2\pi}{60}=40\pi$ et $\omega=100\pi\U{rad\cdot s^{-1}}$. $\ddot\theta=\dfrac{60\pi}{6}=10\pi\approx31{,}4\U{rad\cdot s^{-2}}$. $\theta=\dfrac{\omega^2-\omega_0^2}{2\ddot\theta}=\dfrac{8400\pi^2}{20\pi}=420\pi\U{rad}$, soit $210$ tours.
+
+
+\Exo{29}{Un disque vinyle (synthèse)}{8}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $\omega=\dfrac{45\times2\pi}{60}=1{,}5\pi\approx4{,}71\U{rad\cdot s^{-1}}$ ; $T=\dfrac{2\pi}{\omega}\approx1{,}33\U{s}$. \textbf{(3 pts)}
+\item $v=R\omega=0{,}12\times4{,}71\approx0{,}565\ms$ ; $a=R\omega^2\approx2{,}66\mss$, dirigée vers le centre. \textbf{(3 pts)}
+\item $10T\approx13{,}3\U{s}$. \textbf{(2 pts)}
+\end{enumerate}
+
+\Exo{30}{La meule (synthèse)}{12}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $\dot\theta=5\times8=40\U{rad\cdot s^{-1}}$. $\theta=\frac12\times5\times64=160\U{rad}$, soit $\approx25{,}5$ tours. \textbf{(4 pts)}
+\item $v=0{,}1\times40=4\ms$ ; $a_t=0{,}1\times5=0{,}5\mss$ ; $a_n=0{,}1\times1600=160\mss$. \textbf{(4 pts)}
+\item $\theta=100\pi\U{rad}$ ; $0-40^2=2\,\ddot\theta_2\times100\pi$, donc $\ddot\theta_2=-\dfrac{8}{\pi}\approx-2{,}55\U{rad\cdot s^{-2}}$. Durée : $t=\dfrac{40}{8/\pi}=5\pi\approx15{,}7\U{s}$. \textbf{(4 pts)}
+\end{enumerate}
+\label{mnlast}
+\end{document}

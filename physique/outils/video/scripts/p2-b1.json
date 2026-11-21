@@ -1,0 +1,42 @@
+{
+ "id": "p2-b1",
+ "titre": "Le TCI en cinq temps",
+ "phrases": [
+  [
+   "Le théorème du centre d'inertie, en cinq temps.",
+   "Théorème du centre d'inertie"
+  ],
+  [
+   "Dans un référentiel galiléen, la somme des forces extérieures égale la masse fois l'accélération du centre d'inertie.",
+   "\\sum\\vec F_{\\text{ext}}=m\\,\\vec a_G"
+  ],
+  [
+   "Exemple : une caisse de cinquante kilogrammes, au repos, est tirée horizontalement par une force de deux cents newtons. Les frottements valent cinquante newtons.",
+   "m=50\\ \\mathrm{kg},\\ F=200\\ \\mathrm N,\\ f=50\\ \\mathrm N"
+  ],
+  [
+   "Premier temps, le système : la caisse. Deuxième temps, le référentiel : terrestre, supposé galiléen.",
+   "\\text{système, référentiel}"
+  ],
+  [
+   "Troisième temps, le bilan des forces : le poids, la réaction normale, la force de traction, et les frottements.",
+   "\\vec P,\\ \\vec R,\\ \\vec F,\\ \\vec f"
+  ],
+  [
+   "Quatrième temps, le théorème : la somme de ces quatre vecteurs égale m a. Cinquième temps, la projection sur l'axe du mouvement : F moins f égale m a.",
+   "F-f=ma"
+  ],
+  [
+   "Deux cents moins cinquante, divisé par cinquante : a égale trois mètres par seconde carrée. L'accélération est constante : le mouvement est uniformément accéléré.",
+   "a=\\dfrac{150}{50}=3\\ \\mathrm{m\\cdot s^{-2}}"
+  ],
+  [
+   "On enchaîne avec la cinématique : après quatre secondes, v égale douze mètres par seconde, et la caisse a parcouru vingt-quatre mètres.",
+   "v=12\\ \\mathrm{m/s},\\ d=24\\ \\mathrm m"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

@@ -57,6 +57,7 @@ h1{font-family:var(--f-hand);font-size:2.6rem;line-height:1.05;margin:0;color:va
 .badge.soon{background:var(--grid);color:var(--muted)}
 .go{margin-top:auto;font-weight:700;color:var(--pen)}
 .soon-list{margin:30px 0 0;color:var(--muted)}
+.sec{font-size:.86rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:30px 0 12px}
 footer{margin-top:40px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:.95rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 @media (max-width:600px){h1{font-size:2.1rem}.hd{grid-template-columns:56px minmax(0,1fr)}.hd img{width:56px;height:56px}}
 </style>
@@ -65,9 +66,10 @@ footer{margin-top:40px;border-top:1px solid var(--line);padding-top:14px;color:v
 <main>
   <header class="hd">
     <img src="assets/img/logo-mathnexus.png" alt="Logo Mathnexus">
-    <div><h1>Mathnexus · Terminale S2</h1><p class="sub">Parcours interactifs de mathématiques · programme sénégalais</p></div>
+    <div><h1>Mathnexus · Terminale S2</h1><p class="sub">Parcours interactifs de mathématiques et de sciences physiques · programme sénégalais</p></div>
   </header>
   <p class="lead">Des parcours pas à pas pour réviser seul : explications, graphiques à manipuler, exercices corrigés sur le modèle du bac, et une évaluation chronométrée notée sur 20 à la fin de chaque partie. Ta progression est gardée sur ton appareil.</p>
+  <h2 class="sec">Mathématiques</h2>
   <div class="cards">
     <a class="card" href="etude-de-fonction.html">
       <div class="state"><span class="badge">Partie 1 disponible</span></div>
@@ -81,6 +83,16 @@ footer{margin-top:40px;border-top:1px solid var(--line);padding-top:14px;color:v
       <h2>Nombres complexes</h2>
       <p>Tout le chapitre, des calculs aux exercices de géométrie et de suites, avec des sujets du bac S2.</p>
       <ul><li>Forme algébrique, plan complexe, équations de degré 2 et 3</li><li>À venir : module et argument, racines n-ièmes, géométrie, suites</li></ul>
+      <span class="go">Ouvrir le parcours →</span>
+    </a>
+  </div>
+  <h2 class="sec">Sciences physiques</h2>
+  <div class="cards">
+    <a class="card" href="physique/index.html">
+      <div class="state"><span class="badge">P1 et P2 disponibles</span></div>
+      <h2>Physique</h2>
+      <p>Le programme de physique chapitre par chapitre : cours, vidéos, exemple corrigé, exercice d'application, exercices à faire seul, et une évaluation par partie.</p>
+      <ul><li>P1 Cinématique du point · P2 Bases de la dynamique</li><li>Séries d'exercices à imprimer en PDF, corrigé à la fin</li><li>À venir : P3 à P15, puis la chimie</li></ul>
       <span class="go">Ouvrir le parcours →</span>
     </a>
   </div>

@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+series/*.aux
+series/*.log
+series/*.out
+enregistrements/

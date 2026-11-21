@@ -1,0 +1,38 @@
+{
+ "id": "p2-d2",
+ "titre": "Chocs mous et chocs élastiques",
+ "phrases": [
+  [
+   "Chocs mous et chocs élastiques.",
+   "Les chocs"
+  ],
+  [
+   "Dans tout choc, la quantité de mouvement du système se conserve. Ce qui change d'un choc à l'autre, c'est l'énergie cinétique.",
+   "\\vec P_{\\text{avant}}=\\vec P_{\\text{après}}"
+  ],
+  [
+   "Dans un choc mou, les deux corps restent accrochés et repartent ensemble. Exemple : un wagon de deux tonnes à trois mètres par seconde percute un wagon d'une tonne immobile, et ils s'attellent.",
+   "m_1=2\\ \\mathrm t,\\ v_1=3\\ \\mathrm{m/s},\\ m_2=1\\ \\mathrm t"
+  ],
+  [
+   "Deux mille fois trois égale trois mille fois v prime. Donc v prime égale deux mètres par seconde.",
+   "v'=\\dfrac{6000}{3000}=2\\ \\mathrm{m\\cdot s^{-1}}"
+  ],
+  [
+   "Énergie cinétique avant : neuf mille joules. Après : six mille joules. Trois mille joules ont été perdus en chaleur et en déformation.",
+   "E_c:\\ 9000\\ \\mathrm J\\to6000\\ \\mathrm J"
+  ],
+  [
+   "Dans un choc élastique, l'énergie cinétique est conservée. Avec une cible au repos, on obtient deux formules à connaître.",
+   "v_1'=\\dfrac{m_1-m_2}{m_1+m_2}v_1\\qquad v_2'=\\dfrac{2m_1}{m_1+m_2}v_1"
+  ],
+  [
+   "Cas particulier : deux masses égales. La première s'arrête, et la seconde repart avec la vitesse de la première. Elles échangent leurs vitesses.",
+   "m_1=m_2:\\ v_1'=0,\\ v_2'=v_1"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

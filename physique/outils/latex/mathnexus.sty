@@ -1,0 +1,361 @@
+%% ============================================================
+%%  mathnexus.sty  --  Charte graphique MathNexus Education (v2)
+%%  Design sobre, économe en encre : fond blanc, 2 couleurs,
+%%  filigrane de symboles mathématiques / physiques / chimiques.
+%%  Usage : \usepackage{mathnexus}  puis \mnsetup{...} et \mncover
+%%  Option : [nowatermark] pour supprimer le filigrane.
+%% ============================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mathnexus}[2026/10/10 MathNexus Education v2]
+
+\newif\ifmnwm \mnwmtrue
+\DeclareOption{nowatermark}{\mnwmfalse}
+\ProcessOptions\relax
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[french]{babel}
+\RequirePackage{bookman}
+\RequirePackage[scaled=0.92]{helvet}
+\RequirePackage{microtype}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage{amsmath,amssymb}
+\RequirePackage{enumitem}
+\RequirePackage{etoolbox}
+\RequirePackage{array}
+\RequirePackage{colortbl}
+\RequirePackage{needspace}
+\setlength{\emergencystretch}{3em}
+\RequirePackage[locale=FR]{siunitx}
+\AtEndDocument{\label{mnlast}}
+\RequirePackage{fancyhdr}
+\RequirePackage{tikz}
+\RequirePackage[most]{tcolorbox}
+\usetikzlibrary{calc}
+\RequirePackage[left=1.5cm,right=1.5cm,top=2.9cm,bottom=2.2cm,headheight=1.4cm,footskip=0.9cm]{geometry}
+
+% ---------- Palette : marine + un seul bleu d'accent ----------
+\definecolor{mnnavy}{HTML}{0B1F3A}
+\definecolor{mnblue}{HTML}{1F6FB2}
+\definecolor{mngrey}{HTML}{5B6B7B}
+\colorlet{mncyan}{mnblue}
+\colorlet{mnsky}{mnblue!70}
+\colorlet{mnlight}{mnblue!5}
+
+\newcommand{\mnslogan}{L'excellence par le travail et la persévérance}
+
+% ---------- Métadonnées du document ----------
+\newcommand{\mntype}{Série d'exercices}
+\newcommand{\mnniveau}{Terminale S2}
+\newcommand{\mnmatiere}{Chimie}
+\newcommand{\mnchapnum}{}
+\newcommand{\mnchapitre}{Titre du chapitre}
+\newcommand{\mnsoustitre}{}
+\newcommand{\mnauteur}{MathNexus}
+\newcommand{\mnannee}{2026--2027}
+\pgfkeys{/mn/.cd,
+  type/.store in=\mntype,
+  niveau/.store in=\mnniveau,
+  matiere/.store in=\mnmatiere,
+  chapnum/.store in=\mnchapnum,
+  chapitre/.store in=\mnchapitre,
+  soustitre/.store in=\mnsoustitre,
+  auteur/.store in=\mnauteur,
+  annee/.store in=\mnannee,
+  slogan/.store in=\mnslogan}
+\newcommand{\mnsetup}[1]{\pgfkeys{/mn/.cd,#1}}
+
+% ============================================================
+%  LOGO : atome + personnage lisant (TikZ)
+%  \mnicon[échelle]{couleur traits}{couleur livre}{couleur fond}
+%  échelle 1 = 5,6 cm de haut
+% ============================================================
+\newcommand{\mnicon}[4][1]{%
+  \begin{tikzpicture}[scale=0.01*#1,line cap=round,line join=round]
+    \pgfmathsetlengthmacro{\mnlw}{0.12*#1 cm}
+    \draw[#2,line width=\mnlw] (0,5) ellipse (118 and 280);
+    \draw[#2,line width=\mnlw,rotate around={30:(0,-15)}] (0,-15) ellipse (282 and 110);
+    \draw[#2,line width=\mnlw,rotate around={-30:(0,-15)}] (0,-15) ellipse (282 and 110);
+    \fill[#4] (-116,38)--(-116,-175)--(-72,-175)--(0,-203)--(72,-175)--(116,-175)--(116,38)--cycle;
+    \draw[#2,line width=\mnlw] (-116,38)--(-116,-175)--(-72,-175)--(0,-203)--(72,-175)--(116,-175)--(116,38);
+    \fill[#2] (0,13) circle (57);
+    \fill[#3] (-98,-50)--(-5,-62)--(-5,-183)--(-98,-148)--cycle;
+    \fill[#3] (98,-50)--(5,-62)--(5,-183)--(98,-148)--cycle;
+    \draw[#2,line width=\mnlw,fill=#4] (-243,71) circle (17);
+  \end{tikzpicture}%
+}
+
+% Logo d'entête : icône + nom
+\newcommand{\mnheadlogo}{%
+  \raisebox{-0.28cm}{\mnicon[0.16]{mnnavy}{mnblue}{white}}%
+  \hspace{0.25cm}%
+  {\sffamily\bfseries\large\color{mnnavy}MathNexus\,\color{mnblue}Education}%
+}
+
+% ============================================================
+%  FILIGRANE : symboles de maths, physique et chimie (traits fins)
+% ============================================================
+\tikzset{pics/mnsym/.style args={#1}{code={\mnsymbol{#1}}}}
+
+\newcommand{\mnsymbol}[1]{%
+\ifcase#1
+ % 0 atome
+ \draw (0,0) ellipse (0.95 and 0.34);
+ \draw[rotate=60] (0,0) ellipse (0.95 and 0.34);
+ \draw[rotate=120] (0,0) ellipse (0.95 and 0.34);
+ \fill (0,0) circle (0.09);
+\or % 1 intégrale
+ \node {\fontsize{22}{24}\selectfont $\displaystyle\int_a^b f(x)\,\mathrm{d}x$};
+\or % 2 benzène
+ \draw (0:0.8)--(60:0.8)--(120:0.8)--(180:0.8)--(240:0.8)--(300:0.8)--cycle;
+ \draw (0,0) circle (0.52);
+\or % 3 erlenmeyer
+ \draw (-0.18,0.9)--(-0.18,0.3)--(-0.78,-0.75)--(0.78,-0.75)--(0.18,0.3)--(0.18,0.9);
+ \draw (-0.28,0.9)--(0.28,0.9);
+ \draw (-0.49,-0.25) to[bend left=12] (0.49,-0.25);
+ \draw (-0.15,-0.55) circle (0.07) (0.18,-0.45) circle (0.05);
+\or % 4 somme
+ \node {\fontsize{20}{22}\selectfont $\displaystyle\sum_{n=1}^{\infty}\frac{1}{n^{2}}=\frac{\pi^{2}}{6}$};
+\or % 5 onde sinusoïdale
+ \draw[->] (-1,0)--(1.05,0); \draw[->] (-0.9,-0.65)--(-0.9,0.65);
+ \draw[smooth,samples=40,domain=-0.9:1] plot (\x,{0.42*sin((\x+0.9)*270)});
+\or % 6 pythagore
+ \draw (-0.8,-0.55)--(0.8,-0.55)--(0.8,0.5)--cycle;
+ \draw (0.6,-0.55)--(0.6,-0.35)--(0.8,-0.35);
+ \node at (0,-0.85) {\fontsize{12}{13}\selectfont $a^{2}+b^{2}=c^{2}$};
+\or % 7 pendule
+ \draw (-0.6,0.9)--(0.6,0.9);
+ \draw (0,0.9)--(0.5,-0.55); \draw (0.5,-0.55) circle (0.14);
+ \draw[dashed] (0,0.9)--(0,-0.7);
+ \draw (0,0.2) arc (-90:-70:1.1);
+\or % 8 E = mc2
+ \node {\fontsize{24}{26}\selectfont $E=mc^{2}$};
+\or % 9 bécher
+ \draw[rounded corners=3pt] (-0.55,0.8)--(-0.55,-0.75)--(0.55,-0.75)--(0.55,0.8);
+ \draw (-0.65,0.8)--(0.65,0.8);
+ \draw (-0.55,0.4)--(-0.35,0.4) (-0.55,0.1)--(-0.35,0.1) (-0.55,-0.2)--(-0.35,-0.2);
+ \draw (-0.55,-0.1)--(0.55,-0.1);
+\or % 10 circuit
+ \draw (-0.9,-0.5)--(0.9,-0.5)--(0.9,0.5)--(0.45,0.5)--(0.38,0.7)--(0.24,0.3)--(0.1,0.7)--(-0.04,0.3)--(-0.18,0.7)--(-0.25,0.5)--(-0.9,0.5)--(-0.9,0.12);
+ \draw (-1.05,0.12)--(-0.75,0.12) (-1.0,-0.04)--(-0.8,-0.04);
+ \draw (-0.9,-0.04)--(-0.9,-0.5);
+\or % 11 pi
+ \node {\fontsize{36}{38}\selectfont $\pi$};
+\or % 12 lentille
+ \draw (0,-0.9) to[bend left=35] (0,0.9) to[bend left=35] (0,-0.9);
+ \draw[dashed] (-1,0)--(1.05,0);
+ \draw (-1,0.5)--(0,0.5)--(0.95,0); \draw (-1,-0.5)--(0,-0.5)--(0.95,0);
+\or % 13 force
+ \node {\fontsize{22}{24}\selectfont $\vec{F}=m\,\vec{a}$};
+\or % 14 alcool (squelette)
+ \draw (-0.9,-0.2)--(-0.3,0.15)--(0.3,-0.2)--(0.8,0.1);
+ \node at (1.08,0.18) {\fontsize{12}{13}\selectfont OH};
+\or % 15 discriminant
+ \node {\fontsize{16}{18}\selectfont $x=\dfrac{-b\pm\sqrt{\Delta}}{2a}$};
+\or % 16 parabole
+ \draw[->] (-0.9,0)--(1,0); \draw[->] (0,-0.7)--(0,0.95);
+ \draw[smooth,samples=30,domain=-0.75:0.75] plot (\x,{1.1*\x*\x-0.5});
+\or % 17 pH
+ \node {\fontsize{15}{17}\selectfont $\mathrm{pH}=-\log\,[\mathrm{H_3O^{+}}]$};
+\or % 18 infini
+ \node {\fontsize{40}{42}\selectfont $\infty$};
+\or % 19 ressort
+ \draw (-0.9,-0.45)--(-0.9,0.45);
+ \draw (-0.9,0)--(-0.7,0)--(-0.6,0.25)--(-0.45,-0.25)--(-0.3,0.25)--(-0.15,-0.25)--(0,0.25)--(0.1,0)--(0.15,0);
+ \draw (0.15,-0.28) rectangle (0.75,0.28);
+\or % 20 limite
+ \node {\fontsize{16}{18}\selectfont $\displaystyle\lim_{x\to 0}\frac{\sin x}{x}=1$};
+\or % 21 case du tableau périodique
+ \draw (-0.55,-0.55) rectangle (0.55,0.55);
+ \node at (-0.33,0.36) {\fontsize{8}{9}\selectfont 6};
+ \node at (0,-0.02) {\fontsize{24}{26}\selectfont C};
+ \node at (0,-0.37) {\fontsize{6}{7}\selectfont Carbone};
+\or % 22 dérivée
+ \node {\fontsize{20}{22}\selectfont $\dfrac{\mathrm{d}y}{\mathrm{d}x}$};
+\fi}
+
+% Grille décalée de symboles (déterministe)
+\newcommand{\mnwatermark}[2]{%
+\begin{tikzpicture}[overlay,color=#1,line width=0.5pt,line cap=round,line join=round]
+\begin{scope}
+#2
+\foreach \mnr in {0,...,7}{%
+ \foreach \mnc in {0,...,4}{%
+  \pgfmathtruncatemacro{\mnk}{mod(\mnr*5+\mnc*3+\mnr*\mnc,23)}%
+  \pgfmathsetmacro{\mnpx}{\mnc*4.2+mod(\mnr,2)*2.1+0.3+mod(\mnr*7+\mnc*11,9)*0.12}%
+  \pgfmathsetmacro{\mnpy}{\mnr*3.9+1.2+mod(\mnr*3+\mnc*5,7)*0.1}%
+  \pgfmathsetmacro{\mnpa}{mod(\mnk*53+\mnr*17,31)-15}%
+  \pic[transform shape,rotate=\mnpa] at (\mnpx,\mnpy) {mnsym=\mnk};%
+ }}
+\end{scope}
+\end{tikzpicture}}
+
+\newif\ifmnoncover
+\ifmnwm
+\AddToHook{shipout/background}{%
+  \put(0,-\paperheight){%
+    \ifmnoncover
+      \mnwatermark{mnblue!14}{\clip (1.1,1.1) rectangle (19.9,28.6);}%
+    \else
+      \mnwatermark{mnblue!9}{}%
+    \fi}}
+\fi
+
+% ============================================================
+%  ENTÊTE / PIED DE PAGE
+% ============================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\mnheadlogo}
+\fancyhead[R]{\sffamily\small\color{mngrey}\begin{tabular}{@{}r@{}}\textbf{\mnniveau}\,$\cdot$\,\mnmatiere\\[-1pt]\mnchapnum\ifdefempty{\mnchapnum}{}{\,:\,}\mnchapitre\end{tabular}}
+\fancyfoot[L]{\sffamily\scriptsize\itshape\color{mngrey}\mnslogan}
+\fancyfoot[C]{\sffamily\small\color{mnnavy}\textbf{\thepage}\,/\,\pageref{mnlast}}
+\fancyfoot[R]{\sffamily\scriptsize\color{mngrey}\mnauteur\,$\cdot$\,\mnannee}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{\color{mnblue}\vrule height 1.3pt depth 0pt width 3cm\color{mnnavy!35}\leaders\hrule height 0.4pt depth 0pt\hfill}}
+\renewcommand{\footrule}{%
+  \hbox to\headwidth{\color{mnnavy!35}\leaders\hrule height 0.4pt depth 0pt\hfill}}
+\renewcommand{\headrulewidth}{1.3pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\renewcommand{\footrulewidth}{0pt}}
+
+% ============================================================
+%  PAGE DE COUVERTURE (fond blanc, cadre fin, très peu d'encre)
+% ============================================================
+\newcommand{\mncover}{%
+\mnoncovertrue
+\thispagestyle{empty}%
+\begin{tikzpicture}[remember picture,overlay]
+  % cadre fin + angles d'accent
+  \draw[mnnavy,line width=0.6pt] ($(current page.north west)+(1.1cm,-1.1cm)$) rectangle ($(current page.south east)+(-1.1cm,1.1cm)$);
+  \draw[mnnavy!50,line width=0.3pt] ($(current page.north west)+(1.3cm,-1.3cm)$) rectangle ($(current page.south east)+(-1.3cm,1.3cm)$);
+  \foreach \mna/\mnb in {north west/-1,north east/1} {
+    \fill[mnblue] ($(current page.\mna)+(\mnb*1.1cm,-1.1cm)$) +(-0.14cm,-0.14cm) rectangle +(0.14cm,0.14cm);}
+  \foreach \mna/\mnb in {south west/-1,south east/1} {
+    \fill[mnblue] ($(current page.\mna)+(\mnb*1.1cm,1.1cm)$) +(-0.14cm,-0.14cm) rectangle +(0.14cm,0.14cm);}
+  % marque
+  \node[fill=white,inner sep=6pt] at ($(current page.north)+(0,-4.5cm)$) {\mnicon[0.62]{mnnavy}{mnblue}{white}};
+  \node[fill=white,inner sep=3pt,align=center,text=mnnavy] at ($(current page.north)+(0,-7.35cm)$)
+    {\sffamily\bfseries\fontsize{30}{34}\selectfont\textls[180]{MATHNEXUS}};
+  \node[fill=white,inner sep=2pt,align=center,text=mnblue] (edu) at ($(current page.north)+(0,-8.4cm)$)
+    {\sffamily\bfseries\fontsize{12}{14}\selectfont\textls[450]{EDUCATION}};
+  \draw[mnblue,line width=0.6pt] ($(edu.west)+(-1.6cm,0)$)--($(edu.west)+(-0.3cm,0)$);
+  \draw[mnblue,line width=0.6pt] ($(edu.east)+(0.3cm,0)$)--($(edu.east)+(1.6cm,0)$);
+  % type de document
+  \node[draw=mnblue,fill=white,line width=0.7pt,rounded corners=11pt,inner xsep=16pt,inner ysep=7pt,text=mnblue]
+    at ($(current page.north)+(0,-11.0cm)$)
+    {\sffamily\bfseries\fontsize{12}{14}\selectfont\textls[300]{\MakeUppercase{\mntype}}};
+  % titre
+  \node[fill=white,inner sep=8pt,text width=15.4cm,align=center,text=mnnavy] at ($(current page.north)+(0,-15.4cm)$)
+    {\ifdefempty{\mnchapnum}{}{{\sffamily\bfseries\large\color{mnblue}\textls[200]{\MakeUppercase{\mnchapnum}}}\\[8pt]}%
+     {\sffamily\bfseries\fontsize{30}{36}\selectfont\spaceskip=0.15em plus 0.05em minus 0.03em\relax\mnchapitre}%
+     \ifdefempty{\mnsoustitre}{}{\\[8pt]{\itshape\large\color{mngrey}\mnsoustitre}}};
+  % filet ornemental
+  \draw[mnnavy!45,line width=0.4pt] ($(current page.north)+(-5.2cm,-19.2cm)$)--($(current page.north)+(-0.35cm,-19.2cm)$);
+  \draw[mnnavy!45,line width=0.4pt] ($(current page.north)+(0.35cm,-19.2cm)$)--($(current page.north)+(5.2cm,-19.2cm)$);
+  \fill[mnblue] ($(current page.north)+(0,-19.2cm)$) +(0,0.12cm)--+(0.12cm,0)--+(0,-0.12cm)--+(-0.12cm,0)--cycle;
+  % fiche d'informations
+  \node[anchor=north,draw=mnnavy!55,line width=0.5pt,fill=white,inner xsep=8pt,inner ysep=11pt]
+    at ($(current page.north)+(0,-20.0cm)$)
+    {\sffamily\begin{tabular}{@{}p{4.3cm}@{\hspace{3pt}}!{\color{mnnavy!35}\vrule width 0.4pt}@{\hspace{10pt}}p{3.7cm}@{\hspace{3pt}}!{\color{mnnavy!35}\vrule width 0.4pt}@{\hspace{10pt}}p{4.0cm}@{}}
+      {\scriptsize\bfseries\color{mnblue}\textls[150]{NIVEAU}} & {\scriptsize\bfseries\color{mnblue}\textls[150]{MATIÈRE}} & {\scriptsize\bfseries\color{mnblue}\textls[150]{ANNÉE SCOLAIRE}}\\[2pt]
+      {\large\bfseries\color{mnnavy}\mnniveau} & {\large\bfseries\color{mnnavy}\mnmatiere} & {\large\bfseries\color{mnnavy}\mnannee}
+    \end{tabular}};
+  % auteur
+  \node[fill=white,inner sep=4pt,align=center] at ($(current page.north)+(0,-23.9cm)$)
+    {\sffamily{\scriptsize\bfseries\color{mngrey}\textls[200]{AUTEUR}}\\[3pt]{\Large\bfseries\color{mnnavy}\mnauteur}};
+  % disciplines et slogan
+  \node[fill=white,inner sep=3pt] at ($(current page.north)+(0,-25.9cm)$)
+    {\sffamily\scriptsize\bfseries\color{mnblue}\textls[200]{MATHÉMATIQUES\ \ $\cdot$\ \ PHYSIQUE\ \ $\cdot$\ \ CHIMIE}};
+  \node[fill=white,inner sep=4pt,align=center,text width=15cm,text=mnnavy] at ($(current page.north)+(0,-27.1cm)$)
+    {\fontsize{13}{16}\selectfont\itshape «\,\mnslogan\,»};
+\end{tikzpicture}%
+\newpage\mnoncoverfalse\setcounter{page}{1}}
+
+% ============================================================
+%  BLOC DE TITRE DE SÉRIE (haut de la 1re page de contenu)
+% ============================================================
+\newcommand{\mntitreserie}[2]{% #1 = numéro, #2 = titre
+  \begin{tcolorbox}[enhanced,colback=white,colframe=mnnavy,boxrule=0.6pt,arc=0pt,
+      left=12pt,right=10pt,top=6pt,bottom=6pt,
+      borderline west={3.5pt}{0pt}{mnblue}]
+    {\sffamily\bfseries\color{mnblue}\small\textls[150]{\MakeUppercase{\mntype}\ \ifstrempty{#1}{}{N\textdegree\,#1}}}\\[2pt]
+    {\sffamily\bfseries\Large\color{mnnavy}\spaceskip=0.15em plus 0.05em minus 0.03em\relax #2}
+  \end{tcolorbox}\vspace{4pt}}
+
+% ============================================================
+%  ENVIRONNEMENTS DE BASE (traits fins, peu de fond)
+% ============================================================
+% Titre de partie : carré d'accent + filet
+\newcommand{\sujet}[1]{\par\Needspace{9\baselineskip}\vspace{10pt}\noindent
+  {\color{mnblue}\rule[0.02em]{0.6em}{0.6em}}\hspace{0.5em}%
+  {\sffamily\bfseries\large\color{mnnavy}#1}\par\nointerlineskip\vspace{2pt}\noindent
+  \hbox to\linewidth{\color{mnblue}\vrule height 1.2pt depth 0pt width 2.2cm\color{mnnavy!30}\leaders\hrule height 0.4pt depth 0pt\hfill}%
+  \par\vspace{4pt}}
+
+% Niveau de difficulté : \niveau{3} -> ●●●○○
+\newcommand{\niveau}[1]{{\color{mnblue}\foreach\i in {1,...,5}{\ifnum\i>#1 {\color{mnblue!55}$\circ$}\else$\bullet$\fi}}}
+
+% Exercice : \exo{Titre}  ou  \exo[3]{Titre} (avec niveau de difficulté)
+\newcounter{mnexo}
+\newcommand{\exo}[2][]{\par\bigskip\refstepcounter{mnexo}\noindent
+  {\sffamily\bfseries\color{mnblue}Exercice\,\themnexo}%
+  \ifstrempty{#2}{}{\,{\sffamily\bfseries\color{mnnavy}:\ #2}}%
+  \ifstrempty{#1}{}{\hfill\niveau{#1}}\par\nointerlineskip
+  {\color{mnnavy!22}\noindent\rule{\linewidth}{0.4pt}}\par\smallskip}
+
+% Application directe (cours)
+\newtcolorbox{appli}[1][]{enhanced,breakable,colback=white,colframe=mnblue,boxrule=0.6pt,arc=2pt,
+  title={Application directe\ifstrempty{#1}{}{\,--\,#1}},
+  fonttitle=\sffamily\bfseries\small,coltitle=mnblue,colbacktitle=mnblue!8}
+
+% Définition / propriété / méthode / remarque
+\newcommand{\mnlab}[3]{{\sffamily\bfseries\color{#1}#2\ifstrempty{#3}{}{\,(#3)}.}\ }
+\newtcolorbox{defin}[1][]{enhanced,breakable,frame hidden,sharp corners,colback=mnblue!4,
+  borderline west={2.6pt}{0pt}{mnblue},left=10pt,before upper={\mnlab{mnblue}{Définition}{#1}}}
+\newtcolorbox{propr}[1][]{enhanced,breakable,colback=white,colframe=mnnavy,boxrule=0.6pt,arc=2pt,
+  before upper={\mnlab{mnnavy}{Propriété}{#1}}}
+\newtcolorbox{methode}[1][]{enhanced,breakable,frame hidden,sharp corners,colback=white,
+  borderline west={2.6pt}{0pt}{mnnavy},left=10pt,before upper={\mnlab{mnnavy}{Méthode}{#1}}}
+\newtcolorbox{rem}{enhanced,breakable,frame hidden,sharp corners,colback=white,
+  borderline west={0.6pt}{0pt}{mngrey},left=10pt,before upper={\mnlab{mngrey}{Remarque}{}}}
+
+% ============================================================
+%  FORMAT « BAC GUIDÉ » (barème, questions numérotées, a) b) c))
+%  \exobac[niveau]{points}{Titre}   -> EXERCICE n (7 points) Titre
+%  \contexte{...}                   -> ligne de contexte en italique
+%  environnement questions : \qt{Titre de la question} puis sousq
+%  environnement sousq     : \item texte \pts{0,5}
+% ============================================================
+\newcommand{\exobac}[3][]{\par\Needspace{7\baselineskip}\bigskip\refstepcounter{mnexo}\noindent
+  {\sffamily\bfseries\large\color{mnblue}EXERCICE\,\themnexo}\quad
+  {\sffamily\bfseries\large\color{mnnavy}(#2\,points)}\quad
+  {\sffamily\bfseries\large\color{mnnavy}#3}%
+  \ifstrempty{#1}{}{\hfill\niveau{#1}}\par\nointerlineskip
+  {\color{mnblue}\noindent\rule{\linewidth}{0.8pt}}\par\smallskip}
+\newcommand{\contexte}[1]{\noindent{\small\itshape\color{mngrey}#1}\par\smallskip}
+\newcommand{\pts}[1]{\hfill\mbox{\bfseries(#1\,pt)}}
+\newenvironment{questions}{\begin{enumerate}[label=\bfseries\arabic*.,leftmargin=1.5em,itemsep=4pt,topsep=4pt]}{\end{enumerate}}
+\newenvironment{sousq}{\begin{enumerate}[label=\alph*),leftmargin=2em,itemsep=2pt,topsep=3pt]}{\end{enumerate}}
+\newcommand{\qt}[1]{\item\textbf{#1}}
+% phrase d'accroche sous le bloc de titre de série
+\newcommand{\mnaccroche}[1]{\begin{center}{\small\itshape\color{mngrey}#1}\end{center}\vspace{-4pt}}
+
+% ============================================================
+%  CHIMIE : \fx{CH_3-CH_2-OH}  (formules en romain, trait d'union réel)
+% ============================================================
+\newcommand{\fx}[1]{\ensuremath{\begingroup\mathcode`\-="002D \mathrm{#1}\endgroup}}
+% Flèches de réaction
+\newcommand{\rxn}[1]{\xrightarrow{\ #1\ }}
+
+% ---------- Titres de sous-sections et paragraphes ----------
+\makeatletter
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}{1.4ex plus .3ex minus .2ex}{0.7ex plus .1ex}{\sffamily\bfseries\color{mnblue}\normalsize}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}{1.2ex plus .3ex minus .2ex}{-0.6em}{\sffamily\bfseries\color{mnnavy}\normalsize}}
+\makeatother
+
+% Encadré de résultat final
+\newtcolorbox{resultat}{enhanced,colback=mnblue!6,colframe=mnblue,boxrule=0.8pt,arc=2pt,
+  left=8pt,right=8pt,top=4pt,bottom=4pt,
+  before upper={\mnlab{mnblue}{Résultat}{}}}

@@ -1,0 +1,42 @@
+{
+ "id": "p2-c2",
+ "titre": "Conservation de l'énergie mécanique",
+ "phrases": [
+  [
+   "Énergie potentielle et énergie mécanique.",
+   "Énergie mécanique"
+  ],
+  [
+   "L'énergie potentielle de pesanteur vaut m g z, avec un axe vertical orienté vers le haut. Il faut toujours dire où se trouve la référence, là où elle est nulle.",
+   "E_p=mgz"
+  ],
+  [
+   "L'énergie mécanique est la somme de l'énergie cinétique et de l'énergie potentielle.",
+   "E_m=\\tfrac12mv^2+mgz"
+  ],
+  [
+   "Sans frottement, elle se conserve. Exemple : on lance une balle vers le haut à dix mètres par seconde, depuis le niveau de référence.",
+   "v_0=10\\ \\mathrm{m\\cdot s^{-1}},\\ z_0=0"
+  ],
+  [
+   "Au départ, toute l'énergie est cinétique. Au sommet, la vitesse est nulle : toute l'énergie est potentielle.",
+   "\\tfrac12mv_0^2=mgz_{\\max}"
+  ],
+  [
+   "Les m se simplifient : z max égale v zéro carré sur deux g, soit cent sur vingt, cinq mètres.",
+   "z_{\\max}=\\dfrac{v_0^2}{2g}=5\\ \\mathrm m"
+  ],
+  [
+   "Avec des frottements, l'énergie mécanique diminue. La perte est égale au travail des frottements.",
+   "\\Delta E_m=W(\\vec f)<0"
+  ],
+  [
+   "Le réflexe : comparer l'énergie mécanique au départ et à l'arrivée. Si elle a baissé, il y a des frottements.",
+   "E_m(B)<E_m(A)\\Rightarrow\\text{frottements}"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

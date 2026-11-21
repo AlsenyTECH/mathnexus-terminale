@@ -1,0 +1,42 @@
+{
+ "id": "p1-b1",
+ "titre": "La base de Frenet en quatre calculs",
+ "phrases": [
+  [
+   "La base de Frenet en quatre calculs.",
+   "La base de Frenet"
+  ],
+  [
+   "La base de Frenet suit le mobile. Le vecteur T est tangent à la trajectoire. Le vecteur N est perpendiculaire, tourné vers l'intérieur de la courbe.",
+   "\\vec a=a_t\\vec T+a_n\\vec N"
+  ],
+  [
+   "L'accélération tangentielle mesure la variation de la valeur de la vitesse. L'accélération normale mesure le changement de direction.",
+   "a_t=\\dfrac{\\mathrm dv}{\\mathrm dt}\\qquad a_n=\\dfrac{v^2}{\\rho}"
+  ],
+  [
+   "Exemple : x égale deux t, y égale t carré moins un, à la date un seconde. Premier calcul : vitesse deux, deux, de valeur racine de huit. Accélération zéro, deux, de valeur deux.",
+   "\\vec v(2\\,;2)\\quad \\vec a(0\\,;2)"
+  ],
+  [
+   "Deuxième calcul : a t égale le produit scalaire de v et de a, divisé par v. Ici quatre sur racine de huit, soit racine de deux.",
+   "a_t=\\dfrac{v_xa_x+v_ya_y}{v}=\\sqrt2"
+  ],
+  [
+   "Troisième calcul : a n égale la valeur absolue de v x a y moins v y a x, divisée par v. Encore racine de deux. On vérifie : deux plus deux égale quatre, c'est bien a au carré.",
+   "a_n=\\dfrac{|v_xa_y-v_ya_x|}{v}=\\sqrt2"
+  ],
+  [
+   "Quatrième calcul : le rayon de courbure, v carré sur a n. Huit sur racine de deux, environ cinq virgule sept mètres.",
+   "\\rho=\\dfrac{v^2}{a_n}\\approx5{,}66\\ \\mathrm m"
+  ],
+  [
+   "Le piège : diviser v carré par a au lieu de a n. Prends toujours l'accélération normale.",
+   "\\rho=\\dfrac{v^2}{a_n}\\ \\text{et non}\\ \\dfrac{v^2}{a}"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

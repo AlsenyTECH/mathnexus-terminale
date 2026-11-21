@@ -1,0 +1,42 @@
+{
+ "id": "p1-e1",
+ "titre": "Le mouvement circulaire uniforme",
+ "phrases": [
+  [
+   "Le mouvement circulaire uniforme.",
+   "Mouvement circulaire uniforme"
+  ],
+  [
+   "Sur un cercle, on repère le mobile par un angle, l'abscisse angulaire thêta, en radians. L'arc parcouru vaut R thêta.",
+   "s=R\\,\\theta"
+  ],
+  [
+   "Dans un mouvement circulaire uniforme, thêta augmente régulièrement : thêta égale oméga t plus thêta zéro. Oméga est la vitesse angulaire.",
+   "\\theta=\\omega t+\\theta_0"
+  ],
+  [
+   "La vitesse vaut R oméga, et la période deux pi sur oméga.",
+   "v=R\\omega\\qquad T=\\dfrac{2\\pi}{\\omega}"
+  ],
+  [
+   "La vitesse est constante en valeur, mais pas en direction. Il y a donc une accélération, dirigée vers le centre : v carré sur R.",
+   "a=\\dfrac{v^2}{R}=R\\omega^2"
+  ],
+  [
+   "Exemple : l'extrémité d'une pale de ventilateur, à trente centimètres de l'axe, fait trois tours par seconde.",
+   "R=0{,}30\\ \\mathrm m,\\ N=3\\ \\mathrm{tr/s}"
+  ],
+  [
+   "Oméga égale deux pi N, soit six pi, environ dix-huit virgule neuf radians par seconde. La vitesse vaut R oméga, environ cinq virgule sept mètres par seconde.",
+   "\\omega=6\\pi\\ \\mathrm{rad/s},\\ v\\approx5{,}65\\ \\mathrm{m/s}"
+  ],
+  [
+   "L'accélération vaut R oméga carré, environ cent sept mètres par seconde carrée. Plus de dix fois l'accélération de la pesanteur !",
+   "a=R\\omega^2\\approx107\\ \\mathrm{m\\cdot s^{-2}}"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

@@ -1,0 +1,42 @@
+{
+ "id": "p1-c2",
+ "titre": "Les trois relations du MRUV",
+ "phrases": [
+  [
+   "Le mouvement rectiligne uniformément varié.",
+   "MRUV"
+  ],
+  [
+   "Un mouvement est rectiligne uniformément varié quand la trajectoire est une droite et que l'accélération est constante.",
+   "a=\\text{constante}"
+  ],
+  [
+   "Trois relations à connaître. La vitesse : v égale a t plus v zéro. La position : x égale un demi a t carré, plus v zéro t, plus x zéro.",
+   "v=at+v_0\\qquad x=\\tfrac12at^2+v_0t+x_0"
+  ],
+  [
+   "Et la relation indépendante du temps : v carré moins v zéro carré égale deux a, facteur de x moins x zéro.",
+   "v^2-v_0^2=2a(x-x_0)"
+  ],
+  [
+   "Exemple : une voiture roule à soixante-douze kilomètres heure, soit vingt mètres par seconde. Elle freine avec une accélération de moins quatre mètres par seconde carrée.",
+   "v_0=20\\ \\mathrm{m\\cdot s^{-1}},\\ a=-4\\ \\mathrm{m\\cdot s^{-2}}"
+  ],
+  [
+   "Durée du freinage : la voiture s'arrête quand v est nulle. Zéro égale moins quatre t plus vingt, donc t égale cinq secondes.",
+   "0=-4t+20\\iff t=5\\ \\mathrm s"
+  ],
+  [
+   "Distance de freinage, sans le temps : zéro moins quatre cents égale moins huit fois d. Donc d égale cinquante mètres.",
+   "d=\\dfrac{v_0^2}{2|a|}=50\\ \\mathrm m"
+  ],
+  [
+   "Pendant le freinage, a et v sont de signes contraires : le mouvement est retardé. S'ils ont le même signe, il est accéléré.",
+   "a\\cdot v<0\\ \\Rightarrow\\ \\text{retardé}"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

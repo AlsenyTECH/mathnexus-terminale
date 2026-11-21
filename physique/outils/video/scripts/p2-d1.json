@@ -1,0 +1,38 @@
+{
+ "id": "p2-d1",
+ "titre": "Le recul d'un fusil",
+ "phrases": [
+  [
+   "Conservation de la quantité de mouvement : le recul.",
+   "Le recul"
+  ],
+  [
+   "Quand un système est isolé ou pseudo-isolé, sa quantité de mouvement totale ne change pas.",
+   "\\vec P_{\\text{avant}}=\\vec P_{\\text{après}}"
+  ],
+  [
+   "Exemple : un fusil de quatre kilogrammes tire une balle de dix grammes, à quatre cents mètres par seconde.",
+   "m_1=4\\ \\mathrm{kg},\\ m_2=0{,}01\\ \\mathrm{kg},\\ v_2=400\\ \\mathrm{m/s}"
+  ],
+  [
+   "Le système fusil plus balle est pseudo-isolé : le poids et la réaction se compensent. Avant le tir, tout est immobile : la quantité de mouvement est nulle.",
+   "\\vec P_{\\text{avant}}=\\vec 0"
+  ],
+  [
+   "Après le tir : m un v un plus m deux v deux égale zéro.",
+   "m_1\\vec v_1+m_2\\vec v_2=\\vec 0"
+  ],
+  [
+   "Donc v un égale moins m deux sur m un, fois v deux : moins zéro virgule zéro un sur quatre, fois quatre cents, soit moins un mètre par seconde.",
+   "v_1=-\\dfrac{0{,}01}{4}\\times400=-1\\ \\mathrm{m\\cdot s^{-1}}"
+  ],
+  [
+   "Le signe moins veut dire que le fusil recule, en sens inverse de la balle. C'est le recul que ressent le tireur.",
+   "\\text{le fusil recule}"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

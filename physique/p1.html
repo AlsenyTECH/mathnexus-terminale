@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>P1 · Cinématique du point</title>
+<meta name="description" content="P1 Cinématique du point : cours pas à pas, vidéos, exercices corrigés et évaluations (Terminale S2).">
+<link rel="icon" href="assets/logo.png">
+<style>
+
+/* Polices et MathJax sont dans assets/ : le site fonctionne sans connexion. */
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/caveat-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/caveat-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Kalam';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/kalam-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Kalam';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/kalam-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/source-sans-3-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/source-sans-3-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/source-sans-3-latin-700-normal.woff2) format('woff2')}
+/* Mise en page : un cahier de cours. Sommaire à gauche (les étapes dans l'ordre), une étape à la fois à droite.
+   Clair = page de cahier quadrillée (encre bleue, titres rouges, stylo vert du prof). Sombre = tableau noir et craies. */
+:root{
+  --paper:#f7f9fc; --surface:#ffffff; --ink:#1b2440; --muted:#586381; --line:#d6ddec; --grid:#e3e9f5;
+  --pen:#1c3bb0; --pen-bg:#eef2fd; --rouge:#bd1f2b; --rouge-bg:#fdf2f2; --prof:#0a7441; --prof-bg:#e9f5ee;
+  --btn-fg:#ffffff;
+  --f-body:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-hand:'Caveat','Segoe Print','Bradley Hand',cursive;
+  --f-prof:'Kalam','Comic Sans MS','Segoe Print',cursive;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141d1a; --surface:#1b2723; --ink:#eef2ea; --muted:#a6b5ab; --line:#33453d; --grid:#22302b;
+    --pen:#a9c4ff; --pen-bg:#202d45; --rouge:#ff9d92; --rouge-bg:#372422; --prof:#8fe0ae; --prof-bg:#1e3329;
+    --btn-fg:#10201a; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141d1a; --surface:#1b2723; --ink:#eef2ea; --muted:#a6b5ab; --line:#33453d; --grid:#22302b;
+  --pen:#a9c4ff; --pen-bg:#202d45; --rouge:#ff9d92; --rouge-bg:#372422; --prof:#8fe0ae; --prof-bg:#1e3329;
+  --btn-fg:#10201a; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;margin:0}
+a{color:var(--pen)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:310px minmax(0,1fr);min-height:100%}
+
+/* ---------- sommaire ---------- */
+.side{background:var(--surface);border-right:1px solid var(--line);position:sticky;top:0;align-self:start;height:100vh;height:100dvh;overflow-y:auto;overscroll-behavior:contain;
+  padding-block:20px 28px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:18px}
+.brand{font-family:var(--f-hand);font-weight:700;font-size:1.9rem;line-height:1.05;color:var(--rouge);margin:0 0 2px}
+.brand-sub{margin:0 0 14px;color:var(--muted);font-size:.92rem}
+.prog{margin:0 0 18px}
+.prog-bar{height:8px;border-radius:4px;background:var(--grid);overflow:hidden}
+.prog-fill{height:100%;width:0;background:var(--prof);transition:width .3s}
+.prog-txt{margin:6px 0 0;font-size:.88rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.nav-part{margin:16px 0 6px;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.nav-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.nav-list a{display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;align-items:start;padding:7px 8px;border-radius:4px;text-decoration:none;color:var(--ink);font-size:.95rem;line-height:1.3}
+.nav-list a:hover{background:var(--pen-bg)}
+.nav-list a[aria-current="page"]{background:var(--pen-bg);color:var(--pen);font-weight:700}
+.nav-n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);font-size:.78rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.nav-list a.done .nav-n{background:var(--prof);border-color:var(--prof);color:var(--btn-fg)}
+
+/* ---------- barre mobile ---------- */
+.topbar{display:none}
+.scrim{display:none}
+
+/* ---------- étape ---------- */
+.main{min-width:0;padding-block:0 60px}
+.lesson{max-width:860px;margin:0 auto;padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px))}
+.lhead{padding:30px 0 16px;margin:0 0 6px;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;
+  border-bottom:2px solid var(--rouge)}
+.eyebrow{margin:0 0 4px;font-size:.84rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;display:flex;gap:12px;flex-wrap:wrap;align-items:baseline}
+.eyebrow .meta{letter-spacing:0;text-transform:none;font-weight:600;color:var(--prof)}
+.lhead h2{font-family:var(--f-hand);font-weight:700;font-size:clamp(2.1rem,5.2vw,3rem);line-height:1.05;margin:0;color:var(--rouge);text-wrap:balance}
+.lbody{display:flex;flex-direction:column;gap:14px;padding-top:16px}
+.lbody > p,.lbody > ul,.lbody > ol{margin:0;max-width:70ch}
+.lbody ul,.lbody ol{padding-left:1.3em}
+.lbody li{margin:4px 0}
+.lbody h3{font-size:1.22rem;margin:14px 0 0;line-height:1.25;text-wrap:balance}
+.lead{font-size:1.15rem}
+.objectif{font-size:1.08rem;color:var(--muted);font-weight:600}
+.objectif::before{content:"Objectif : ";color:var(--pen);font-weight:700}
+
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%;padding:4px 0;margin:.5em 0 !important}
+mjx-container{color:inherit;position:relative}
+.table-wrap,.copie,.exo{position:relative}
+
+.lab{margin:0 0 6px;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;font-family:var(--f-body)}
+.retenir{border:2px solid var(--rouge);border-radius:4px;background:var(--rouge-bg);padding:12px 16px}
+.retenir .lab{color:var(--rouge)}
+.retenir p,.retenir ul,.retenir ol{margin:6px 0}
+.retenir ul,.retenir ol{padding-left:1.3em}
+.prof{background:var(--prof-bg);border-radius:4px;padding:12px 16px;color:var(--prof);font-family:var(--f-prof);font-size:1rem;line-height:1.55}
+.prof .lab{color:var(--prof)}
+.prof p,.prof ul{margin:4px 0}
+.prof ul{padding-left:1.2em}
+.copie{border:1px solid var(--line);border-radius:3px;padding:14px 16px 12px;color:var(--pen);font-family:var(--f-hand);font-size:1.42rem;line-height:1.5;min-width:0;
+  background-color:var(--surface);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+.copie .lab{color:var(--muted)}
+.copie p{margin:4px 0}
+.copie mjx-container{font-size:.82em}
+.copie u{text-decoration-thickness:1.5px;text-underline-offset:3px}
+
+.video{margin:6px 0;display:flex;flex-direction:column;gap:6px}
+.video video{width:100%;max-width:100%;aspect-ratio:16/9;background:#101614;border-radius:4px;border:1px solid var(--line);display:block}
+.video figcaption{font-size:.95rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.tag{font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:var(--btn-fg);background:var(--pen);padding:2px 7px;border-radius:3px}
+.dur{font-variant-numeric:tabular-nums}
+
+.table-wrap{overflow-x:auto;max-width:100%}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.98rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--pen-bg);font-weight:700}
+
+.exos-h{border-top:1px solid var(--line);padding-top:18px;margin-top:18px !important}
+.exo{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.exo-n{margin:0;font-weight:700;color:var(--pen);font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+.exo-q p{margin:4px 0}
+.exo details{display:flex;flex-direction:column;gap:10px}
+.exo summary{cursor:pointer;font-weight:700;color:var(--pen);padding:6px 0;width:max-content;max-width:100%}
+.exo details[open] summary{margin-bottom:8px}
+.exo details > * + *{margin-top:10px}
+
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.howto > div{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:12px 14px}
+.howto p{margin:0}
+.howto .num{font-family:var(--f-hand);font-weight:700;font-size:2rem;line-height:1;color:var(--rouge);margin-bottom:4px}
+
+.chrono{border:2px solid var(--pen);border-radius:4px;background:var(--pen-bg);padding:14px 16px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.chrono-lab{margin:0;font-weight:700}
+.chrono-t{margin:0;font-size:3rem;line-height:1;font-weight:700;font-variant-numeric:tabular-nums;color:var(--pen)}
+.chrono-b{display:flex;gap:10px;flex-wrap:wrap}
+.chrono-end{margin:0;font-weight:700;color:var(--rouge)}
+
+.btn{border:1.5px solid var(--pen);background:var(--pen);color:var(--btn-fg);font-weight:700;padding:10px 16px;border-radius:4px;cursor:pointer;text-decoration:none;display:inline-block;line-height:1.2}
+.btn.ghost{background:transparent;color:var(--pen)}
+.btn[disabled]{opacity:.45;cursor:default}
+.pager{max-width:860px;margin:30px auto 0;padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px));display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.pager .right{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.done-note{color:var(--prof);font-weight:700;margin:0}
+.linkbtn{background:none;border:0;padding:4px 0;color:var(--muted);font-size:.88rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.linkbtn:hover{color:var(--pen)}
+.linkbtn.warn{color:var(--rouge);font-weight:700}
+.prog .linkbtn{margin-top:4px}
+.lesson{scroll-margin-top:70px;overflow-x:hidden;overflow-x:clip} /* le texte caché de MathJax pour lecteurs d'écran ne doit pas élargir la page */
+.video .hint{display:none;font-size:.88rem;color:var(--muted);margin:0}
+
+@media (max-width: 880px){
+  .app{display:block}
+  .topbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+    padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));gap:12px;align-items:center;justify-content:space-between}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+  .topbar .brand{font-size:1.45rem;margin:0}
+  .topbar .mini{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;margin:0}
+  .side{position:fixed;inset:0 auto 0 0;width:min(88vw,330px);z-index:40;transform:translateX(-102%);transition:transform .22s;
+    /* align-self:start (utile sur ordinateur) empêchait le panneau de prendre la hauteur de l'écran : il ne défilait plus */
+    align-self:auto;height:100%;height:100dvh;max-height:100dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+    padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+  .side.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.35)}
+  .scrim{display:block;position:fixed;inset:0;z-index:30;background:rgba(10,16,30,.45)}
+  .lesson,.pager{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .lhead{padding-top:20px}
+  body{font-size:16.5px}
+  .copie{font-size:1.3rem;padding:12px 12px 10px}
+  .pager .btn{flex:1 1 auto;text-align:center}
+  .video .hint{display:block}
+}
+@media (prefers-reduced-motion: reduce){.side,.prog-fill{transition:none}}
+
+/* ---- ajouts du site Sciences physiques TS2 ---- */
+.logo{display:inline-block;margin:0 0 6px}
+.logo img{display:block;width:64px;height:auto}
+.exemple{border:1px solid var(--line);border-left:4px solid var(--pen);border-radius:4px;background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.exemple > p,.exemple > ol,.exemple > ul{margin:0}
+.exo.appli{border-left:4px solid var(--prof)}
+.exo.eval{border-left:4px solid var(--rouge)}
+.exo-q ol.q,.exemple ol.q{padding-left:1.4em;margin:6px 0}
+.copie ol.q{padding-left:1.3em}
+.pts{float:right;color:var(--rouge);letter-spacing:0;text-transform:none}
+.consigne{color:var(--muted);font-style:italic;margin:-6px 0 0 !important}
+.disp{margin:0;overflow-x:auto}
+.video-attente{border:2px dashed var(--line);border-radius:4px;padding:14px 16px;background:var(--surface)}
+.video-attente .lab{color:var(--pen)}
+.video-attente p{margin:4px 0}
+.note{border:2px solid var(--rouge);border-radius:4px;background:var(--rouge-bg);padding:12px 16px}
+.note label{font-weight:700}
+.note input{font:inherit;width:6.5em;padding:6px 8px;margin-left:6px;border:1.5px solid var(--line);border-radius:4px;background:var(--surface);color:var(--ink)}
+.note-msg{margin:8px 0 0;font-weight:700}
+.note-msg.ok{color:var(--prof)}
+.note-msg.ko{color:var(--rouge)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.card{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:14px 16px;text-decoration:none;color:var(--ink);min-width:0}
+a.card:hover{border-color:var(--pen);background:var(--pen-bg)}
+.card.off{opacity:.55}
+.c-code{font-family:var(--f-hand);font-size:1.7rem;font-weight:700;color:var(--rouge);line-height:1}
+.c-t{font-weight:700;line-height:1.3}
+.c-m{font-size:.88rem;color:var(--muted)}
+.c-go{margin-top:auto;font-weight:700;color:var(--pen)}
+.muted{color:var(--muted)}
+.foot{max-width:860px;margin:36px auto 0;padding:0 22px;color:var(--muted);font-size:.85rem;text-align:center}
+
+</style>
+<script>window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']],
+    macros: { vect: ['\\overrightarrow{#1}',1], U: ['\\,\\mathrm{#1}',1], ms: '\\,\\mathrm{m\\cdot s^{-1}}', mss: '\\,\\mathrm{m\\cdot s^{-2}}',
+      dd: '\\mathrm{d}', R: '\\mathbb{R}' } },
+  svg: { fontCache: 'global' }, startup: { typeset: false }
+};</script>
+<script src="assets/mathjax/tex-svg.js" defer></script>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <button type="button" class="btn ghost" id="menu-btn" aria-controls="side" aria-expanded="false">Sommaire</button>
+    <p class="brand">P1 · Cinématique</p>
+    <p class="mini" id="mini-prog"></p>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <nav class="side" id="side" aria-label="Sommaire">
+    <a class="logo" href="index.html"><img src="assets/logo.png" alt="MathNexus Education" width="64" height="55"></a>
+    <p class="brand">P1 · Cinématique du point</p>
+    <p class="brand-sub">Sciences physiques · Terminale S2</p>
+    <p class='brand-sub'><a href='index.html'>← Tous les chapitres</a></p>
+    <div class="prog">
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+      <p class="prog-txt" id="prog-txt"></p>
+      <button type="button" class="linkbtn" id="reset" hidden>Remettre ma progression à zéro</button>
+    </div>
+    <div id="nav"></div>
+  </nav>
+  <main class="main" id="main">
+<section class='lesson' id='accueil' data-part='' data-title='Comment travailler' hidden>
+<header class='lhead'><p class='eyebrow'>Bienvenue · P1</p><h2>Cinématique du point</h2></header><div class='lbody'>
+<p class='lead'>Décrire un mouvement sans chercher ses causes : position, vitesse, accélération, puis les grands mouvements du programme (rectilignes, sinusoïdal, circulaires).</p>
+<div class='howto'>
+<div><p class='num'>1</p><p><strong>Lis le cours</strong> de l'étape. Les encadrés rouges sont à savoir par cœur.</p></div>
+<div><p class='num'>2</p><p><strong>Regarde la vidéo</strong>, puis l'exemple corrigé ligne par ligne.</p></div>
+<div><p class='num'>3</p><p><strong>Fais l'exercice d'application</strong> en t'aidant de l'exemple.</p></div>
+<div><p class='num'>4</p><p><strong>Fais seul les exercices</strong> « À toi de jouer », puis ouvre la correction.</p></div>
+</div>
+<p>À la fin de chaque partie, une <strong>évaluation chronométrée</strong> vérifie que tout est compris. Note-toi honnêtement avec le barème : en dessous de 12 sur 20, refais les étapes de la partie avant d'avancer.</p>
+<h3>Le plan</h3><ul><li><strong>Partie A</strong> · Repérage, vitesse et accélération (2 étapes + évaluation)</li><li><strong>Partie B</strong> · La base de Frenet (1 étapes + évaluation)</li><li><strong>Partie C</strong> · Les mouvements rectilignes (3 étapes + évaluation)</li><li><strong>Partie D</strong> · Le mouvement rectiligne sinusoïdal (2 étapes + évaluation)</li><li><strong>Partie E</strong> · Les mouvements circulaires (2 étapes + évaluation)</li></ul>
+<div class='retenir'><p class='lab'>La série à imprimer</p><p>Les exercices « À toi de jouer » et les évaluations du chapitre sont réunis dans une série PDF à imprimer, avec le corrigé à la fin : <a href='series/Serie-P1-Cinematique.pdf'>télécharger la série P1 (PDF)</a>.</p></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Une étape par jour vaut mieux que tout le chapitre la veille du devoir. Ta progression est gardée sur cet appareil.</p></div>
+</div></section>
+<section class='lesson' id='p1-a1' data-part='Partie A · Repérage, vitesse et accélération' data-title='Repère, équations horaires et trajectoire' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie A · Étape 1 <span class='meta'>15 min</span></p><h2>Repère, équations horaires et trajectoire</h2></header>
+<div class='lbody'><p class='objectif'>Savoir repérer un mobile dans un repère, lire ses équations horaires et trouver l'équation de sa trajectoire.</p>
+<p>Étudier un mouvement, c'est d'abord choisir <strong>par rapport à quoi</strong> on l'observe : c'est le <strong>référentiel</strong> (le sol, un train, la Terre…). Dans ce référentiel, on fixe un <strong>repère</strong> \((O;\vec i,\vec j)\) et une origine des dates.</p>
+<p>La position du mobile \(M\) à la date \(t\) est donnée par son <strong>vecteur position</strong> :</p>
+<p class='disp'>\[\vect{OM}=x(t)\,\vec i+y(t)\,\vec j\]</p>
+<p>Les fonctions \(x(t)\) et \(y(t)\) sont les <strong>équations horaires</strong> du mouvement. La <strong>trajectoire</strong> est l'ensemble des positions occupées : c'est une courbe, et son équation ne contient plus le temps.</p>
+<div class='retenir'><p class='lab'>À retenir · Trouver l'équation de la trajectoire</p><ol class='q' start='1'><li>Dans l'équation la plus simple (souvent \(x(t)\)), j'exprime \(t\) en fonction de \(x\).</li><li>Je remplace \(t\) dans l'autre équation.</li><li>J'obtiens \(y=f(x)\) et je reconnais la courbe : droite (\(y=ax+b\)), parabole (\(y=ax^2+bx+c\)), cercle (\(x^2+y^2=R^2\)).</li></ol></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Pour un cercle, on n'exprime pas \(t\) : on calcule \(x^2+y^2\) et on utilise \(\cos^2+\sin^2=1\).</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 1</p><p><strong>Des équations horaires à la trajectoire</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · une parabole</p><p>Un mobile se déplace dans le plan. Ses équations horaires sont \(x=2t\) et \(y=t^2-1\) (\(x\), \(y\) en m ; \(t\) en s ; \(t\geq 0\)).</p>
+<ol class='q' start='1'><li>Où est le mobile à \(t=1\U{s}\) ? À quelle distance de \(O\) ?</li><li>Déterminer l'équation de la trajectoire.</li></ol><div class='copie'><p class='lab'>Solution rédigée</p><ol class='q' start='1'><li>À \(t=1\U{s}\) : \(x=2\times1=2\U{m}\) et \(y=1^2-1=0\). Le mobile est en \(M(2\,;\,0)\) et \(OM=\sqrt{2^2+0^2}=2\U{m}\).</li><li>De \(x=2t\) on tire \(t=\dfrac{x}{2}\). On remplace : \(y=\left(\dfrac{x}{2}\right)^2-1\), soit \(y=\dfrac{x^2}{4}-1\). La trajectoire est une <strong>portion de parabole</strong> (\(x\geq0\) car \(t\geq0\)).</li></ol></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · une droite</p><div class='exo-q'><p>Les équations horaires d'un mobile sont \(x=3t+1\) et \(y=-2t+4\) (unités SI).</p>
+<ol class='q' start='1'><li>Donner la position du mobile à \(t=0\) et à \(t=2\U{s}\).</li><li>Déterminer l'équation de la trajectoire et la nommer.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>À \(t=0\) : \(M_0(1\,;\,4)\). À \(t=2\U{s}\) : \(x=7\U{m}\), \(y=0\), donc \(M(7\,;\,0)\).</li><li>\(t=\dfrac{x-1}{3}\), donc \(y=-2\times\dfrac{x-1}{3}+4=-\dfrac{2}{3}x+\dfrac{14}{3}\). C'est une <strong>droite</strong> : le mouvement est rectiligne.</li></ol></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · un cercle</p><div class='exo-q'><p>Un point \(M\) a pour équations horaires \(x=4\cos(2t)\) et \(y=4\sin(2t)\) (SI).</p>
+<ol class='q' start='1'><li>Calculer \(x^2+y^2\).</li><li>En déduire la nature de la trajectoire et ses caractéristiques.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(x^2+y^2=16\cos^2(2t)+16\sin^2(2t)=16\,(\cos^2+\sin^2)=16\).</li><li>\(x^2+y^2=4^2\) : la trajectoire est le **cercle de centre \(O\) et de rayon \(4\U{m}\)**.</li></ol></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · lire une parabole</p><div class='exo-q'><p>Un mobile a pour équations horaires \(x=t\) et \(y=-5t^2+10t\) (SI, \(t\geq0\)).</p>
+<ol class='q' start='1'><li>Montrer que la trajectoire a pour équation \(y=-5x^2+10x\).</li><li>Pour quelles valeurs de \(x\) le mobile est-il sur l'axe \((Ox)\) ?</li><li>Quelle est l'ordonnée maximale atteinte ?</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(t=x\), donc \(y=-5x^2+10x\).</li><li>\(y=0\iff x(-5x+10)=0\iff x=0\) ou \(x=2\U{m}\).</li><li>Le sommet de la parabole est au milieu des racines : \(x=1\U{m}\), et \(y=-5+10=5\U{m}\).</li></ol></div></details></div>
+</div></section>
+<section class='lesson' id='p1-a2' data-part='Partie A · Repérage, vitesse et accélération' data-title='Vecteurs vitesse et accélération' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie A · Étape 2 <span class='meta'>15 min</span></p><h2>Vecteurs vitesse et accélération</h2></header>
+<div class='lbody'><p class='objectif'>Calculer les composantes et la valeur des vecteurs vitesse et accélération à partir des équations horaires.</p>
+<p>Le <strong>vecteur vitesse</strong> est la dérivée du vecteur position par rapport au temps ; le <strong>vecteur accélération</strong> est la dérivée du vecteur vitesse.</p>
+<div class='retenir'><p class='lab'>À retenir · Vitesse et accélération dans un repère</p><p class='disp'>\[\vec v=\frac{\dd\vect{OM}}{\dd t}\quad\begin{cases}v_x=\dot x\\ v_y=\dot y\end{cases}\qquad\qquad \vec a=\frac{\dd\vec v}{\dd t}\quad\begin{cases}a_x=\dot v_x=\ddot x\\ a_y=\dot v_y=\ddot y\end{cases}\]</p>
+<ul><li>Valeurs : \(v=\sqrt{v_x^2+v_y^2}\) (en \(\mathrm{m\cdot s^{-1}}\)) et \(a=\sqrt{a_x^2+a_y^2}\) (en \(\mathrm{m\cdot s^{-2}}\)).</li><li>Le vecteur vitesse est <strong>tangent à la trajectoire</strong> et orienté dans le sens du mouvement.</li></ul></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Le chemin inverse sert aussi : si on connaît \(\vec a\) ou \(\vec v\), on retrouve les équations horaires en cherchant une <strong>primitive</strong>, et les constantes avec les conditions initiales (position et vitesse à \(t=0\)).</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 2</p><p><strong>Dériver pour trouver la vitesse et l'accélération</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · dériver deux fois</p><p>Équations horaires : \(x=2t\) et \(y=t^2-1\) (SI).</p>
+<ol class='q' start='1'><li>Déterminer les coordonnées du vecteur vitesse, puis sa valeur à \(t=1\U{s}\).</li><li>Déterminer le vecteur accélération. Que remarque-t-on ?</li></ol><div class='copie'><p class='lab'>Solution rédigée</p><ol class='q' start='1'><li>\(v_x=\dot x=2\) et \(v_y=\dot y=2t\). À \(t=1\U{s}\) : \(\vec v\,(2\,;\,2)\) et \(v=\sqrt{4+4}=2\sqrt2\approx2{,}83\ms\).</li><li>\(a_x=\dot v_x=0\) et \(a_y=\dot v_y=2\) : \(\vec a\,(0\,;\,2)\), \(a=2\mss\). L'accélération est <strong>constante</strong> (même valeur, même direction à toute date).</li></ol></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · vitesse à une date</p><div class='exo-q'><p>Un mobile a pour équations horaires \(x=3t^2-2t\) et \(y=4t\) (SI).</p>
+<ol class='q' start='1'><li>Exprimer \(v_x\), \(v_y\), puis calculer \(v\) à \(t=2\U{s}\).</li><li>Déterminer \(\vec a\) et sa valeur.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(v_x=6t-2\) et \(v_y=4\). À \(t=2\U{s}\) : \(v_x=10\ms\), \(v_y=4\ms\), \(v=\sqrt{100+16}=\sqrt{116}\approx10{,}8\ms\).</li><li>\(a_x=6\) et \(a_y=0\) : \(\vec a=6\,\vec i\), \(a=6\mss\), constante.</li></ol></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · quand la vitesse s'annule</p><div class='exo-q'><p>Un mobile a pour équations horaires \(x=-t^2+4t\) et \(y=3\) (SI).</p>
+<ol class='q' start='1'><li>Quelle est la nature de la trajectoire ?</li><li>À quelle date la vitesse s'annule-t-elle ? Où est alors le mobile ?</li><li>Donner le vecteur accélération.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(y=3\) est constant : la trajectoire est la <strong>droite</strong> d'équation \(y=3\), le mouvement est rectiligne.</li><li>\(v_x=-2t+4\) et \(v_y=0\). \(v=0\iff t=2\U{s}\). Alors \(x=-4+8=4\U{m}\) : le mobile est en \((4\,;\,3)\), il fait demi-tour.</li><li>\(a_x=-2\), \(a_y=0\) : \(\vec a=-2\,\vec i\), \(a=2\mss\).</li></ol></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · le chemin inverse</p><div class='exo-q'><p>Le vecteur vitesse d'un mobile est \(\vec v\,(2\,;\,-10t+5)\) (SI). À \(t=0\), le mobile est en \(O\).</p>
+<ol class='q' start='1'><li>Déterminer les équations horaires \(x(t)\) et \(y(t)\).</li><li>Déterminer le vecteur accélération.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>On cherche des primitives : \(x=2t+x_0\) et \(y=-5t^2+5t+y_0\). À \(t=0\), le mobile est en \(O\) : \(x_0=y_0=0\). Donc \(x=2t\) et \(y=-5t^2+5t\).</li><li>\(a_x=0\) et \(a_y=-10\) : \(\vec a\,(0\,;\,-10)\), \(a=10\mss\).</li></ol></div></details></div>
+</div></section>
+<section class='lesson' id='p1-eval-a' data-part='Partie A · Repérage, vitesse et accélération' data-title='Évaluation de la partie A' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie A · Consolidation <span class='meta'>35 min</span></p><h2>Évaluation : Repérage, vitesse et accélération</h2></header>
+<div class='lbody'><p class='lead'>Cette évaluation vérifie que la partie est comprise. Traite-la comme un devoir : feuille, calculatrice, chronomètre, sans le cours.</p>
+<div class='chrono' data-min='35'><p class='chrono-lab'>Durée conseillée : 35 minutes</p><p class='chrono-t'>35:00</p><div class='chrono-b'><button type='button' class='btn c-start'>Démarrer</button><button type='button' class='btn ghost c-reset'>Remettre à zéro</button></div><p class='chrono-end' hidden>Temps écoulé : pose le stylo et corrige-toi.</p></div>
+<div class='exo eval'><p class='exo-n'>Exercice 1 · Mouvement dans un plan <span class='pts'>10 pts</span></p><div class='exo-q'><p>Dans un repère \((O;\vec i,\vec j)\), un mobile a pour équations horaires \(x=2t\) et \(y=-t^2+4t\) (\(x\), \(y\) en m, \(t\) en s, \(t\geq0\)).</p>
+<ol class='q' start='1'><li>Déterminer l'équation de la trajectoire et la nommer.</li><li>Déterminer les coordonnées du vecteur vitesse à une date \(t\).</li><li>À quelle date \(t_1\) le vecteur vitesse est-il horizontal ? Donner la position du mobile et la valeur de sa vitesse à cette date.</li><li>Déterminer le vecteur accélération et sa valeur.</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>\(t=\dfrac{x}{2}\), donc \(y=-\dfrac{x^2}{4}+2x\) : <strong>parabole</strong> (portion \(x\geq0\)). <strong>(2 pts)</strong></li><li>\(v_x=2\) et \(v_y=-2t+4\). <strong>(2 pts)</strong></li><li>Vecteur vitesse horizontal \(\iff v_y=0\iff t_1=2\U{s}\). Position : \(x=4\U{m}\), \(y=-4+8=4\U{m}\). Vitesse : \(v=\sqrt{2^2+0^2}=2\ms\). <strong>(4 pts)</strong></li><li>\(a_x=0\), \(a_y=-2\) : \(\vec a=-2\,\vec j\), \(a=2\mss\), constant. <strong>(2 pts)</strong></li></ol>
+<p>Remarque : au sommet de la parabole, la vitesse n'est pas nulle, elle est horizontale.</p></div></details></div>
+<div class='exo eval'><p class='exo-n'>Exercice 2 · Retrouver les équations horaires <span class='pts'>10 pts</span></p><div class='exo-q'><p>Le vecteur vitesse d'un mobile est \(\vec v=4\,\vec i+(-2t+2)\,\vec j\) (SI). À \(t=0\), le mobile est au point \(M_0(0\,;\,1)\).</p>
+<ol class='q' start='1'><li>Déterminer les équations horaires du mouvement.</li><li>Déterminer l'équation de la trajectoire.</li><li>Calculer la valeur de la vitesse à \(t=0\).</li><li>Déterminer le vecteur accélération. À quelle date et en quel point le mobile atteint-il son ordonnée maximale ?</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>Primitives : \(x=4t+x_0\), \(y=-t^2+2t+y_0\). Avec \(M_0(0\,;\,1)\) : \(x=4t\) et \(y=-t^2+2t+1\). <strong>(3 pts)</strong></li><li>\(t=\dfrac{x}{4}\), donc \(y=-\dfrac{x^2}{16}+\dfrac{x}{2}+1\) : parabole. <strong>(2 pts)</strong></li><li>\(\vec v_0\,(4\,;\,2)\), \(v_0=\sqrt{20}=2\sqrt5\approx4{,}47\ms\). <strong>(2 pts)</strong></li><li>\(\vec a\,(0\,;\,-2)\), \(a=2\mss\). L'ordonnée est maximale quand \(v_y=0\) : \(t=1\U{s}\), au point \((4\,;\,2)\). <strong>(3 pts)</strong></li></ol></div></details></div>
+<div class='note'><label>Ma note sur 20 : <input type='number' class='score' min='0' max='20' step='0.25' inputmode='decimal' data-tot='20'></label><p class='note-msg' aria-live='polite'></p></div>
+</div></section>
+<section class='lesson' id='p1-b1' data-part='Partie B · La base de Frenet' data-title='Accélérations tangentielle et normale, rayon de courbure' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie B · Étape 3 <span class='meta'>20 min</span></p><h2>Accélérations tangentielle et normale, rayon de courbure</h2></header>
+<div class='lbody'><p class='objectif'>Décomposer l'accélération dans la base de Frenet et calculer le rayon de courbure à une date donnée.</p>
+<p>La <strong>base de Frenet</strong> est attachée au mobile : \(\vec T\) est tangent à la trajectoire (dans le sens du mouvement), \(\vec N\) lui est perpendiculaire et pointe <strong>vers l'intérieur de la courbe</strong>.</p>
+<div class='retenir'><p class='lab'>À retenir · Base de Frenet</p><p class='disp'>\[\vec a=a_t\,\vec T+a_n\,\vec N\qquad a_t=\frac{\dd v}{\dd t}\qquad a_n=\frac{v^2}{\rho}\qquad a^2=a_t^2+a_n^2\]</p>
+<ul><li>\(\rho\) est le <strong>rayon de courbure</strong> (en m). Pour un cercle, \(\rho=R\).</li><li>\(a_t&gt;0\) : mouvement accéléré ; \(a_t&lt;0\) : retardé ; \(a_t=0\) : uniforme.</li><li>\(a_n=0\) à toute date : mouvement rectiligne.</li></ul></div>
+<div class='retenir'><p class='lab'>À retenir · Méthode à une date donnée</p><ol class='q' start='1'><li>Calculer \(\vec v\), \(v\) et \(\vec a\), \(a\) à cette date.</li><li>\(a_t=\dfrac{\vec v\cdot\vec a}{v}=\dfrac{v_xa_x+v_ya_y}{v}\).</li><li>\(a_n=\dfrac{|v_xa_y-v_ya_x|}{v}\), ou \(a_n=\sqrt{a^2-a_t^2}\).</li><li>\(\rho=\dfrac{v^2}{a_n}\).</li></ol></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Ne calcule pas \(\rho\) avec \(a\) au lieu de \(a_n\) : c'est l'erreur la plus fréquente. Vérifie toujours \(a_t^2+a_n^2=a^2\).</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 3</p><p><strong>La base de Frenet en quatre calculs</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · à la date t = 1 s</p><p>Équations horaires : \(x=2t\), \(y=t^2-1\) (SI). Calculer à \(t=1\U{s}\) : \(a_t\), \(a_n\) et le rayon de courbure \(\rho\).</p><div class='copie'><p class='lab'>Solution rédigée</p><p>À \(t=1\U{s}\) : \(\vec v\,(2\,;\,2)\), \(v=\sqrt8\approx2{,}83\ms\) ; \(\vec a\,(0\,;\,2)\), \(a=2\mss\).</p>
+<p>\(a_t=\dfrac{2\times0+2\times2}{\sqrt8}=\sqrt2\approx1{,}41\mss\) (positive : mouvement accéléré).</p>
+<p>\(a_n=\dfrac{|2\times2-2\times0|}{\sqrt8}=\sqrt2\approx1{,}41\mss\). Vérification : \(a_t^2+a_n^2=2+2=4=a^2\).</p>
+<p>\(\rho=\dfrac{v^2}{a_n}=\dfrac{8}{\sqrt2}=4\sqrt2\approx5{,}66\U{m}\).</p></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · à la date t = 1 s</p><div class='exo-q'><p>Équations horaires : \(x=3t\), \(y=2t^2\) (SI). À \(t=1\U{s}\), calculer \(v\), \(a\), \(a_t\), \(a_n\) et \(\rho\).</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(\vec v\,(3\,;\,4t)\) : à \(t=1\U{s}\), \(\vec v\,(3\,;\,4)\) et \(v=5\ms\). \(\vec a\,(0\,;\,4)\), \(a=4\mss\).</p>
+<p>\(a_t=\dfrac{3\times0+4\times4}{5}=3{,}2\mss\) ; \(a_n=\dfrac{|3\times4-4\times0|}{5}=2{,}4\mss\) (vérification : \(3{,}2^2+2{,}4^2=16\)).</p>
+<p>\(\rho=\dfrac{25}{2{,}4}\approx10{,}4\U{m}\).</p></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · un mouvement circulaire</p><div class='exo-q'><p>Équations horaires : \(x=2\cos(3t)\), \(y=2\sin(3t)\) (SI).</p>
+<ol class='q' start='1'><li>Calculer \(v\). Le mouvement est-il uniforme ?</li><li>En déduire \(a_t\), puis \(a_n\) sachant que \(a=18\mss\). Calculer \(\rho\) et conclure.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(v_x=-6\sin(3t)\), \(v_y=6\cos(3t)\), donc \(v=6\ms\) constante : mouvement <strong>uniforme</strong>.</li><li>\(a_t=\dfrac{\dd v}{\dd t}=0\), donc \(a_n=a=18\mss\) et \(\rho=\dfrac{36}{18}=2\U{m}\) : c'est le rayon du cercle décrit (\(x^2+y^2=4\)).</li></ol></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · à la date t = 0,6 s</p><div class='exo-q'><p>Équations horaires : \(x=4t\), \(y=-5t^2\) (SI). À \(t=0{,}6\U{s}\), calculer \(v\), \(a_t\), \(a_n\) et \(\rho\).</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(\vec v\,(4\,;\,-10t)\) : à \(0{,}6\U{s}\), \(\vec v\,(4\,;\,-6)\), \(v=\sqrt{52}\approx7{,}21\ms\). \(\vec a\,(0\,;\,-10)\), \(a=10\mss\).</p>
+<p>\(a_t=\dfrac{4\times0+(-6)(-10)}{7{,}21}\approx8{,}32\mss\) ; \(a_n=\dfrac{|4\times(-10)-(-6)\times0|}{7{,}21}\approx5{,}55\mss\).</p>
+<p>\(\rho=\dfrac{52}{5{,}55}\approx9{,}37\U{m}\).</p></div></details></div>
+</div></section>
+<section class='lesson' id='p1-eval-b' data-part='Partie B · La base de Frenet' data-title='Évaluation de la partie B' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie B · Consolidation <span class='meta'>35 min</span></p><h2>Évaluation : La base de Frenet</h2></header>
+<div class='lbody'><p class='lead'>Cette évaluation vérifie que la partie est comprise. Traite-la comme un devoir : feuille, calculatrice, chronomètre, sans le cours.</p>
+<div class='chrono' data-min='35'><p class='chrono-lab'>Durée conseillée : 35 minutes</p><p class='chrono-t'>35:00</p><div class='chrono-b'><button type='button' class='btn c-start'>Démarrer</button><button type='button' class='btn ghost c-reset'>Remettre à zéro</button></div><p class='chrono-end' hidden>Temps écoulé : pose le stylo et corrige-toi.</p></div>
+<div class='exo eval'><p class='exo-n'>Exercice 1 · Frenet à une date donnée <span class='pts'>12 pts</span></p><div class='exo-q'><p>Un mobile a pour équations horaires \(x=4t\) et \(y=t^2+1\) (SI).</p>
+<ol class='q' start='1'><li>Déterminer l'équation de la trajectoire.</li><li>Calculer les valeurs de la vitesse et de l'accélération à \(t=3\U{s}\).</li><li>Calculer à cette date les accélérations tangentielle et normale. Le mouvement est-il accéléré ou retardé ?</li><li>Calculer le rayon de courbure de la trajectoire au point occupé à \(t=3\U{s}\).</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>\(t=\dfrac{x}{4}\) donc \(y=\dfrac{x^2}{16}+1\) : parabole. <strong>(2 pts)</strong></li><li>\(\vec v\,(4\,;\,2t)\) : à \(3\U{s}\), \(\vec v\,(4\,;\,6)\), \(v=\sqrt{52}\approx7{,}21\ms\). \(\vec a\,(0\,;\,2)\), \(a=2\mss\). <strong>(3 pts)</strong></li><li>\(a_t=\dfrac{4\times0+6\times2}{7{,}21}\approx1{,}66\mss&gt;0\) : mouvement <strong>accéléré</strong>. \(a_n=\dfrac{|4\times2-6\times0|}{7{,}21}\approx1{,}11\mss\). Vérification : \(1{,}66^2+1{,}11^2\approx4=a^2\). <strong>(5 pts)</strong></li><li>\(\rho=\dfrac{v^2}{a_n}=\dfrac{52}{1{,}11}\approx46{,}9\U{m}\). <strong>(2 pts)</strong></li></ol></div></details></div>
+<div class='exo eval'><p class='exo-n'>Exercice 2 · Mouvement circulaire uniforme <span class='pts'>8 pts</span></p><div class='exo-q'><p>Un point \(M\) a pour équations horaires \(x=0{,}5\cos(\pi t)\) et \(y=0{,}5\sin(\pi t)\) (SI).</p>
+<ol class='q' start='1'><li>Montrer que la trajectoire est un cercle dont on précisera le centre et le rayon.</li><li>Calculer la vitesse \(v\). Le mouvement est-il uniforme ?</li><li>En déduire \(a_t\) et \(a_n\). Montrer que \(\vec a=-\pi^2\,\vect{OM}\) et interpréter.</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>\(x^2+y^2=0{,}25\) : cercle de centre \(O\), de rayon \(R=0{,}5\U{m}\). <strong>(2 pts)</strong></li><li>\(v_x=-0{,}5\pi\sin(\pi t)\), \(v_y=0{,}5\pi\cos(\pi t)\), donc \(v=0{,}5\pi\approx1{,}57\ms\) constante : <strong>uniforme</strong>. <strong>(2 pts)</strong></li><li>\(a_t=0\) ; \(a_n=\dfrac{v^2}{R}=\dfrac{0{,}25\pi^2}{0{,}5}=0{,}5\pi^2\approx4{,}93\mss\). \(a_x=-0{,}5\pi^2\cos(\pi t)=-\pi^2x\) et \(a_y=-\pi^2y\), donc \(\vec a=-\pi^2\vect{OM}\) : l'accélération est dirigée vers le centre (<strong>centripète</strong>). <strong>(4 pts)</strong></li></ol></div></details></div>
+<div class='note'><label>Ma note sur 20 : <input type='number' class='score' min='0' max='20' step='0.25' inputmode='decimal' data-tot='20'></label><p class='note-msg' aria-live='polite'></p></div>
+</div></section>
+<section class='lesson' id='p1-c1' data-part='Partie C · Les mouvements rectilignes' data-title='Le mouvement rectiligne uniforme' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie C · Étape 4 <span class='meta'>15 min</span></p><h2>Le mouvement rectiligne uniforme</h2></header>
+<div class='lbody'><p class='objectif'>Écrire l'équation horaire d'un MRU et résoudre un problème de rencontre de deux mobiles.</p>
+<div class='retenir'><p class='lab'>À retenir · Mouvement rectiligne uniforme (MRU)</p><p>Trajectoire droite et vitesse constante : \(\vec a=\vec 0\).</p>
+<p class='disp'>\[x(t)=v\,(t-t_0)+x_0\qquad\text{souvent}\qquad x(t)=vt+x_0\]</p>
+<ul><li>\(v\) est algébrique : \(v&gt;0\) si le mobile va dans le sens de l'axe, \(v&lt;0\) sinon.</li><li>\(x_0\) est la position à la date \(t_0\) (souvent \(t_0=0\)).</li></ul></div>
+<div class='retenir'><p class='lab'>À retenir · Rencontre de deux mobiles</p><ol class='q' start='1'><li>Un <strong>seul</strong> repère et une <strong>seule</strong> origine des dates pour les deux mobiles.</li><li>Écrire \(x_1(t)\) et \(x_2(t)\) (attention aux signes et aux départs décalés).</li><li>Ils se rencontrent quand \(x_1(t)=x_2(t)\) : on trouve la date, puis la position.</li></ol></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Convertis tout de suite les km/h en m/s : on divise par 3,6. Ainsi 72 km/h = 20 m/s.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 4</p><p><strong>Deux mobiles qui se rencontrent</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · deux voitures face à face</p><p>À \(t=0\), une voiture A passe en \(O\) à \(20\ms\). Au même instant, une voiture B passe au point d'abscisse \(600\U{m}\) à \(10\ms\), en sens inverse. Les deux mouvements sont rectilignes uniformes sur l'axe \((Ox)\) orienté de A vers B.</p>
+<ol class='q' start='1'><li>Écrire les équations horaires \(x_A(t)\) et \(x_B(t)\).</li><li>Déterminer la date et le lieu de la rencontre.</li></ol><div class='copie'><p class='lab'>Solution rédigée</p><ol class='q' start='1'><li>\(x_A=20t\) et \(x_B=-10t+600\) (B va dans le sens négatif).</li><li>\(x_A=x_B\iff 30t=600\iff t=20\U{s}\). Alors \(x=20\times20=400\U{m}\) (vérification : \(-200+600=400\)). Rencontre à \(t=20\U{s}\), à \(400\U{m}\) de \(O\).</li></ol></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · un cycliste</p><div class='exo-q'><p>Un cycliste roule en ligne droite. Le tableau donne sa position :</p>
+<div class='table-wrap'><table><thead><tr><th>\(t\) (s)</th><th>0</th><th>2</th><th>4</th><th>6</th></tr></thead><tbody><tr><td>\(x\) (m)</td><td>5</td><td>15</td><td>25</td><td>35</td></tr></tbody></table></div>
+<ol class='q' start='1'><li>Montrer que le mouvement est uniforme et calculer sa vitesse.</li><li>Écrire l'équation horaire. À quelle date le cycliste passe-t-il à \(80\U{m}\) ?</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>En \(2\U{s}\), il parcourt toujours \(10\U{m}\) : la vitesse est constante, \(v=\dfrac{10}{2}=5\ms\).</li><li>\(x=5t+5\). \(5t+5=80\iff t=15\U{s}\).</li></ol></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · départs décalés</p><div class='exo-q'><p>Un train passe en \(O\) à \(t=0\) à \(72\U{km/h}\). Un second train part de \(O\) à \(t=10\U{s}\), dans le même sens, à \(30\ms\) (vitesse constante).</p>
+<ol class='q' start='1'><li>Écrire les équations horaires des deux trains (origine des dates commune).</li><li>Où et quand le second train rattrape-t-il le premier ?</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(72\U{km/h}=20\ms\). \(x_1=20t\) et \(x_2=30(t-10)\) pour \(t\geq10\U{s}\).</li><li>\(20t=30t-300\iff t=30\U{s}\). Alors \(x=600\U{m}\).</li></ol></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · deux positions suffisent</p><div class='exo-q'><p>Un mobile en MRU est en \(x=10\U{m}\) à \(t=2\U{s}\) et en \(x=-2\U{m}\) à \(t=6\U{s}\).</p>
+<ol class='q' start='1'><li>Calculer sa vitesse. Dans quel sens se déplace-t-il ?</li><li>Écrire son équation horaire. À quelle date passe-t-il par l'origine ?</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(v=\dfrac{-2-10}{6-2}=-3\ms\) : il se déplace dans le sens négatif.</li><li>\(x=-3t+x_0\) avec \(10=-6+x_0\), donc \(x_0=16\U{m}\) : \(x=-3t+16\). \(x=0\iff t=\dfrac{16}{3}\approx5{,}33\U{s}\).</li></ol></div></details></div>
+</div></section>
+<section class='lesson' id='p1-c2' data-part='Partie C · Les mouvements rectilignes' data-title='Le mouvement rectiligne uniformément varié' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie C · Étape 5 <span class='meta'>20 min</span></p><h2>Le mouvement rectiligne uniformément varié</h2></header>
+<div class='lbody'><p class='objectif'>Utiliser les trois relations du MRUV, dont la relation indépendante du temps, et reconnaître les phases accélérées ou retardées.</p>
+<div class='retenir'><p class='lab'>À retenir · Mouvement rectiligne uniformément varié (MRUV)</p><p>Trajectoire droite et accélération constante \(a\) :</p>
+<p class='disp'>\[v(t)=a\,t+v_0\qquad x(t)=\frac12\,a\,t^2+v_0\,t+x_0\qquad v^2-v_0^2=2a\,(x-x_0)\]</p>
+<ul><li>La troisième relation ne contient pas le temps : elle sert quand on ne connaît pas la durée (distance de freinage).</li><li>Mouvement <strong>accéléré</strong> si \(a\cdot v&gt;0\), <strong>retardé</strong> si \(a\cdot v&lt;0\).</li></ul></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Pour identifier \(a\), \(v_0\) et \(x_0\) dans \(x=2t^2-8t+3\), attention au \(\frac12\) : \(\frac12a=2\) donc \(a=4\mss\).</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 5</p><p><strong>Les trois relations du MRUV</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · un freinage</p><p>Une voiture roule à \(72\U{km/h}\) sur une route droite. À \(t=0\), le conducteur freine : l'accélération vaut \(a=-4\mss\).</p>
+<ol class='q' start='1'><li>Au bout de combien de temps la voiture s'arrête-t-elle ?</li><li>Quelle distance parcourt-elle pendant le freinage ?</li></ol><div class='copie'><p class='lab'>Solution rédigée</p><ol class='q' start='1'><li>\(v_0=20\ms\) et \(v=-4t+20\). \(v=0\iff t=5\U{s}\).</li><li>Relation indépendante du temps : \(0-20^2=2\times(-4)\times d\), donc \(d=\dfrac{400}{8}=50\U{m}\). (Vérification : \(x(5)=-2\times25+20\times5=50\U{m}\).)</li></ol></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · lire une équation horaire</p><div class='exo-q'><p>Un mobile a pour équation horaire \(x=2t^2-8t+3\) (SI).</p>
+<ol class='q' start='1'><li>Identifier \(a\), \(v_0\) et \(x_0\). Écrire \(v(t)\).</li><li>À quelle date le mobile s'arrête-t-il ? Où est-il alors ?</li><li>Préciser la nature du mouvement avant et après cette date.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(\frac12a=2\) donc \(a=4\mss\) ; \(v_0=-8\ms\) ; \(x_0=3\U{m}\). \(v=4t-8\).</li><li>\(v=0\iff t=2\U{s}\) ; \(x(2)=8-16+3=-5\U{m}\).</li><li>Pour \(t&lt;2\U{s}\) : \(v&lt;0\) et \(a&gt;0\), \(a\cdot v&lt;0\), <strong>retardé</strong>. Pour \(t&gt;2\U{s}\) : \(v&gt;0\), <strong>accéléré</strong>.</li></ol></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · un démarrage</p><div class='exo-q'><p>Une voiture démarre sans vitesse initiale avec une accélération constante \(a=2\mss\).</p>
+<ol class='q' start='1'><li>Au bout de combien de temps atteint-elle \(30\ms\) ?</li><li>Quelle distance a-t-elle alors parcourue ? Répondre de deux façons.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(v=2t\) ; \(2t=30\iff t=15\U{s}\).</li><li>\(x=t^2\), donc \(x(15)=225\U{m}\). Ou : \(30^2-0=2\times2\times d\), donc \(d=225\U{m}\).</li></ol></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · aller et retour</p><div class='exo-q'><p>Un mobile part de \(O\) avec \(v_0=10\ms\) ; son accélération est constante, \(a=-2\mss\).</p>
+<ol class='q' start='1'><li>Écrire \(v(t)\) et \(x(t)\).</li><li>Quelle est l'abscisse maximale atteinte ?</li><li>À quelle date revient-il en \(O\), et avec quelle vitesse ?</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(v=-2t+10\) et \(x=-t^2+10t\).</li><li>\(v=0\) à \(t=5\U{s}\) : \(x_{\max}=-25+50=25\U{m}\).</li><li>\(x=0\iff t(-t+10)=0\iff t=10\U{s}\) ; \(v=-10\ms\) (même valeur qu'au départ, sens opposé).</li></ol></div></details></div>
+</div></section>
+<section class='lesson' id='p1-c3' data-part='Partie C · Les mouvements rectilignes' data-title='Enregistrements et graphes' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie C · Étape 6 <span class='meta'>20 min</span></p><h2>Enregistrements et graphes</h2></header>
+<div class='lbody'><p class='objectif'>Reconnaître un MRU ou un MRUV sur un enregistrement, calculer une vitesse instantanée et une accélération.</p>
+<p>Sur un enregistrement, les positions \(M_0, M_1, M_2,\dots\) du mobile sont marquées à intervalles de temps égaux \(\tau\).</p>
+<div class='retenir'><p class='lab'>À retenir · Exploiter un enregistrement</p><ul><li>Distances \(M_iM_{i+1}\) toutes égales : <strong>MRU</strong>, \(v=\dfrac{M_iM_{i+1}}{\tau}\).</li><li>Distances qui augmentent (ou diminuent) toujours de la même quantité \(\Delta d\) : <strong>MRUV</strong>, avec \(\Delta d=a\,\tau^2\).</li><li>Vitesse instantanée en \(M_i\) : \(v_i=\dfrac{M_{i-1}M_{i+1}}{2\tau}\).</li><li>Sur un graphe \(v(t)\) : une droite horizontale indique un MRU, une droite oblique un MRUV de pente \(a\).</li></ul></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Convertis les centimètres en mètres et les millisecondes en secondes <strong>avant</strong> de calculer : \(\tau^2\) multiplie l'erreur.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 6</p><p><strong>Lire un enregistrement</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · une chute enregistrée</p><p>Un enregistrement donne, avec \(\tau=20\U{ms}\) : \(M_0M_1=1{,}0\U{cm}\), \(M_1M_2=1{,}4\U{cm}\), \(M_2M_3=1{,}8\U{cm}\), \(M_3M_4=2{,}2\U{cm}\).</p>
+<ol class='q' start='1'><li>Quelle est la nature du mouvement ? Calculer l'accélération.</li><li>Calculer la vitesse au point \(M_2\).</li></ol><div class='copie'><p class='lab'>Solution rédigée</p><ol class='q' start='1'><li>Les distances augmentent toujours de \(\Delta d=0{,}4\U{cm}=4\times10^{-3}\U{m}\) : <strong>MRUV</strong>. \(a=\dfrac{\Delta d}{\tau^2}=\dfrac{4\times10^{-3}}{(0{,}02)^2}=10\mss\).</li><li>\(v_2=\dfrac{M_1M_3}{2\tau}=\dfrac{(1{,}4+1{,}8)\times10^{-2}}{0{,}04}=0{,}8\ms\).</li></ol></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · un chariot</p><div class='exo-q'><p>Avec \(\tau=50\U{ms}\), on mesure : \(M_0M_1=2{,}0\U{cm}\), \(M_1M_2=2{,}5\U{cm}\), \(M_2M_3=3{,}0\U{cm}\), \(M_3M_4=3{,}5\U{cm}\).</p>
+<ol class='q' start='1'><li>Nature du mouvement et accélération.</li><li>Vitesse au point \(M_2\).</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(\Delta d=0{,}5\U{cm}=5\times10^{-3}\U{m}\) constant : MRUV ; \(a=\dfrac{5\times10^{-3}}{(0{,}05)^2}=2\mss\).</li><li>\(v_2=\dfrac{(2{,}5+3{,}0)\times10^{-2}}{0{,}1}=0{,}55\ms\).</li></ol></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · distances égales</p><div class='exo-q'><p>Un enregistrement (\(\tau=40\U{ms}\)) montre des distances toutes égales à \(1{,}5\U{cm}\). Nature du mouvement et vitesse ?</p></div><details><summary>Voir la correction</summary><div class='copie'><p>Distances égales pendant des durées égales : <strong>MRU</strong>. \(v=\dfrac{1{,}5\times10^{-2}}{0{,}04}=0{,}375\ms\).</p></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · lire un graphe v(t)</p><div class='exo-q'><p>La vitesse d'un mobile en ligne droite est donnée par le tableau :</p>
+<div class='table-wrap'><table><thead><tr><th>\(t\) (s)</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead><tbody><tr><td>\(v\) (\(\mathrm{m\cdot s^{-1}}\))</td><td>2</td><td>4</td><td>6</td><td>8</td><td>8</td><td>8</td></tr></tbody></table></div>
+<ol class='q' start='1'><li>Décrire les deux phases du mouvement. Calculer l'accélération de la première.</li><li>Le mobile part de \(O\). Calculer la distance parcourue entre \(0\) et \(3\U{s}\).</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>De \(0\) à \(3\U{s}\), \(v\) augmente de \(2\ms\) chaque seconde : MRUV, \(a=2\mss\). De \(3\) à \(5\U{s}\), \(v=8\ms\) constante : MRU.</li><li>\(x=t^2+2t\), donc \(x(3)=9+6=15\U{m}\).</li></ol></div></details></div>
+</div></section>
+<section class='lesson' id='p1-eval-c' data-part='Partie C · Les mouvements rectilignes' data-title='Évaluation de la partie C' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie C · Consolidation <span class='meta'>45 min</span></p><h2>Évaluation : Les mouvements rectilignes</h2></header>
+<div class='lbody'><p class='lead'>Cette évaluation vérifie que la partie est comprise. Traite-la comme un devoir : feuille, calculatrice, chronomètre, sans le cours.</p>
+<div class='chrono' data-min='45'><p class='chrono-lab'>Durée conseillée : 45 minutes</p><p class='chrono-t'>45:00</p><div class='chrono-b'><button type='button' class='btn c-start'>Démarrer</button><button type='button' class='btn ghost c-reset'>Remettre à zéro</button></div><p class='chrono-end' hidden>Temps écoulé : pose le stylo et corrige-toi.</p></div>
+<div class='exo eval'><p class='exo-n'>Exercice 1 · La voiture et le bus <span class='pts'>10 pts</span></p><div class='exo-q'><p>Une voiture est arrêtée à un feu rouge. Au moment où le feu passe au vert (\(t=0\)), elle démarre avec une accélération constante \(a=1{,}5\mss\). Au même instant, un bus la dépasse à la vitesse constante de \(15\ms\). On prend comme origine la position du feu.</p>
+<ol class='q' start='1'><li>Écrire les équations horaires de la voiture et du bus.</li><li>À quelle date et à quelle distance du feu la voiture rattrape-t-elle le bus ? Quelle est alors sa vitesse ?</li><li>À quelle date l'écart entre les deux véhicules est-il maximal ? Calculer cet écart.</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>Voiture : \(x_V=0{,}75\,t^2\). Bus : \(x_B=15t\). <strong>(2 pts)</strong></li><li>\(0{,}75t^2=15t\iff t=20\U{s}\) (\(t\neq0\)). \(x=300\U{m}\). Vitesse : \(v_V=1{,}5\times20=30\ms\). <strong>(4 pts)</strong></li><li>L'écart \(x_B-x_V\) augmente tant que le bus va plus vite que la voiture : il est maximal quand \(v_V=15\ms\), soit \(t=10\U{s}\). Écart : \(150-75=75\U{m}\). <strong>(4 pts)</strong></li></ol></div></details></div>
+<div class='exo eval'><p class='exo-n'>Exercice 2 · Un enregistrement <span class='pts'>10 pts</span></p><div class='exo-q'><p>On enregistre le mouvement rectiligne d'un mobile avec \(\tau=50\U{ms}\) : \(M_0M_1=2{,}0\U{cm}\), \(M_1M_2=3{,}0\U{cm}\), \(M_2M_3=4{,}0\U{cm}\), \(M_3M_4=5{,}0\U{cm}\).</p>
+<ol class='q' start='1'><li>Montrer que le mouvement est uniformément varié et calculer son accélération.</li><li>Calculer les vitesses aux points \(M_1\) et \(M_2\). Retrouver l'accélération.</li><li>On prend \(M_1\) comme origine des espaces et des dates. Écrire l'équation horaire \(x(t)\).</li><li>Quelle distance le mobile parcourt-il entre \(t=0\) et \(t=0{,}5\U{s}\) (en supposant le mouvement inchangé) ?</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>\(\Delta d=1{,}0\U{cm}\) constant : MRUV. \(a=\dfrac{10^{-2}}{(0{,}05)^2}=4\mss\). <strong>(2 pts)</strong></li><li>\(v_1=\dfrac{(2+3)\times10^{-2}}{0{,}1}=0{,}5\ms\) ; \(v_2=\dfrac{(3+4)\times10^{-2}}{0{,}1}=0{,}7\ms\). \(a=\dfrac{0{,}7-0{,}5}{0{,}05}=4\mss\). <strong>(4 pts)</strong></li><li>\(x=\frac12\times4\,t^2+0{,}5\,t=2t^2+0{,}5t\) (SI). <strong>(2 pts)</strong></li><li>\(x(0{,}5)=2\times0{,}25+0{,}25=0{,}75\U{m}\). <strong>(2 pts)</strong></li></ol></div></details></div>
+<div class='note'><label>Ma note sur 20 : <input type='number' class='score' min='0' max='20' step='0.25' inputmode='decimal' data-tot='20'></label><p class='note-msg' aria-live='polite'></p></div>
+</div></section>
+<section class='lesson' id='p1-d1' data-part='Partie D · Le mouvement rectiligne sinusoïdal' data-title='Équation horaire et phase à l&#x27;origine' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie D · Étape 7 <span class='meta'>20 min</span></p><h2>Équation horaire et phase à l'origine</h2></header>
+<div class='lbody'><p class='objectif'>Reconnaître un mouvement rectiligne sinusoïdal, donner ses grandeurs caractéristiques et trouver la phase à l'origine.</p>
+<div class='retenir'><p class='lab'>À retenir · Mouvement rectiligne sinusoïdal</p><p class='disp'>\[x(t)=X_m\cos(\omega t+\varphi)\qquad \ddot x+\omega^2x=0\]</p>
+<ul><li>\(X_m&gt;0\) : amplitude (m). Le mobile oscille entre \(-X_m\) et \(+X_m\) : le segment parcouru mesure \(2X_m\).</li><li>\(\omega\) : pulsation (\(\mathrm{rad\cdot s^{-1}}\)) ; période \(T=\dfrac{2\pi}{\omega}\) (s) ; fréquence \(N=\dfrac1T\) (Hz).</li><li>\(\varphi\) : phase à l'origine (rad), fixée par l'état du mobile à \(t=0\).</li></ul></div>
+<div class='retenir'><p class='lab'>À retenir · Trouver φ</p><ol class='q' start='1'><li>\(x_0=X_m\cos\varphi\) donne \(\cos\varphi\), donc deux valeurs opposées \(\pm\alpha\).</li><li>\(v_0=-X_m\,\omega\sin\varphi\) : le <strong>sens du mouvement</strong> à \(t=0\) choisit. Sens positif (\(v_0&gt;0\)) : \(\sin\varphi&lt;0\). Sens négatif : \(\sin\varphi&gt;0\).</li></ol></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Une phase est définie à \(2\pi\) près : \(-\frac{2\pi}{3}\) et \(\frac{4\pi}{3}\) désignent le même mouvement. On choisit en général \(\varphi\in\,]-\pi\,;\,\pi]\).</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 7</p><p><strong>Trouver la phase à l'origine</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · phase positive</p><p>Un mobile a un mouvement rectiligne sinusoïdal d'amplitude \(X_m=4\U{cm}\) et de période \(T=0{,}5\U{s}\). À \(t=0\), il passe à l'abscisse \(x_0=2\U{cm}\) en allant dans le sens négatif. Écrire son équation horaire.</p><div class='copie'><p class='lab'>Solution rédigée</p><p>\(\omega=\dfrac{2\pi}{T}=4\pi\U{rad\cdot s^{-1}}\).</p>
+<p>\(x_0=X_m\cos\varphi\) : \(\cos\varphi=\dfrac24=\dfrac12\), donc \(\varphi=\pm\dfrac{\pi}{3}\).</p>
+<p>Sens négatif : \(v_0=-X_m\,\omega\sin\varphi&lt;0\), donc \(\sin\varphi&gt;0\) : \(\varphi=\dfrac{\pi}{3}\).</p>
+<p>\(x(t)=4\cos\left(4\pi t+\dfrac{\pi}{3}\right)\) (\(x\) en cm, \(t\) en s).</p></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · départ au centre</p><div class='exo-q'><p>Amplitude \(5\U{cm}\), période \(0{,}2\U{s}\). À \(t=0\), le mobile passe par le centre \(O\) dans le sens positif. Écrire \(x(t)\).</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(\omega=\dfrac{2\pi}{0{,}2}=10\pi\U{rad\cdot s^{-1}}\). \(x_0=0\) : \(\cos\varphi=0\), \(\varphi=\pm\dfrac{\pi}{2}\). Sens positif : \(\sin\varphi&lt;0\), donc \(\varphi=-\dfrac{\pi}{2}\).</p>
+<p>\(x(t)=5\cos\left(10\pi t-\dfrac{\pi}{2}\right)\) (cm).</p></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · à partir de l'équation différentielle</p><div class='exo-q'><p>Un mobile vérifie \(\ddot x+400\,x=0\) (SI). Son amplitude est \(3\U{cm}\) et, à \(t=0\), il est en \(x_0=-3\U{cm}\).</p>
+<ol class='q' start='1'><li>Calculer \(\omega\), \(T\) et \(N\).</li><li>Déterminer \(\varphi\) et écrire \(x(t)\).</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(\omega^2=400\) donc \(\omega=20\U{rad\cdot s^{-1}}\) ; \(T=\dfrac{2\pi}{20}=\dfrac{\pi}{10}\approx0{,}314\U{s}\) ; \(N\approx3{,}18\U{Hz}\).</li><li>\(\cos\varphi=-1\) donc \(\varphi=\pi\) (le mobile est à une extrémité, sa vitesse est nulle). \(x=3\cos(20t+\pi)\) (cm).</li></ol></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · lire une équation horaire</p><div class='exo-q'><p>\(x(t)=0{,}02\cos\left(50t+\dfrac{\pi}{6}\right)\) (SI).</p>
+<ol class='q' start='1'><li>Donner \(X_m\), \(\omega\), \(T\) et la longueur du segment parcouru.</li><li>Calculer \(x\) et \(v\) à \(t=0\). Dans quel sens part le mobile ?</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(X_m=2\U{cm}\), \(\omega=50\U{rad\cdot s^{-1}}\), \(T=\dfrac{2\pi}{50}\approx0{,}126\U{s}\), segment de \(4\U{cm}\).</li><li>\(x_0=0{,}02\cos\frac{\pi}{6}\approx1{,}73\U{cm}\). \(v=-0{,}02\times50\sin(50t+\frac{\pi}{6})\), donc \(v_0=-1\times\frac12=-0{,}5\ms\) : il part dans le <strong>sens négatif</strong>.</li></ol></div></details></div>
+</div></section>
+<section class='lesson' id='p1-d2' data-part='Partie D · Le mouvement rectiligne sinusoïdal' data-title='Vitesse, dates de passage et relation v² = f(x²)' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie D · Étape 8 <span class='meta'>20 min</span></p><h2>Vitesse, dates de passage et relation v² = f(x²)</h2></header>
+<div class='lbody'><p class='objectif'>Exprimer la vitesse, calculer une date de passage et utiliser la relation entre vitesse et élongation.</p>
+<div class='retenir'><p class='lab'>À retenir · Vitesse et accélération</p><p class='disp'>\[v=-X_m\,\omega\sin(\omega t+\varphi)\qquad a=-\omega^2x\qquad v^2=\omega^2\,(X_m^2-x^2)\]</p>
+<ul><li>\(v_{\max}=X_m\,\omega\), atteinte au centre (\(x=0\)) ; \(v=0\) aux extrémités.</li><li>La courbe \(v^2=f(x^2)\) est une droite de pente \(-\omega^2\) et d'ordonnée à l'origine \(\omega^2X_m^2\).</li></ul></div>
+<div class='retenir'><p class='lab'>À retenir · Date de passage en un point avec un sens donné</p><ol class='q' start='1'><li>Écrire \(\cos(\omega t+\varphi)=\dfrac{x}{X_m}\) : deux angles \(\pm\alpha\) à \(2k\pi\) près.</li><li>Sens positif : \(\sin(\omega t+\varphi)&lt;0\) ; sens négatif : \(\sin&gt;0\). On garde un seul angle.</li><li>Résoudre en \(t\), puis choisir \(k\) pour obtenir le premier, le deuxième… passage (avec \(t\geq0\)).</li></ol></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Les passages au même point et dans le même sens sont espacés d'une période \(T\).</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 8</p><p><strong>Dates de passage et vitesse</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · premier passage</p><p>\(x(t)=4\cos\left(4\pi t+\dfrac{\pi}{3}\right)\) (\(x\) en cm, \(t\) en s).</p>
+<ol class='q' start='1'><li>Calculer la vitesse maximale.</li><li>À quelle date le mobile passe-t-il pour la première fois en \(x=-2\U{cm}\) dans le sens négatif ?</li><li>Calculer la valeur de la vitesse en \(x=2\U{cm}\).</li></ol><div class='copie'><p class='lab'>Solution rédigée</p><ol class='q' start='1'><li>\(v_{\max}=X_m\,\omega=0{,}04\times4\pi\approx0{,}503\ms\).</li><li>\(\cos(4\pi t+\frac{\pi}{3})=-\frac12\) et \(\sin&gt;0\) (sens négatif) : \(4\pi t+\frac{\pi}{3}=\frac{2\pi}{3}+2k\pi\), donc \(t=\dfrac{1}{12}+\dfrac{k}{2}\). Premier passage (\(k=0\)) : \(t=\dfrac{1}{12}\approx0{,}083\U{s}\).</li><li>\(|v|=\omega\sqrt{X_m^2-x^2}=4\pi\sqrt{16-4}\approx43{,}5\U{cm\cdot s^{-1}}=0{,}435\ms\).</li></ol></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · à une extrémité</p><div class='exo-q'><p>\(x(t)=5\cos\left(10\pi t-\dfrac{\pi}{2}\right)\) (cm, s).</p>
+<ol class='q' start='1'><li>Calculer \(v\) à \(t=0\).</li><li>À quelle date le mobile atteint-il pour la première fois l'extrémité \(x=+5\U{cm}\) ?</li><li>Calculer la valeur de la vitesse en \(x=3\U{cm}\).</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(v=-0{,}05\times10\pi\sin(10\pi t-\frac{\pi}{2})\) ; \(v_0=+0{,}5\pi\approx1{,}57\ms\).</li><li>\(\cos(10\pi t-\frac{\pi}{2})=1\iff10\pi t-\frac{\pi}{2}=2k\pi\iff t=\dfrac{1}{20}+\dfrac{k}{5}\). Premier : \(t=0{,}05\U{s}=\frac{T}{4}\).</li><li>\(|v|=10\pi\sqrt{25-9}=40\pi\U{cm\cdot s^{-1}}\approx1{,}26\ms\).</li></ol></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · à partir de la courbe x(t)</p><div class='exo-q'><p>La courbe \(x(t)\) d'un mobile est une sinusoïde : elle part de \(0\) à \(t=0\) en montant, atteint son maximum \(2\U{cm}\) à \(t=0{,}1\U{s}\), repasse à \(0\) à \(t=0{,}2\U{s}\) et atteint \(-2\U{cm}\) à \(t=0{,}3\U{s}\).</p>
+<ol class='q' start='1'><li>Déterminer \(X_m\), \(T\) et \(\omega\).</li><li>Déterminer \(\varphi\) et écrire \(x(t)\).</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(X_m=2\U{cm}\). Du départ au retour au même état, il faut \(0{,}4\U{s}\) : \(T=0{,}4\U{s}\), \(\omega=5\pi\U{rad\cdot s^{-1}}\).</li><li>\(x_0=0\) et la courbe monte (\(v_0&gt;0\)) : \(\varphi=-\dfrac{\pi}{2}\). \(x=2\cos\left(5\pi t-\dfrac{\pi}{2}\right)\) (cm).</li></ol></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · la droite v² = f(x²)</p><div class='exo-q'><p>Pour un mobile en mouvement rectiligne sinusoïdal, on a établi \(v^2=0{,}25-25\,x^2\) (SI).</p>
+<ol class='q' start='1'><li>Justifier l'allure de la courbe \(v^2=f(x^2)\).</li><li>En déduire \(\omega\) et \(X_m\).</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(v^2=-\omega^2x^2+\omega^2X_m^2\) est une fonction affine de \(x^2\) : droite décroissante.</li><li>Pente : \(\omega^2=25\), donc \(\omega=5\U{rad\cdot s^{-1}}\). Ordonnée à l'origine : \(\omega^2X_m^2=0{,}25\), donc \(X_m^2=0{,}01\) et \(X_m=0{,}1\U{m}\).</li></ol></div></details></div>
+</div></section>
+<section class='lesson' id='p1-eval-d' data-part='Partie D · Le mouvement rectiligne sinusoïdal' data-title='Évaluation de la partie D' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie D · Consolidation <span class='meta'>40 min</span></p><h2>Évaluation : Le mouvement rectiligne sinusoïdal</h2></header>
+<div class='lbody'><p class='lead'>Cette évaluation vérifie que la partie est comprise. Traite-la comme un devoir : feuille, calculatrice, chronomètre, sans le cours.</p>
+<div class='chrono' data-min='40'><p class='chrono-lab'>Durée conseillée : 40 minutes</p><p class='chrono-t'>40:00</p><div class='chrono-b'><button type='button' class='btn c-start'>Démarrer</button><button type='button' class='btn ghost c-reset'>Remettre à zéro</button></div><p class='chrono-end' hidden>Temps écoulé : pose le stylo et corrige-toi.</p></div>
+<div class='exo eval'><p class='exo-n'>Exercice 1 · Équation horaire et tableau de valeurs <span class='pts'>10 pts</span></p><div class='exo-q'><p>Un mobile vérifie l'équation différentielle \(\ddot x+25\pi^2x=0\) (SI). Son amplitude vaut \(X_m=3\U{cm}\). À \(t=0\), il passe en \(x_0=1{,}5\U{cm}\) en allant dans le sens positif.</p>
+<ol class='q' start='1'><li>Quelle est la nature du mouvement ? Calculer \(\omega\) et \(T\).</li><li>Déterminer \(\varphi\) et écrire \(x(t)\).</li><li>Compléter le tableau : \(x\) aux dates \(0\), \(T/4\), \(T/2\), \(3T/4\), \(T\). Quelle distance le mobile parcourt-il en une période ?</li><li>Calculer \(v_0\) et \(v_{\max}\).</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>Équation de la forme \(\ddot x+\omega^2x=0\) : mouvement <strong>rectiligne sinusoïdal</strong>. \(\omega=5\pi\U{rad\cdot s^{-1}}\), \(T=0{,}4\U{s}\). <strong>(2 pts)</strong></li><li>\(\cos\varphi=\frac12\) et sens positif (\(\sin\varphi&lt;0\)) : \(\varphi=-\dfrac{\pi}{3}\). \(x=3\cos\left(5\pi t-\dfrac{\pi}{3}\right)\) (cm). <strong>(3 pts)</strong></li><li><strong>(3 pts)</strong></li></ol>
+<div class='table-wrap'><table><thead><tr><th>\(t\) (s)</th><th>0</th><th>0,1</th><th>0,2</th><th>0,3</th><th>0,4</th></tr></thead><tbody><tr><td>\(x\) (cm)</td><td>1,5</td><td>2,6</td><td>\(-1{,}5\)</td><td>\(-2{,}6\)</td><td>1,5</td></tr></tbody></table></div>
+<p>En une période : \(4X_m=12\U{cm}\).</p>
+<ol class='q' start='4'><li>\(v_0=-0{,}03\times5\pi\sin(-\frac{\pi}{3})\approx0{,}408\ms\) ; \(v_{\max}=0{,}15\pi\approx0{,}471\ms\). <strong>(2 pts)</strong></li></ol></div></details></div>
+<div class='exo eval'><p class='exo-n'>Exercice 2 · Dates de passage <span class='pts'>10 pts</span></p><div class='exo-q'><p>On reprend le mobile précédent : \(x(t)=3\cos\left(5\pi t-\dfrac{\pi}{3}\right)\) (\(x\) en cm, \(t\) en s).</p>
+<ol class='q' start='1'><li>Déterminer les dates des deux premiers passages en \(x=-1{,}5\U{cm}\) dans le sens positif.</li><li>Calculer la valeur de la vitesse en ce point, de deux façons.</li><li>Calculer l'accélération en ce point. Vers où est-elle dirigée ?</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>\(\cos\theta=-\frac12\) avec \(\sin\theta&lt;0\) (sens positif) : \(\theta=-\dfrac{2\pi}{3}+2k\pi\). \(5\pi t-\frac{\pi}{3}=-\frac{2\pi}{3}+2k\pi\), donc \(t=-\dfrac{1}{15}+0{,}4k\). Avec \(t\geq0\) : \(k=1\), \(t_1=\dfrac13\approx0{,}333\U{s}\) ; \(k=2\), \(t_2\approx0{,}733\U{s}\). <strong>(5 pts)</strong></li><li>\(|v|=\omega\sqrt{X_m^2-x^2}=5\pi\sqrt{9-2{,}25}\approx40{,}8\U{cm\cdot s^{-1}}\). Ou \(v(t_1)=-0{,}15\pi\sin(-\frac{2\pi}{3})\approx0{,}408\ms\). <strong>(3 pts)</strong></li><li>\(a=-\omega^2x=25\pi^2\times0{,}015\approx3{,}70\mss\) : positive, dirigée vers le centre \(O\). <strong>(2 pts)</strong></li></ol></div></details></div>
+<div class='note'><label>Ma note sur 20 : <input type='number' class='score' min='0' max='20' step='0.25' inputmode='decimal' data-tot='20'></label><p class='note-msg' aria-live='polite'></p></div>
+</div></section>
+<section class='lesson' id='p1-e1' data-part='Partie E · Les mouvements circulaires' data-title='Le mouvement circulaire uniforme' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie E · Étape 9 <span class='meta'>15 min</span></p><h2>Le mouvement circulaire uniforme</h2></header>
+<div class='lbody'><p class='objectif'>Utiliser l'abscisse angulaire, la vitesse angulaire, la période et l'accélération centripète d'un MCU.</p>
+<div class='retenir'><p class='lab'>À retenir · Mouvement circulaire uniforme (MCU)</p><p>Sur un cercle de rayon \(R\), la position est repérée par l'abscisse angulaire \(\theta\) (rad) ou l'abscisse curviligne \(s=R\,\theta\) (m).</p>
+<p class='disp'>\[\theta(t)=\omega\,t+\theta_0\qquad v=R\,\omega\qquad T=\frac{2\pi}{\omega}\qquad a=a_n=\frac{v^2}{R}=R\,\omega^2\]</p>
+<ul><li>\(\omega\) : vitesse angulaire (\(\mathrm{rad\cdot s^{-1}}\)), constante.</li><li>\(a_t=0\) : l'accélération est <strong>centripète</strong> (dirigée vers le centre).</li></ul></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Une fréquence en tours par seconde se convertit ainsi : \(\omega=2\pi N\). Pour des tours par minute, divise d'abord par 60.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 9</p><p><strong>Le mouvement circulaire uniforme</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · une pale de ventilateur</p><p>L'extrémité d'une pale de ventilateur est à \(R=30\U{cm}\) de l'axe et tourne à \(3\U{tours/s}\) (mouvement uniforme). Calculer \(\omega\), \(T\), \(v\) et \(a\).</p><div class='copie'><p class='lab'>Solution rédigée</p><p>\(\omega=2\pi N=6\pi\approx18{,}9\U{rad\cdot s^{-1}}\) ; \(T=\dfrac13\approx0{,}333\U{s}\) ; \(v=R\omega=0{,}30\times6\pi\approx5{,}65\ms\) ; \(a=R\omega^2=0{,}30\times36\pi^2\approx107\mss\), dirigée vers l'axe.</p></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · un rond-point</p><div class='exo-q'><p>Une voiture parcourt un rond-point de rayon \(R=20\U{m}\) à \(36\U{km/h}\) constante. Calculer \(\omega\), la durée d'un tour et l'accélération.</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(v=10\ms\) ; \(\omega=\dfrac{v}{R}=0{,}5\U{rad\cdot s^{-1}}\) ; \(T=\dfrac{2\pi}{0{,}5}=4\pi\approx12{,}6\U{s}\) ; \(a=\dfrac{v^2}{R}=5\mss\).</p></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · un point de l'équateur</p><div class='exo-q'><p>La Terre fait un tour sur elle-même en \(24\U{h}\) (on prend cette valeur). Le rayon terrestre vaut \(6400\U{km}\). Pour un point de l'équateur, calculer \(\omega\), \(v\) et \(a\).</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(\omega=\dfrac{2\pi}{86\,400}\approx7{,}27\times10^{-5}\U{rad\cdot s^{-1}}\) ; \(v=R\omega\approx465\ms\) ; \(a=R\omega^2\approx3{,}4\times10^{-2}\mss\).</p></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · une loi horaire angulaire</p><div class='exo-q'><p>Un point décrit un cercle de rayon \(0{,}5\U{m}\) avec \(\theta(t)=2t+\dfrac{\pi}{4}\) (SI).</p>
+<ol class='q' start='1'><li>Calculer \(\omega\) et \(v\).</li><li>Quel angle et quelle longueur d'arc le point parcourt-il en \(3\U{s}\) ? Combien de tours cela fait-il ?</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(\omega=2\U{rad\cdot s^{-1}}\) ; \(v=0{,}5\times2=1\ms\).</li><li>\(\Delta\theta=6\U{rad}\) ; arc \(=R\,\Delta\theta=3\U{m}\) ; \(\dfrac{6}{2\pi}\approx0{,}95\) tour.</li></ol></div></details></div>
+</div></section>
+<section class='lesson' id='p1-e2' data-part='Partie E · Les mouvements circulaires' data-title='Le mouvement circulaire uniformément varié' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie E · Étape 10 <span class='meta'>20 min</span></p><h2>Le mouvement circulaire uniformément varié</h2></header>
+<div class='lbody'><p class='objectif'>Utiliser les relations du MCUV et calculer les accélérations tangentielle et normale d'un point.</p>
+<div class='retenir'><p class='lab'>À retenir · Mouvement circulaire uniformément varié (MCUV)</p><p>L'accélération angulaire \(\ddot\theta\) (\(\mathrm{rad\cdot s^{-2}}\)) est constante :</p>
+<p class='disp'>\[\dot\theta=\ddot\theta\,t+\omega_0\qquad \theta=\frac12\,\ddot\theta\,t^2+\omega_0\,t+\theta_0\qquad \dot\theta^{\,2}-\omega_0^2=2\,\ddot\theta\,(\theta-\theta_0)\]</p>
+<ul><li>Pour un point à la distance \(R\) de l'axe : \(v=R\,\dot\theta\), \(a_t=R\,\ddot\theta\), \(a_n=R\,\dot\theta^{\,2}\).</li><li>Ce sont les relations du MRUV où \(x\) devient \(\theta\), \(v\) devient \(\dot\theta\) et \(a\) devient \(\ddot\theta\).</li></ul></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Un nombre de tours \(n\) correspond à l'angle \(\theta=2\pi n\) radians. Convertis toujours en radians avant d'utiliser les formules.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 10</p><p><strong>Le mouvement circulaire uniformément varié</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · un disque qui démarre</p><p>Un disque part du repos et atteint \(10\U{rad\cdot s^{-1}}\) en \(5\U{s}\), d'un mouvement uniformément accéléré.</p>
+<ol class='q' start='1'><li>Calculer \(\ddot\theta\) et le nombre de tours effectués pendant ces \(5\U{s}\).</li><li>Pour un point situé à \(R=10\U{cm}\) de l'axe, calculer \(a_t\) et \(a_n\) à \(t=5\U{s}\).</li></ol><div class='copie'><p class='lab'>Solution rédigée</p><ol class='q' start='1'><li>\(\ddot\theta=\dfrac{10-0}{5}=2\U{rad\cdot s^{-2}}\). \(\theta=\frac12\times2\times25=25\U{rad}\), soit \(\dfrac{25}{2\pi}\approx3{,}98\) tours.</li><li>\(a_t=R\ddot\theta=0{,}1\times2=0{,}2\mss\) ; \(a_n=R\dot\theta^{\,2}=0{,}1\times100=10\mss\).</li></ol></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · un freinage</p><div class='exo-q'><p>Une roue tourne à \(\omega_0=20\U{rad\cdot s^{-1}}\). Freinée uniformément, elle s'arrête après \(10\) tours. Calculer \(\ddot\theta\) et la durée du freinage.</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(\theta=10\times2\pi=20\pi\U{rad}\). \(0-20^2=2\,\ddot\theta\times20\pi\), donc \(\ddot\theta=-\dfrac{10}{\pi}\approx-3{,}18\U{rad\cdot s^{-2}}\). Durée : \(0=-\frac{10}{\pi}t+20\), donc \(t=2\pi\approx6{,}28\U{s}\).</p></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · une loi horaire</p><div class='exo-q'><p>\(\theta(t)=0{,}5\,t^2+2t\) (rad, s) pour un point à \(R=0{,}2\U{m}\) de l'axe.</p>
+<ol class='q' start='1'><li>Donner \(\ddot\theta\) et \(\dot\theta(t)\).</li><li>À \(t=4\U{s}\), calculer \(v\), \(a_t\) et \(a_n\).</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(\ddot\theta=1\U{rad\cdot s^{-2}}\) ; \(\dot\theta=t+2\).</li><li>\(\dot\theta(4)=6\U{rad\cdot s^{-1}}\) ; \(v=1{,}2\ms\) ; \(a_t=0{,}2\mss\) ; \(a_n=0{,}2\times36=7{,}2\mss\).</li></ol></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · un moteur</p><div class='exo-q'><p>Un moteur passe de \(1200\U{tr/min}\) à \(3000\U{tr/min}\) en \(6\U{s}\), d'un mouvement uniformément varié. Calculer l'accélération angulaire et le nombre de tours effectués.</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(\omega_0=\dfrac{1200\times2\pi}{60}=40\pi\) et \(\omega=100\pi\U{rad\cdot s^{-1}}\). \(\ddot\theta=\dfrac{60\pi}{6}=10\pi\approx31{,}4\U{rad\cdot s^{-2}}\). \(\theta=\dfrac{\omega^2-\omega_0^2}{2\ddot\theta}=\dfrac{8400\pi^2}{20\pi}=420\pi\U{rad}\), soit \(210\) tours.</p></div></details></div>
+</div></section>
+<section class='lesson' id='p1-eval-e' data-part='Partie E · Les mouvements circulaires' data-title='Évaluation de la partie E' hidden>
+<header class='lhead'><p class='eyebrow'>P1 · Partie E · Consolidation <span class='meta'>40 min</span></p><h2>Évaluation : Les mouvements circulaires</h2></header>
+<div class='lbody'><p class='lead'>Cette évaluation vérifie que la partie est comprise. Traite-la comme un devoir : feuille, calculatrice, chronomètre, sans le cours.</p>
+<div class='chrono' data-min='40'><p class='chrono-lab'>Durée conseillée : 40 minutes</p><p class='chrono-t'>40:00</p><div class='chrono-b'><button type='button' class='btn c-start'>Démarrer</button><button type='button' class='btn ghost c-reset'>Remettre à zéro</button></div><p class='chrono-end' hidden>Temps écoulé : pose le stylo et corrige-toi.</p></div>
+<div class='exo eval'><p class='exo-n'>Exercice 1 · Un disque vinyle <span class='pts'>8 pts</span></p><div class='exo-q'><p>Un disque tourne à \(45\U{tr/min}\) d'un mouvement uniforme. On étudie un point \(M\) situé à \(12\U{cm}\) de l'axe.</p>
+<ol class='q' start='1'><li>Calculer la vitesse angulaire et la période.</li><li>Calculer la vitesse et l'accélération de \(M\). Préciser la direction de l'accélération.</li><li>Combien de temps faut-il pour faire 10 tours ?</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>\(\omega=\dfrac{45\times2\pi}{60}=1{,}5\pi\approx4{,}71\U{rad\cdot s^{-1}}\) ; \(T=\dfrac{2\pi}{\omega}\approx1{,}33\U{s}\). <strong>(3 pts)</strong></li><li>\(v=R\omega=0{,}12\times4{,}71\approx0{,}565\ms\) ; \(a=R\omega^2\approx2{,}66\mss\), dirigée vers le centre. <strong>(3 pts)</strong></li><li>\(10T\approx13{,}3\U{s}\). <strong>(2 pts)</strong></li></ol></div></details></div>
+<div class='exo eval'><p class='exo-n'>Exercice 2 · La meule <span class='pts'>12 pts</span></p><div class='exo-q'><p>Une meule de rayon \(10\U{cm}\), initialement au repos, est mise en rotation avec une accélération angulaire constante \(\ddot\theta_1=5\U{rad\cdot s^{-2}}\) pendant \(8\U{s}\).</p>
+<ol class='q' start='1'><li>Calculer la vitesse angulaire atteinte à \(t=8\U{s}\) et le nombre de tours effectués pendant cette phase.</li><li>À \(t=8\U{s}\), calculer pour un point de la périphérie : \(v\), \(a_t\) et \(a_n\).</li><li>On coupe le moteur : la meule s'arrête après 50 tours, d'un mouvement uniformément retardé. Calculer l'accélération angulaire de freinage et la durée du freinage.</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>\(\dot\theta=5\times8=40\U{rad\cdot s^{-1}}\). \(\theta=\frac12\times5\times64=160\U{rad}\), soit \(\approx25{,}5\) tours. <strong>(4 pts)</strong></li><li>\(v=0{,}1\times40=4\ms\) ; \(a_t=0{,}1\times5=0{,}5\mss\) ; \(a_n=0{,}1\times1600=160\mss\). <strong>(4 pts)</strong></li><li>\(\theta=100\pi\U{rad}\) ; \(0-40^2=2\,\ddot\theta_2\times100\pi\), donc \(\ddot\theta_2=-\dfrac{8}{\pi}\approx-2{,}55\U{rad\cdot s^{-2}}\). Durée : \(t=\dfrac{40}{8/\pi}=5\pi\approx15{,}7\U{s}\). <strong>(4 pts)</strong></li></ol></div></details></div>
+<div class='note'><label>Ma note sur 20 : <input type='number' class='score' min='0' max='20' step='0.25' inputmode='decimal' data-tot='20'></label><p class='note-msg' aria-live='polite'></p></div>
+</div></section>
+    <div class="pager">
+      <a class="btn ghost" id="prev" href="#">← Étape précédente</a>
+      <div class="right">
+        <p class="done-note" id="done-note" hidden>Étape validée ✓</p>
+        <button type="button" class="linkbtn" id="undo" hidden>Annuler</button>
+        <a class="btn" id="next" href="#">Étape suivante →</a>
+      </div>
+    </div>
+    <footer class="foot">MathNexus Education · « L'excellence par le travail et la persévérance »</footer>
+  </main>
+</div>
+<script>
+var PARCOURS_KEY = "ts2-p1";
+
+(function(){
+  var lessons = Array.prototype.slice.call(document.querySelectorAll('.lesson'));
+  var ids = lessons.map(function(s){ return s.id; });
+  var KEY = PARCOURS_KEY;
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ done = {}; }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(done)); } catch(e){} }
+
+  // ----- sommaire -----
+  var nav = document.getElementById('nav'), html = '', part = null, n = 0;
+  lessons.forEach(function(s){
+    var p = s.dataset.part || '';
+    if (p !== part){ if (part !== null) html += '</ol>'; html += (p ? '<p class="nav-part">' + p + '</p>' : '') + '<ol class="nav-list">'; part = p; }
+    var num = s.id === 'accueil' ? 'i' : String(++n);
+    html += '<li><a href="#' + s.id + '" data-id="' + s.id + '"><span class="nav-n">' + num + '</span><span>' + s.dataset.title + '</span></a></li>';
+  });
+  nav.innerHTML = html + '</ol>';
+  var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
+  var total = ids.length - 1;
+
+  links.forEach(function(a){ a.dataset.num = a.querySelector('.nav-n').textContent; });
+  var resetBtn = document.getElementById('reset');
+
+  function refreshProgress(){
+    var c = 0;
+    links.forEach(function(a){
+      var d = !!done[a.dataset.id] && a.dataset.id !== 'accueil';
+      a.classList.toggle('done', d);
+      a.querySelector('.nav-n').textContent = d ? '✓' : a.dataset.num;
+      if (d) c++;
+    });
+    document.getElementById('prog-fill').style.width = (100 * c / total) + '%';
+    document.getElementById('prog-txt').textContent = c + ' étape' + (c > 1 ? 's' : '') + ' validée' + (c > 1 ? 's' : '') + ' sur ' + total;
+    document.getElementById('mini-prog').textContent = c + ' / ' + total;
+    resetBtn.hidden = c === 0;
+    disarmReset();
+  }
+
+  // remise à zéro : deux appuis, sans fenêtre de confirmation
+  var armed = false, armTimer = null;
+  function disarmReset(){ armed = false; clearTimeout(armTimer); resetBtn.textContent = 'Remettre ma progression à zéro'; resetBtn.classList.remove('warn'); }
+  resetBtn.addEventListener('click', function(){
+    if (!armed){ armed = true; resetBtn.textContent = 'Appuie encore pour tout effacer'; resetBtn.classList.add('warn'); armTimer = setTimeout(disarmReset, 5000); return; }
+    done = {}; save(); refreshProgress(); refreshDone();
+  });
+
+  // ----- formules : rendues à l'ouverture de l'étape -----
+  var typeset = {};
+  function renderMath(el){
+    if (typeset[el.id] || !window.MathJax || !MathJax.typesetPromise) return;
+    typeset[el.id] = true;
+    MathJax.typesetPromise([el]).catch(function(){ typeset[el.id] = false; });
+  }
+
+  var side = document.getElementById('side'), scrim = document.getElementById('scrim'), menuBtn = document.getElementById('menu-btn');
+  function closeMenu(){ side.classList.remove('open'); scrim.hidden = true; menuBtn.setAttribute('aria-expanded','false'); }
+  menuBtn.addEventListener('click', function(){
+    var o = !side.classList.contains('open');
+    side.classList.toggle('open', o); scrim.hidden = !o; menuBtn.setAttribute('aria-expanded', String(o));
+  });
+  scrim.addEventListener('click', closeMenu);
+
+  var prev = document.getElementById('prev'), next = document.getElementById('next'), doneNote = document.getElementById('done-note'), undo = document.getElementById('undo');
+  var current = 0;
+  function refreshDone(){ var d = !!done[ids[current]] && current > 0; doneNote.hidden = !d; undo.hidden = !d; }
+  undo.addEventListener('click', function(){ delete done[ids[current]]; save(); refreshProgress(); refreshDone(); });
+  function show(id, scroll){
+    var i = ids.indexOf(id); if (i < 0) i = 0;
+    current = i;
+    document.querySelectorAll('video').forEach(function(v){ try { v.pause(); } catch(e){} });
+    lessons.forEach(function(s, k){ s.hidden = k !== i; });
+    links.forEach(function(a){ if (a.dataset.id === ids[i]) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    renderMath(lessons[i]);
+    prev.hidden = i === 0;
+    if (i > 0) prev.setAttribute('href', '#' + ids[i-1]);
+    var last = i === ids.length - 1;
+    next.setAttribute('href', last ? '#accueil' : '#' + ids[i+1]);
+    next.textContent = i === 0 ? 'Commencer le parcours →' : (last ? 'Valider et revenir au début' : "J'ai compris, étape suivante →");
+    refreshDone();
+    closeMenu();
+    if (scroll) window.scrollTo(0, 0);
+  }
+  next.addEventListener('click', function(){ if (current > 0){ done[ids[current]] = true; save(); refreshProgress(); } });
+  window.addEventListener('hashchange', function(){ show(location.hash.slice(1), true); });
+
+  // ----- chronomètres : calculés sur l'heure réelle, donc justes même si l'onglet passe en arrière-plan -----
+  document.querySelectorAll('.chrono').forEach(function(c){
+    var totalS = (+c.dataset.min || 15) * 60, left = totalS, timer = null, endAt = 0;
+    var t = c.querySelector('.chrono-t'), b = c.querySelector('.c-start'), r = c.querySelector('.c-reset'), end = c.querySelector('.chrono-end');
+    function draw(){ var m = Math.floor(left / 60), s = left % 60; t.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s; }
+    function stop(){ clearInterval(timer); timer = null; b.textContent = left === totalS ? 'Démarrer' : 'Reprendre'; }
+    function tick(){
+      left = Math.max(0, Math.ceil((endAt - Date.now()) / 1000)); draw();
+      if (left <= 0){ stop(); b.textContent = 'Terminé'; end.hidden = false; }
+    }
+    b.addEventListener('click', function(){
+      if (timer){ tick(); if (timer) stop(); return; }
+      if (left === 0) return;
+      end.hidden = true; b.textContent = 'Pause';
+      endAt = Date.now() + left * 1000;
+      timer = setInterval(tick, 250);
+    });
+    r.addEventListener('click', function(){ clearInterval(timer); timer = null; left = totalS; draw(); b.textContent = 'Démarrer'; end.hidden = true; });
+    document.addEventListener('visibilitychange', function(){ if (timer && !document.hidden) tick(); });
+  });
+
+  // corrections : formules rendues à l'ouverture
+  document.querySelectorAll('.exo details').forEach(function(d){
+    d.addEventListener('toggle', function(){
+      if (!d.open || !d.classList.contains('tex2jax_ignore')) return;
+      d.classList.remove('tex2jax_ignore');
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([d]).catch(function(){});
+    });
+  });
+
+  // notes des évaluations
+  document.querySelectorAll('.score').forEach(function(inp){
+    var msg = inp.closest('.note').querySelector('.note-msg'), tot = +inp.dataset.tot;
+    var sk = KEY + ':' + inp.closest('.lesson').id;
+    try { var old = localStorage.getItem(sk); if (old !== null) inp.value = old; } catch(e){}
+    function upd(){
+      var v = parseFloat(String(inp.value).replace(',', '.'));
+      if (isNaN(v)){ msg.textContent = ''; msg.className = 'note-msg'; return; }
+      try { localStorage.setItem(sk, String(v)); } catch(e){}
+      if (v >= 0.6 * tot){ msg.textContent = 'Partie comprise : tu peux passer à la suite.'; msg.className = 'note-msg ok'; }
+      else { msg.textContent = 'Pas encore : refais les exercices des étapes de cette partie, puis recommence l\u2019évaluation.'; msg.className = 'note-msg ko'; }
+    }
+    inp.addEventListener('input', upd); upd();
+  });
+
+  if (lessons.length < 2){ document.querySelector('.pager').hidden = true; document.querySelector('.prog').hidden = true; }
+  refreshProgress();
+  show(location.hash.slice(1) || 'accueil', true);
+  // si MathJax arrive après le premier affichage
+  var tries = 0, wait = setInterval(function(){
+    if (window.MathJax && MathJax.typesetPromise){ clearInterval(wait); renderMath(lessons[current]); }
+    else if (++tries > 100) clearInterval(wait);
+  }, 150);
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{
+ "id": "p1-d2",
+ "titre": "Dates de passage et vitesse",
+ "phrases": [
+  [
+   "Mouvement sinusoïdal : vitesse et dates de passage.",
+   "Vitesse et dates de passage"
+  ],
+  [
+   "On dérive l'équation horaire : v égale moins X m oméga sinus de oméga t plus phi. La vitesse maximale vaut X m oméga, au centre.",
+   "v=-X_m\\omega\\sin(\\omega t+\\varphi)"
+  ],
+  [
+   "Reprenons x égale quatre cosinus de quatre pi t plus pi sur trois, en centimètres. La vitesse maximale vaut zéro virgule zéro quatre fois quatre pi, environ zéro virgule cinq mètre par seconde.",
+   "v_{\\max}=0{,}04\\times4\\pi\\approx0{,}50\\ \\mathrm{m\\cdot s^{-1}}"
+  ],
+  [
+   "Question type : à quelle date le mobile passe-t-il pour la première fois à moins deux centimètres, dans le sens négatif ?",
+   "x=-2\\ \\mathrm{cm},\\ v<0"
+  ],
+  [
+   "Cosinus de l'angle égale moins un demi : l'angle vaut deux pi sur trois, ou moins deux pi sur trois.",
+   "\\cos\\theta=-\\tfrac12"
+  ],
+  [
+   "Sens négatif : le sinus doit être positif. On garde deux pi sur trois, plus deux k pi.",
+   "\\theta=\\tfrac{2\\pi}{3}+2k\\pi"
+  ],
+  [
+   "Quatre pi t plus pi sur trois égale deux pi sur trois plus deux k pi. Donc t égale un douzième plus k demis. Le premier passage, pour k égale zéro, a lieu à un douzième de seconde.",
+   "t=\\tfrac{1}{12}+\\tfrac{k}{2}\\ \\mathrm s"
+  ],
+  [
+   "Dernier outil : v carré égale oméga carré, facteur de X m carré moins x carré. Il donne la vitesse en un point sans passer par le temps.",
+   "v^2=\\omega^2(X_m^2-x^2)"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

@@ -1,0 +1,42 @@
+{
+ "id": "p2-c1",
+ "titre": "Le théorème de l'énergie cinétique",
+ "phrases": [
+  [
+   "Le travail d'une force, et le théorème de l'énergie cinétique.",
+   "Théorème de l'énergie cinétique"
+  ],
+  [
+   "Le travail d'une force constante sur un déplacement A B est le produit scalaire de la force par le vecteur A B : F fois A B fois cosinus thêta.",
+   "W=F\\times AB\\times\\cos\\theta"
+  ],
+  [
+   "Une force perpendiculaire au déplacement ne travaille pas. Une force opposée au mouvement a un travail négatif : il est résistant.",
+   "W(\\vec R)=0\\qquad W(\\vec f)=-f\\,\\ell"
+  ],
+  [
+   "Le théorème : la variation d'énergie cinétique entre A et B égale la somme des travaux des forces extérieures.",
+   "E_c(B)-E_c(A)=\\sum W"
+  ],
+  [
+   "Exemple : un solide de deux kilogrammes part du repos et descend de deux mètres sur un plan incliné de trente degrés, sans frottement.",
+   "m=2\\ \\mathrm{kg},\\ AB=2\\ \\mathrm m,\\ \\alpha=30°"
+  ],
+  [
+   "Le poids travaille : m g fois la hauteur descendue, A B sinus alpha, soit un mètre. Cela fait vingt joules. La réaction ne travaille pas.",
+   "W(\\vec P)=mg\\,AB\\sin\\alpha=20\\ \\mathrm J"
+  ],
+  [
+   "Un demi m v B carré moins zéro égale vingt joules. Donc v B carré égale vingt, et v B vaut environ quatre virgule quarante-sept mètres par seconde.",
+   "v_B=\\sqrt{20}\\approx4{,}47\\ \\mathrm{m\\cdot s^{-1}}"
+  ],
+  [
+   "C'est le même résultat qu'avec le théorème du centre d'inertie, mais en deux lignes.",
+   "\\text{même résultat, plus vite}"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

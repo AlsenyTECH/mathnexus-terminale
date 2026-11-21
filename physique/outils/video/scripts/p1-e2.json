@@ -1,0 +1,42 @@
+{
+ "id": "p1-e2",
+ "titre": "Le mouvement circulaire uniformément varié",
+ "phrases": [
+  [
+   "Le mouvement circulaire uniformément varié.",
+   "MCUV"
+  ],
+  [
+   "Dans ce mouvement, l'accélération angulaire, thêta seconde, est constante. Les formules sont celles du MRUV, avec des angles.",
+   "\\ddot\\theta=\\text{constante}"
+  ],
+  [
+   "Vitesse angulaire : thêta point égale thêta seconde t plus oméga zéro. Angle : un demi thêta seconde t carré, plus oméga zéro t, plus thêta zéro.",
+   "\\dot\\theta=\\ddot\\theta t+\\omega_0"
+  ],
+  [
+   "Et la relation sans le temps : thêta point carré moins oméga zéro carré égale deux thêta seconde, facteur de l'angle parcouru.",
+   "\\dot\\theta^2-\\omega_0^2=2\\ddot\\theta\\,\\Delta\\theta"
+  ],
+  [
+   "Exemple : un disque part du repos et atteint dix radians par seconde en cinq secondes. Son accélération angulaire vaut deux radians par seconde carrée.",
+   "\\ddot\\theta=\\dfrac{10}{5}=2\\ \\mathrm{rad\\cdot s^{-2}}"
+  ],
+  [
+   "Angle parcouru : un demi fois deux fois vingt-cinq, soit vingt-cinq radians. Divisé par deux pi, cela fait environ quatre tours.",
+   "\\theta=25\\ \\mathrm{rad}\\approx4\\ \\text{tours}"
+  ],
+  [
+   "Pour un point à dix centimètres de l'axe, à cinq secondes : a t égale R thêta seconde, zéro virgule deux. Et a n égale R thêta point carré, dix mètres par seconde carrée.",
+   "a_t=R\\ddot\\theta\\qquad a_n=R\\dot\\theta^2"
+  ],
+  [
+   "Le réflexe : un tour égale deux pi radians. Convertis les tours avant de calculer.",
+   "1\\ \\text{tour}=2\\pi\\ \\mathrm{rad}"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

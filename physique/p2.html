@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>P2 · Bases de la dynamique</title>
+<meta name="description" content="P2 Bases de la dynamique : cours pas à pas, vidéos, exercices corrigés et évaluations (Terminale S2).">
+<link rel="icon" href="assets/logo.png">
+<style>
+
+/* Polices et MathJax sont dans assets/ : le site fonctionne sans connexion. */
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500;font-display:swap;src:url(assets/fonts/caveat-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/caveat-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Kalam';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/kalam-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Kalam';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/kalam-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:400;font-display:swap;src:url(assets/fonts/source-sans-3-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:600;font-display:swap;src:url(assets/fonts/source-sans-3-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:700;font-display:swap;src:url(assets/fonts/source-sans-3-latin-700-normal.woff2) format('woff2')}
+/* Mise en page : un cahier de cours. Sommaire à gauche (les étapes dans l'ordre), une étape à la fois à droite.
+   Clair = page de cahier quadrillée (encre bleue, titres rouges, stylo vert du prof). Sombre = tableau noir et craies. */
+:root{
+  --paper:#f7f9fc; --surface:#ffffff; --ink:#1b2440; --muted:#586381; --line:#d6ddec; --grid:#e3e9f5;
+  --pen:#1c3bb0; --pen-bg:#eef2fd; --rouge:#bd1f2b; --rouge-bg:#fdf2f2; --prof:#0a7441; --prof-bg:#e9f5ee;
+  --btn-fg:#ffffff;
+  --f-body:'Source Sans 3',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-hand:'Caveat','Segoe Print','Bradley Hand',cursive;
+  --f-prof:'Kalam','Comic Sans MS','Segoe Print',cursive;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141d1a; --surface:#1b2723; --ink:#eef2ea; --muted:#a6b5ab; --line:#33453d; --grid:#22302b;
+    --pen:#a9c4ff; --pen-bg:#202d45; --rouge:#ff9d92; --rouge-bg:#372422; --prof:#8fe0ae; --prof-bg:#1e3329;
+    --btn-fg:#10201a; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141d1a; --surface:#1b2723; --ink:#eef2ea; --muted:#a6b5ab; --line:#33453d; --grid:#22302b;
+  --pen:#a9c4ff; --pen-bg:#202d45; --rouge:#ff9d92; --rouge-bg:#372422; --prof:#8fe0ae; --prof-bg:#1e3329;
+  --btn-fg:#10201a; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{height:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.6;margin:0}
+a{color:var(--pen)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:310px minmax(0,1fr);min-height:100%}
+
+/* ---------- sommaire ---------- */
+.side{background:var(--surface);border-right:1px solid var(--line);position:sticky;top:0;align-self:start;height:100vh;height:100dvh;overflow-y:auto;overscroll-behavior:contain;
+  padding-block:20px 28px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:18px}
+.brand{font-family:var(--f-hand);font-weight:700;font-size:1.9rem;line-height:1.05;color:var(--rouge);margin:0 0 2px}
+.brand-sub{margin:0 0 14px;color:var(--muted);font-size:.92rem}
+.prog{margin:0 0 18px}
+.prog-bar{height:8px;border-radius:4px;background:var(--grid);overflow:hidden}
+.prog-fill{height:100%;width:0;background:var(--prof);transition:width .3s}
+.prog-txt{margin:6px 0 0;font-size:.88rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.nav-part{margin:16px 0 6px;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.nav-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.nav-list a{display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;align-items:start;padding:7px 8px;border-radius:4px;text-decoration:none;color:var(--ink);font-size:.95rem;line-height:1.3}
+.nav-list a:hover{background:var(--pen-bg)}
+.nav-list a[aria-current="page"]{background:var(--pen-bg);color:var(--pen);font-weight:700}
+.nav-n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);font-size:.78rem;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums}
+.nav-list a.done .nav-n{background:var(--prof);border-color:var(--prof);color:var(--btn-fg)}
+
+/* ---------- barre mobile ---------- */
+.topbar{display:none}
+.scrim{display:none}
+
+/* ---------- étape ---------- */
+.main{min-width:0;padding-block:0 60px}
+.lesson{max-width:860px;margin:0 auto;padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px))}
+.lhead{padding:30px 0 16px;margin:0 0 6px;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;
+  border-bottom:2px solid var(--rouge)}
+.eyebrow{margin:0 0 4px;font-size:.84rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;display:flex;gap:12px;flex-wrap:wrap;align-items:baseline}
+.eyebrow .meta{letter-spacing:0;text-transform:none;font-weight:600;color:var(--prof)}
+.lhead h2{font-family:var(--f-hand);font-weight:700;font-size:clamp(2.1rem,5.2vw,3rem);line-height:1.05;margin:0;color:var(--rouge);text-wrap:balance}
+.lbody{display:flex;flex-direction:column;gap:14px;padding-top:16px}
+.lbody > p,.lbody > ul,.lbody > ol{margin:0;max-width:70ch}
+.lbody ul,.lbody ol{padding-left:1.3em}
+.lbody li{margin:4px 0}
+.lbody h3{font-size:1.22rem;margin:14px 0 0;line-height:1.25;text-wrap:balance}
+.lead{font-size:1.15rem}
+.objectif{font-size:1.08rem;color:var(--muted);font-weight:600}
+.objectif::before{content:"Objectif : ";color:var(--pen);font-weight:700}
+
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%;padding:4px 0;margin:.5em 0 !important}
+mjx-container{color:inherit;position:relative}
+.table-wrap,.copie,.exo{position:relative}
+
+.lab{margin:0 0 6px;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;font-family:var(--f-body)}
+.retenir{border:2px solid var(--rouge);border-radius:4px;background:var(--rouge-bg);padding:12px 16px}
+.retenir .lab{color:var(--rouge)}
+.retenir p,.retenir ul,.retenir ol{margin:6px 0}
+.retenir ul,.retenir ol{padding-left:1.3em}
+.prof{background:var(--prof-bg);border-radius:4px;padding:12px 16px;color:var(--prof);font-family:var(--f-prof);font-size:1rem;line-height:1.55}
+.prof .lab{color:var(--prof)}
+.prof p,.prof ul{margin:4px 0}
+.prof ul{padding-left:1.2em}
+.copie{border:1px solid var(--line);border-radius:3px;padding:14px 16px 12px;color:var(--pen);font-family:var(--f-hand);font-size:1.42rem;line-height:1.5;min-width:0;
+  background-color:var(--surface);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px}
+.copie .lab{color:var(--muted)}
+.copie p{margin:4px 0}
+.copie mjx-container{font-size:.82em}
+.copie u{text-decoration-thickness:1.5px;text-underline-offset:3px}
+
+.video{margin:6px 0;display:flex;flex-direction:column;gap:6px}
+.video video{width:100%;max-width:100%;aspect-ratio:16/9;background:#101614;border-radius:4px;border:1px solid var(--line);display:block}
+.video figcaption{font-size:.95rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.tag{font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;color:var(--btn-fg);background:var(--pen);padding:2px 7px;border-radius:3px}
+.dur{font-variant-numeric:tabular-nums}
+
+.table-wrap{overflow-x:auto;max-width:100%}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:.98rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--pen-bg);font-weight:700}
+
+.exos-h{border-top:1px solid var(--line);padding-top:18px;margin-top:18px !important}
+.exo{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.exo-n{margin:0;font-weight:700;color:var(--pen);font-size:.86rem;letter-spacing:.06em;text-transform:uppercase}
+.exo-q p{margin:4px 0}
+.exo details{display:flex;flex-direction:column;gap:10px}
+.exo summary{cursor:pointer;font-weight:700;color:var(--pen);padding:6px 0;width:max-content;max-width:100%}
+.exo details[open] summary{margin-bottom:8px}
+.exo details > * + *{margin-top:10px}
+
+.howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.howto > div{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:12px 14px}
+.howto p{margin:0}
+.howto .num{font-family:var(--f-hand);font-weight:700;font-size:2rem;line-height:1;color:var(--rouge);margin-bottom:4px}
+
+.chrono{border:2px solid var(--pen);border-radius:4px;background:var(--pen-bg);padding:14px 16px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.chrono-lab{margin:0;font-weight:700}
+.chrono-t{margin:0;font-size:3rem;line-height:1;font-weight:700;font-variant-numeric:tabular-nums;color:var(--pen)}
+.chrono-b{display:flex;gap:10px;flex-wrap:wrap}
+.chrono-end{margin:0;font-weight:700;color:var(--rouge)}
+
+.btn{border:1.5px solid var(--pen);background:var(--pen);color:var(--btn-fg);font-weight:700;padding:10px 16px;border-radius:4px;cursor:pointer;text-decoration:none;display:inline-block;line-height:1.2}
+.btn.ghost{background:transparent;color:var(--pen)}
+.btn[disabled]{opacity:.45;cursor:default}
+.pager{max-width:860px;margin:30px auto 0;padding-left:max(22px,env(safe-area-inset-left,0px));padding-right:max(22px,env(safe-area-inset-right,0px));display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.pager .right{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.done-note{color:var(--prof);font-weight:700;margin:0}
+.linkbtn{background:none;border:0;padding:4px 0;color:var(--muted);font-size:.88rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.linkbtn:hover{color:var(--pen)}
+.linkbtn.warn{color:var(--rouge);font-weight:700}
+.prog .linkbtn{margin-top:4px}
+.lesson{scroll-margin-top:70px;overflow-x:hidden;overflow-x:clip} /* le texte caché de MathJax pour lecteurs d'écran ne doit pas élargir la page */
+.video .hint{display:none;font-size:.88rem;color:var(--muted);margin:0}
+
+@media (max-width: 880px){
+  .app{display:block}
+  .topbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+    padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));gap:12px;align-items:center;justify-content:space-between}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+  .topbar .brand{font-size:1.45rem;margin:0}
+  .topbar .mini{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;margin:0}
+  .side{position:fixed;inset:0 auto 0 0;width:min(88vw,330px);z-index:40;transform:translateX(-102%);transition:transform .22s;
+    /* align-self:start (utile sur ordinateur) empêchait le panneau de prendre la hauteur de l'écran : il ne défilait plus */
+    align-self:auto;height:100%;height:100dvh;max-height:100dvh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+    padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+  .side.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.35)}
+  .scrim{display:block;position:fixed;inset:0;z-index:30;background:rgba(10,16,30,.45)}
+  .lesson,.pager{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .lhead{padding-top:20px}
+  body{font-size:16.5px}
+  .copie{font-size:1.3rem;padding:12px 12px 10px}
+  .pager .btn{flex:1 1 auto;text-align:center}
+  .video .hint{display:block}
+}
+@media (prefers-reduced-motion: reduce){.side,.prog-fill{transition:none}}
+
+/* ---- ajouts du site Sciences physiques TS2 ---- */
+.logo{display:inline-block;margin:0 0 6px}
+.logo img{display:block;width:64px;height:auto}
+.exemple{border:1px solid var(--line);border-left:4px solid var(--pen);border-radius:4px;background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.exemple > p,.exemple > ol,.exemple > ul{margin:0}
+.exo.appli{border-left:4px solid var(--prof)}
+.exo.eval{border-left:4px solid var(--rouge)}
+.exo-q ol.q,.exemple ol.q{padding-left:1.4em;margin:6px 0}
+.copie ol.q{padding-left:1.3em}
+.pts{float:right;color:var(--rouge);letter-spacing:0;text-transform:none}
+.consigne{color:var(--muted);font-style:italic;margin:-6px 0 0 !important}
+.disp{margin:0;overflow-x:auto}
+.video-attente{border:2px dashed var(--line);border-radius:4px;padding:14px 16px;background:var(--surface)}
+.video-attente .lab{color:var(--pen)}
+.video-attente p{margin:4px 0}
+.note{border:2px solid var(--rouge);border-radius:4px;background:var(--rouge-bg);padding:12px 16px}
+.note label{font-weight:700}
+.note input{font:inherit;width:6.5em;padding:6px 8px;margin-left:6px;border:1.5px solid var(--line);border-radius:4px;background:var(--surface);color:var(--ink)}
+.note-msg{margin:8px 0 0;font-weight:700}
+.note-msg.ok{color:var(--prof)}
+.note-msg.ko{color:var(--rouge)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.card{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:14px 16px;text-decoration:none;color:var(--ink);min-width:0}
+a.card:hover{border-color:var(--pen);background:var(--pen-bg)}
+.card.off{opacity:.55}
+.c-code{font-family:var(--f-hand);font-size:1.7rem;font-weight:700;color:var(--rouge);line-height:1}
+.c-t{font-weight:700;line-height:1.3}
+.c-m{font-size:.88rem;color:var(--muted)}
+.c-go{margin-top:auto;font-weight:700;color:var(--pen)}
+.muted{color:var(--muted)}
+.foot{max-width:860px;margin:36px auto 0;padding:0 22px;color:var(--muted);font-size:.85rem;text-align:center}
+
+</style>
+<script>window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']],
+    macros: { vect: ['\\overrightarrow{#1}',1], U: ['\\,\\mathrm{#1}',1], ms: '\\,\\mathrm{m\\cdot s^{-1}}', mss: '\\,\\mathrm{m\\cdot s^{-2}}',
+      dd: '\\mathrm{d}', R: '\\mathbb{R}' } },
+  svg: { fontCache: 'global' }, startup: { typeset: false }
+};</script>
+<script src="assets/mathjax/tex-svg.js" defer></script>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <button type="button" class="btn ghost" id="menu-btn" aria-controls="side" aria-expanded="false">Sommaire</button>
+    <p class="brand">P2 · Dynamique</p>
+    <p class="mini" id="mini-prog"></p>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <nav class="side" id="side" aria-label="Sommaire">
+    <a class="logo" href="index.html"><img src="assets/logo.png" alt="MathNexus Education" width="64" height="55"></a>
+    <p class="brand">P2 · Bases de la dynamique</p>
+    <p class="brand-sub">Sciences physiques · Terminale S2</p>
+    <p class='brand-sub'><a href='index.html'>← Tous les chapitres</a></p>
+    <div class="prog">
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+      <p class="prog-txt" id="prog-txt"></p>
+      <button type="button" class="linkbtn" id="reset" hidden>Remettre ma progression à zéro</button>
+    </div>
+    <div id="nav"></div>
+  </nav>
+  <main class="main" id="main">
+<section class='lesson' id='accueil' data-part='' data-title='Comment travailler' hidden>
+<header class='lhead'><p class='eyebrow'>Bienvenue · P2</p><h2>Bases de la dynamique</h2></header><div class='lbody'>
+<p class='lead'>Relier le mouvement à ses causes : centre d'inertie, théorème du centre d'inertie, énergies et conservation de la quantité de mouvement. On prend g = 10 m·s⁻² dans tout le chapitre.</p>
+<div class='howto'>
+<div><p class='num'>1</p><p><strong>Lis le cours</strong> de l'étape. Les encadrés rouges sont à savoir par cœur.</p></div>
+<div><p class='num'>2</p><p><strong>Regarde la vidéo</strong>, puis l'exemple corrigé ligne par ligne.</p></div>
+<div><p class='num'>3</p><p><strong>Fais l'exercice d'application</strong> en t'aidant de l'exemple.</p></div>
+<div><p class='num'>4</p><p><strong>Fais seul les exercices</strong> « À toi de jouer », puis ouvre la correction.</p></div>
+</div>
+<p>À la fin de chaque partie, une <strong>évaluation chronométrée</strong> vérifie que tout est compris. Note-toi honnêtement avec le barème : en dessous de 12 sur 20, refais les étapes de la partie avant d'avancer.</p>
+<h3>Le plan</h3><ul><li><strong>Partie A</strong> · Centre d'inertie et référentiels (2 étapes + évaluation)</li><li><strong>Partie B</strong> · Le théorème du centre d'inertie (2 étapes + évaluation)</li><li><strong>Partie C</strong> · Les théorèmes énergétiques (2 étapes + évaluation)</li><li><strong>Partie D</strong> · La conservation de la quantité de mouvement (2 étapes + évaluation)</li></ul>
+<div class='retenir'><p class='lab'>La série à imprimer</p><p>Les exercices « À toi de jouer » et les évaluations du chapitre sont réunis dans une série PDF à imprimer, avec le corrigé à la fin : <a href='series/Serie-P2-Dynamique.pdf'>télécharger la série P2 (PDF)</a>.</p></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Une étape par jour vaut mieux que tout le chapitre la veille du devoir. Ta progression est gardée sur cet appareil.</p></div>
+</div></section>
+<section class='lesson' id='p2-a1' data-part='Partie A · Centre d&#x27;inertie et référentiels' data-title='Centre d&#x27;inertie et quantité de mouvement' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie A · Étape 1 <span class='meta'>15 min</span></p><h2>Centre d'inertie et quantité de mouvement</h2></header>
+<div class='lbody'><p class='objectif'>Placer le centre d'inertie d'un système et calculer sa quantité de mouvement.</p>
+<div class='retenir'><p class='lab'>À retenir · Centre d'inertie</p><p>Le centre d'inertie \(G\) d'un système est le barycentre de ses points affectés de leurs masses. Pour des solides de masses \(m_1, m_2,\dots\) et de centres \(G_1, G_2,\dots\) :</p>
+<p class='disp'>\[\vect{OG}=\frac{m_1\vect{OG_1}+m_2\vect{OG_2}+\cdots}{m_1+m_2+\cdots}\qquad\text{sur un axe : }x_G=\frac{m_1x_1+m_2x_2+\cdots}{m_1+m_2+\cdots}\]</p>
+<p>Pour un solide homogène et symétrique, \(G\) est au centre de symétrie (milieu d'une tige, centre d'une sphère).</p></div>
+<div class='retenir'><p class='lab'>À retenir · Quantité de mouvement</p><p class='disp'>\[\vec p=m\,\vec v_G\quad(\mathrm{kg\cdot m\cdot s^{-1}})\qquad\text{système : }\vec P=\vec p_1+\vec p_2+\cdots=M\,\vec v_G\]</p></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Choisis l'origine de l'axe sur l'un des objets : un terme du numérateur devient nul et le calcul est plus court.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 1</p><p><strong>Centre d'inertie et quantité de mouvement</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · la tige lestée</p><p>Une tige homogène \(AB\) de longueur \(72\U{cm}\) et de masse \(m\) porte en \(A\) une masselotte de masse \(2m\) et en \(B\) une masselotte de masse \(3m\) (masselottes ponctuelles). Déterminer la position du centre d'inertie \(G\) du système.</p><div class='copie'><p class='lab'>Solution rédigée</p><p>Axe d'origine \(A\), dirigé vers \(B\). Le centre de la tige est en \(x=36\U{cm}\).</p>
+<p>\(AG=\dfrac{2m\times0+m\times36+3m\times72}{2m+m+3m}=\dfrac{252\,m}{6\,m}=42\U{cm}\). \(G\) est à \(42\U{cm}\) de \(A\), du côté de la masse la plus lourde.</p></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · deux billes</p><div class='exo-q'><p>Une bille de \(200\U{g}\) est en \(x=0\) et une bille de \(300\U{g}\) en \(x=50\U{cm}\).</p>
+<ol class='q' start='1'><li>Calculer \(x_G\).</li><li>La première bille roule à \(+2\ms\) et la seconde à \(-1\ms\) sur l'axe. Calculer la quantité de mouvement du système.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(x_G=\dfrac{0{,}2\times0+0{,}3\times50}{0{,}5}=30\U{cm}\).</li><li>\(P=0{,}2\times2+0{,}3\times(-1)=0{,}1\U{kg\cdot m\cdot s^{-1}}\), dirigée dans le sens de l'axe.</li></ol></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · le système Terre-Lune</p><div class='exo-q'><p>La masse de la Terre vaut 81 fois celle de la Lune ; la distance entre leurs centres vaut \(384\,000\U{km}\). Où est le centre d'inertie du système Terre-Lune ? Est-il à l'intérieur de la Terre (rayon \(6400\U{km}\)) ?</p></div><details><summary>Voir la correction</summary><div class='copie'><p>Origine au centre de la Terre : \(x_G=\dfrac{81M_L\times0+M_L\times384\,000}{82\,M_L}\approx4683\U{km}\). C'est moins que \(6400\U{km}\) : \(G\) est <strong>à l'intérieur de la Terre</strong>.</p></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · comparer des quantités de mouvement</p><div class='exo-q'><ol class='q' start='1'><li>Calculer la quantité de mouvement d'une voiture de \(1000\U{kg}\) roulant à \(72\U{km/h}\).</li><li>À quelle vitesse un camion de \(10\U{t}\) a-t-il la même quantité de mouvement ?</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(p=1000\times20=2\times10^4\U{kg\cdot m\cdot s^{-1}}\).</li><li>\(v=\dfrac{2\times10^4}{10^4}=2\ms=7{,}2\U{km/h}\).</li></ol></div></details></div>
+</div></section>
+<section class='lesson' id='p2-a2' data-part='Partie A · Centre d&#x27;inertie et référentiels' data-title='Référentiels galiléens et principe de l&#x27;inertie' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie A · Étape 2 <span class='meta'>15 min</span></p><h2>Référentiels galiléens et principe de l'inertie</h2></header>
+<div class='lbody'><p class='objectif'>Choisir le bon référentiel et utiliser le principe de l'inertie pour trouver une force inconnue.</p>
+<div class='retenir'><p class='lab'>À retenir · Référentiels galiléens</p><p>Un référentiel est galiléen si le principe de l'inertie y est vérifié.</p>
+<ul><li><strong>Terrestre</strong> (le sol) : mouvements sur Terre de courte durée.</li><li><strong>Géocentrique</strong> (centre de la Terre, axes vers des étoiles fixes) : satellites, Lune.</li><li><strong>Héliocentrique</strong> (centre du Soleil) : planètes.</li></ul></div>
+<div class='retenir'><p class='lab'>À retenir · Principe de l'inertie</p><p>Dans un référentiel galiléen, si les forces extérieures appliquées à un système se compensent (\(\sum\vec F_{\text{ext}}=\vec 0\)), son centre d'inertie est au repos ou en mouvement rectiligne uniforme, et réciproquement.</p>
+<ul><li>Système <strong>isolé</strong> : aucune force. <strong>Pseudo-isolé</strong> : les forces se compensent.</li></ul></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>« Vitesse constante en ligne droite » se traduit toujours par « les forces se compensent ». C'est la clé pour trouver une force de frottement ou une tension.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 2</p><p><strong>Le principe de l'inertie</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · le mobile autoporteur</p><p>Un mobile autoporteur glisse sur une table horizontale ; un coussin d'air supprime les frottements. On enregistre ses positions à intervalles réguliers. Que prévoit le principe de l'inertie, et que doit-on observer ?</p><div class='copie'><p class='lab'>Solution rédigée</p><p>Système : le mobile. Référentiel terrestre, supposé galiléen. Forces : le poids \(\vec P\) et la réaction \(\vec R\) du coussin d'air, verticale, qui le compense : \(\vec P+\vec R=\vec 0\).</p>
+<p>D'après le principe de l'inertie, le centre d'inertie est en <strong>mouvement rectiligne uniforme</strong> : sur l'enregistrement, les points de \(G\) sont alignés et régulièrement espacés.</p></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · la voiture à vitesse constante</p><div class='exo-q'><p>Une voiture de \(1000\U{kg}\) roule à vitesse constante sur une route droite et horizontale. Les frottements sont équivalents à une force de \(500\U{N}\) opposée au mouvement. On prend \(g=10\mss\).</p>
+<p>Faire le bilan des forces et calculer la force motrice \(\vec F\) et la réaction verticale \(\vec R\).</p></div><details><summary>Voir la correction</summary><div class='copie'><p>Forces : poids \(\vec P\), réaction \(\vec R\), force motrice \(\vec F\), frottements \(\vec f\). Mouvement rectiligne uniforme, donc \(\vec P+\vec R+\vec F+\vec f=\vec 0\).</p>
+<p>Sur l'horizontale : \(F=f=500\U{N}\). Sur la verticale : \(R=P=mg=10^4\U{N}\).</p></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · choisir le référentiel</p><div class='exo-q'><p>Quel référentiel choisir pour étudier : a) un satellite autour de la Terre ; b) la Terre autour du Soleil ; c) un ballon de football ?</p></div><details><summary>Voir la correction</summary><div class='copie'><p>a) Géocentrique. b) Héliocentrique. c) Terrestre.</p></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · l'ascenseur</p><div class='exo-q'><p>Un ascenseur de \(400\U{kg}\) monte à vitesse constante. On prend \(g=10\mss\). Calculer la tension du câble.</p></div><details><summary>Voir la correction</summary><div class='copie'><p>Forces : poids et tension. Mouvement rectiligne uniforme : \(\vec T+\vec P=\vec 0\), donc \(T=mg=4000\U{N}\).</p></div></details></div>
+</div></section>
+<section class='lesson' id='p2-eval-a' data-part='Partie A · Centre d&#x27;inertie et référentiels' data-title='Évaluation de la partie A' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie A · Consolidation <span class='meta'>30 min</span></p><h2>Évaluation : Centre d'inertie et référentiels</h2></header>
+<div class='lbody'><p class='lead'>Cette évaluation vérifie que la partie est comprise. Traite-la comme un devoir : feuille, calculatrice, chronomètre, sans le cours.</p>
+<div class='chrono' data-min='30'><p class='chrono-lab'>Durée conseillée : 30 minutes</p><p class='chrono-t'>30:00</p><div class='chrono-b'><button type='button' class='btn c-start'>Démarrer</button><button type='button' class='btn ghost c-reset'>Remettre à zéro</button></div><p class='chrono-end' hidden>Temps écoulé : pose le stylo et corrige-toi.</p></div>
+<div class='exo eval'><p class='exo-n'>Exercice 1 · L'haltère <span class='pts'>10 pts</span></p><div class='exo-q'><p>Un haltère est formé d'une barre homogène de masse \(1\U{kg}\) et de deux boules : \(m_1=2\U{kg}\) et \(m_2=3\U{kg}\), dont les centres sont aux extrémités de la barre, distants de \(50\U{cm}\).</p>
+<ol class='q' start='1'><li>Déterminer la position du centre d'inertie \(G\) par rapport au centre de la boule 1.</li><li>L'haltère est déplacé en translation à \(0{,}5\ms\). Calculer sa quantité de mouvement.</li><li>Un élève affirme : « \(G\) est au milieu de la barre ». Expliquer son erreur.</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>Origine au centre de la boule 1 : \(x_G=\dfrac{2\times0+1\times25+3\times50}{6}=\dfrac{175}{6}\approx29{,}2\U{cm}\). <strong>(5 pts)</strong></li><li>\(P=Mv_G=6\times0{,}5=3\U{kg\cdot m\cdot s^{-1}}\). <strong>(3 pts)</strong></li><li>Les boules n'ont pas la même masse : \(G\) est décalé vers la plus lourde, la boule 2. <strong>(2 pts)</strong></li></ol></div></details></div>
+<div class='exo eval'><p class='exo-n'>Exercice 2 · Le bloc tiré à vitesse constante <span class='pts'>10 pts</span></p><div class='exo-q'><p>Un bloc de masse \(4\U{kg}\) est tiré sur un plan horizontal par une force horizontale \(\vec F\) de valeur \(12\U{N}\). Il se déplace en ligne droite à vitesse constante. On prend \(g=10\mss\).</p>
+<ol class='q' start='1'><li>Énoncer le principe de l'inertie.</li><li>Faire le bilan des forces. En déduire la force de frottement \(\vec f\) et la composante normale \(\vec R_N\) de la réaction.</li><li>Calculer la valeur de la réaction totale \(\vec R=\vec R_N+\vec f\) et l'angle qu'elle fait avec la verticale.</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>Dans un référentiel galiléen, si les forces se compensent, le centre d'inertie est au repos ou en MRU (et réciproquement). <strong>(2 pts)</strong></li><li>Forces : \(\vec P\), \(\vec F\), \(\vec R_N\), \(\vec f\). MRU : leur somme est nulle. Horizontale : \(f=F=12\U{N}\). Verticale : \(R_N=mg=40\U{N}\). <strong>(4 pts)</strong></li><li>\(R=\sqrt{40^2+12^2}\approx41{,}8\U{N}\) ; \(\tan\varphi=\dfrac{12}{40}\), donc \(\varphi\approx16{,}7°\). <strong>(4 pts)</strong></li></ol></div></details></div>
+<div class='note'><label>Ma note sur 20 : <input type='number' class='score' min='0' max='20' step='0.25' inputmode='decimal' data-tot='20'></label><p class='note-msg' aria-live='polite'></p></div>
+</div></section>
+<section class='lesson' id='p2-b1' data-part='Partie B · Le théorème du centre d&#x27;inertie' data-title='Le théorème du centre d&#x27;inertie et sa méthode' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie B · Étape 3 <span class='meta'>20 min</span></p><h2>Le théorème du centre d'inertie et sa méthode</h2></header>
+<div class='lbody'><p class='objectif'>Appliquer le théorème du centre d'inertie en cinq temps pour calculer une accélération ou une force.</p>
+<div class='retenir'><p class='lab'>À retenir · Théorème du centre d'inertie (TCI)</p><p>Dans un référentiel galiléen :</p>
+<p class='disp'>\[\sum\vec F_{\text{ext}}=m\,\vec a_G\]</p>
+<p>C'est la relation fondamentale de la dynamique appliquée au centre d'inertie. Si la somme des forces est constante, \(\vec a_G\) est constante : le mouvement est uniformément varié.</p></div>
+<div class='retenir'><p class='lab'>À retenir · La méthode en cinq temps</p><ol class='q' start='1'><li><strong>Système</strong> : je le nomme.</li><li><strong>Référentiel</strong> : terrestre, supposé galiléen.</li><li><strong>Bilan des forces</strong> : je les nomme et je les représente sur un schéma.</li><li><strong>TCI</strong> : j'écris la relation vectorielle.</li><li><strong>Projection</strong> sur un axe bien choisi (souvent celui du mouvement), puis calcul.</li></ol></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Le correcteur note la méthode autant que le résultat : écris les cinq temps, même quand le calcul te paraît évident.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 3</p><p><strong>Le TCI en cinq temps</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · la caisse tirée</p><p>Une caisse de \(50\U{kg}\), au repos sur un sol horizontal, est tirée par une force horizontale de \(200\U{N}\). Les frottements sont équivalents à une force constante de \(50\U{N}\).</p>
+<ol class='q' start='1'><li>Calculer l'accélération de la caisse.</li><li>Calculer sa vitesse et la distance parcourue au bout de \(4\U{s}\).</li></ol><div class='copie'><p class='lab'>Solution rédigée</p><ol class='q' start='1'><li>Système : la caisse. Référentiel terrestre supposé galiléen. Forces : \(\vec P\), \(\vec R\), \(\vec F\), \(\vec f\). TCI : \(\vec P+\vec R+\vec F+\vec f=m\vec a\). Sur l'axe du mouvement : \(F-f=ma\), donc \(a=\dfrac{200-50}{50}=3\mss\).</li><li>MRUV partant du repos : \(v=3\times4=12\ms\) ; \(d=\frac12\times3\times16=24\U{m}\).</li></ol></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · le freinage d'urgence</p><div class='exo-q'><p>Une voiture de \(1200\U{kg}\) roule à \(20\ms\). Le conducteur freine : l'ensemble des forces de freinage équivaut à une force constante de \(6000\U{N}\).</p>
+<ol class='q' start='1'><li>Calculer la décélération.</li><li>Calculer la distance d'arrêt.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>TCI projeté sur l'axe du mouvement : \(-f=ma\), donc \(a=-\dfrac{6000}{1200}=-5\mss\).</li><li>\(0-20^2=2\times(-5)\times d\), donc \(d=40\U{m}\).</li></ol></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · l'ascenseur qui démarre</p><div class='exo-q'><p>Un ascenseur de \(500\U{kg}\) démarre vers le haut avec une accélération de \(2\mss\). On prend \(g=10\mss\). Calculer la tension du câble. La comparer au poids.</p></div><details><summary>Voir la correction</summary><div class='copie'><p>Axe vertical vers le haut : \(T-mg=ma\), donc \(T=m(g+a)=500\times12=6000\U{N}\). C'est plus que le poids (\(5000\U{N}\)) : il faut une force supplémentaire pour accélérer.</p></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · sans frottement</p><div class='exo-q'><p>Un solide de \(5\U{kg}\), au repos sur un plan horizontal sans frottement, est poussé par une force horizontale constante de \(30\U{N}\). Calculer son accélération, puis sa vitesse et la distance parcourue après \(2\U{s}\).</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(a=\dfrac{F}{m}=6\mss\) ; \(v=12\ms\) ; \(d=\frac12\times6\times4=12\U{m}\).</p></div></details></div>
+</div></section>
+<section class='lesson' id='p2-b2' data-part='Partie B · Le théorème du centre d&#x27;inertie' data-title='Projeter sur deux axes : le plan incliné' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie B · Étape 4 <span class='meta'>20 min</span></p><h2>Projeter sur deux axes : le plan incliné</h2></header>
+<div class='lbody'><p class='objectif'>Projeter le TCI sur deux axes pour trouver l'accélération et la réaction sur un plan incliné.</p>
+<div class='retenir'><p class='lab'>À retenir · Solide sur un plan incliné</p><p>Plan incliné d'un angle \(\alpha\) sur l'horizontale.</p>
+<p>Axe \((Ox)\) parallèle au plan, vers le bas ; axe \((Oy)\) perpendiculaire au plan.</p>
+<ul><li>Poids : \(P_x=mg\sin\alpha\) et \(P_y=-mg\cos\alpha\).</li><li>Sur \((Oy)\) : pas de mouvement, donc \(R_N=mg\cos\alpha\).</li><li>Sur \((Ox)\) : \(mg\sin\alpha-f=ma\), donc \(a=g\sin\alpha-\dfrac{f}{m}\).</li><li>Sans frottement : \(a=g\sin\alpha\), qui ne dépend pas de la masse.</li></ul></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Le \(\sin\) va avec l'axe parallèle au plan. Vérifie avec \(\alpha=0\) (plan horizontal) : \(a=0\) sans frottement, c'est logique.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 4</p><p><strong>Le plan incliné</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · descente sans frottement</p><p>Un solide de \(2\U{kg}\) est lâché sans vitesse sur un plan incliné de \(30°\), sans frottement. On prend \(g=10\mss\).</p>
+<ol class='q' start='1'><li>Calculer son accélération et la réaction du plan.</li><li>Calculer sa vitesse après \(2\U{m}\) de descente.</li></ol><div class='copie'><p class='lab'>Solution rédigée</p><ol class='q' start='1'><li>Système : le solide ; référentiel terrestre galiléen ; forces : \(\vec P\) et \(\vec R\). TCI : \(\vec P+\vec R=m\vec a\). Sur \((Ox)\) : \(mg\sin\alpha=ma\), donc \(a=10\times0{,}5=5\mss\). Sur \((Oy)\) : \(R=mg\cos\alpha=20\times0{,}866\approx17{,}3\U{N}\).</li><li>\(v^2=2ad=2\times5\times2=20\), donc \(v\approx4{,}47\ms\).</li></ol></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · avec frottement</p><div class='exo-q'><p>Même solide et même plan, mais une force de frottement constante \(f=4\U{N}\) s'oppose au mouvement. Calculer l'accélération et la vitesse après \(2\U{m}\).</p></div><details><summary>Voir la correction</summary><div class='copie'><p>Sur \((Ox)\) : \(mg\sin\alpha-f=ma\), donc \(a=5-\dfrac42=3\mss\). \(v=\sqrt{2\times3\times2}=\sqrt{12}\approx3{,}46\ms\).</p></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · la montée</p><div class='exo-q'><p>Un solide est lancé vers le haut d'un plan incliné de \(30°\) (sans frottement) avec une vitesse de \(6\ms\). On prend \(g=10\mss\). Quelle distance parcourt-il avant de s'arrêter, et en combien de temps ?</p></div><details><summary>Voir la correction</summary><div class='copie'><p>Axe vers le haut du plan : \(a=-g\sin\alpha=-5\mss\). \(0-36=2\times(-5)\times d\), donc \(d=3{,}6\U{m}\). \(0=-5t+6\), donc \(t=1{,}2\U{s}\).</p></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · mesurer un frottement</p><div class='exo-q'><p>Un solide de \(0{,}5\U{kg}\) glisse sur un plan incliné de \(20°\). On mesure \(a=2{,}4\mss\). On prend \(g=10\mss\). Calculer la force de frottement.</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(f=m(g\sin\alpha-a)=0{,}5\times(3{,}42-2{,}4)\approx0{,}51\U{N}\).</p></div></details></div>
+</div></section>
+<section class='lesson' id='p2-eval-b' data-part='Partie B · Le théorème du centre d&#x27;inertie' data-title='Évaluation de la partie B' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie B · Consolidation <span class='meta'>45 min</span></p><h2>Évaluation : Le théorème du centre d'inertie</h2></header>
+<div class='lbody'><p class='lead'>Cette évaluation vérifie que la partie est comprise. Traite-la comme un devoir : feuille, calculatrice, chronomètre, sans le cours.</p>
+<div class='chrono' data-min='45'><p class='chrono-lab'>Durée conseillée : 45 minutes</p><p class='chrono-t'>45:00</p><div class='chrono-b'><button type='button' class='btn c-start'>Démarrer</button><button type='button' class='btn ghost c-reset'>Remettre à zéro</button></div><p class='chrono-end' hidden>Temps écoulé : pose le stylo et corrige-toi.</p></div>
+<div class='exo eval'><p class='exo-n'>Exercice 1 · Le plan incliné puis le plan horizontal <span class='pts'>10 pts</span></p><div class='exo-q'><p>Un solide de masse \(m=1\U{kg}\) part sans vitesse du sommet \(A\) d'un plan incliné de \(30°\), de longueur \(AB=4\U{m}\). Sur tout le trajet, une force de frottement constante \(f=2\U{N}\) s'oppose au mouvement. On prend \(g=10\mss\).</p>
+<ol class='q' start='1'><li>Appliquer le TCI sur \(AB\) et calculer l'accélération \(a_1\) ainsi que la réaction normale \(R_N\).</li><li>Calculer la vitesse en \(B\) et la durée du trajet \(AB\).</li><li>Le solide aborde en \(B\) un plan horizontal, avec le même frottement. Calculer sa nouvelle accélération et la distance parcourue avant l'arrêt.</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>Forces : \(\vec P\), \(\vec R_N\), \(\vec f\). Sur \((Ox)\) : \(mg\sin\alpha-f=ma_1\), donc \(a_1=5-2=3\mss\). Sur \((Oy)\) : \(R_N=mg\cos\alpha\approx8{,}66\U{N}\). <strong>(4 pts)</strong></li><li>\(v_B=\sqrt{2\times3\times4}=\sqrt{24}\approx4{,}90\ms\) ; \(t=\dfrac{v_B}{a_1}\approx1{,}63\U{s}\). <strong>(3 pts)</strong></li><li>\(-f=ma_2\), donc \(a_2=-2\mss\). \(0-24=2\times(-2)\times d\), donc \(d=6\U{m}\). <strong>(3 pts)</strong></li></ol></div></details></div>
+<div class='exo eval'><p class='exo-n'>Exercice 2 · La luge tirée par une corde <span class='pts'>10 pts</span></p><div class='exo-q'><p>Une luge de \(20\U{kg}\) est tirée sur un sol horizontal par une corde inclinée de \(30°\) au-dessus de l'horizontale. La tension vaut \(T=100\U{N}\) et les frottements \(f=50\U{N}\). On prend \(g=10\mss\).</p>
+<ol class='q' start='1'><li>Faire le bilan des forces et écrire le TCI.</li><li>Projeter sur l'horizontale : calculer l'accélération.</li><li>Projeter sur la verticale : calculer la réaction normale du sol. Pourquoi est-elle inférieure au poids ?</li><li>Partie du repos, quelle vitesse la luge atteint-elle en \(5\U{s}\) ?</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>Forces : \(\vec P\), \(\vec R_N\), \(\vec T\), \(\vec f\). TCI : \(\vec P+\vec R_N+\vec T+\vec f=m\vec a\). <strong>(2 pts)</strong></li><li>\(T\cos30°-f=ma\), donc \(a=\dfrac{86{,}6-50}{20}\approx1{,}83\mss\). <strong>(3 pts)</strong></li><li>\(R_N+T\sin30°-mg=0\), donc \(R_N=200-50=150\U{N}\). La corde tire aussi un peu vers le haut et soulage le sol. <strong>(3 pts)</strong></li><li>\(v=1{,}83\times5\approx9{,}15\ms\). <strong>(2 pts)</strong></li></ol></div></details></div>
+<div class='note'><label>Ma note sur 20 : <input type='number' class='score' min='0' max='20' step='0.25' inputmode='decimal' data-tot='20'></label><p class='note-msg' aria-live='polite'></p></div>
+</div></section>
+<section class='lesson' id='p2-c1' data-part='Partie C · Les théorèmes énergétiques' data-title='Travail et théorème de l&#x27;énergie cinétique' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie C · Étape 5 <span class='meta'>20 min</span></p><h2>Travail et théorème de l'énergie cinétique</h2></header>
+<div class='lbody'><p class='objectif'>Calculer le travail d'une force constante et appliquer le théorème de l'énergie cinétique.</p>
+<div class='retenir'><p class='lab'>À retenir · Travail d'une force constante</p><p class='disp'>\[W_{AB}(\vec F)=\vec F\cdot\vect{AB}=F\times AB\times\cos\theta\quad(\mathrm J)\]</p>
+<ul><li>Travail <strong>moteur</strong> (\(W&gt;0\)) si \(\theta&lt;90°\), <strong>résistant</strong> (\(W&lt;0\)) si \(\theta&gt;90°\), nul si la force est perpendiculaire au déplacement (réaction sans frottement).</li><li>Poids : \(W(\vec P)=mgh\) quand le solide descend d'une hauteur \(h\), \(-mgh\) quand il monte.</li><li>Frottement constant opposé au mouvement : \(W(\vec f)=-f\times\ell\).</li></ul></div>
+<div class='retenir'><p class='lab'>À retenir · Théorème de l'énergie cinétique (TEC)</p><p class='disp'>\[E_c=\frac12\,m\,v^2\qquad E_c(B)-E_c(A)=\sum W_{AB}(\vec F_{\text{ext}})\]</p></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Le TEC donne une vitesse sans passer par le temps ni par l'accélération : c'est souvent le chemin le plus court.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 5</p><p><strong>Le théorème de l'énergie cinétique</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · le plan incliné, version énergie</p><p>Un solide de \(2\U{kg}\) part du repos en \(A\) et descend \(AB=2\U{m}\) sur un plan incliné de \(30°\), sans frottement. On prend \(g=10\mss\). Calculer sa vitesse en \(B\) avec le TEC.</p><div class='copie'><p class='lab'>Solution rédigée</p><p>Système : le solide ; référentiel terrestre galiléen ; forces : \(\vec P\) et \(\vec R\).</p>
+<p>\(W(\vec R)=0\) (perpendiculaire au déplacement) ; \(W(\vec P)=mg\,AB\sin30°=2\times10\times2\times0{,}5=20\U{J}\).</p>
+<p>TEC : \(\frac12mv_B^2-0=20\), donc \(v_B=\sqrt{20}\approx4{,}47\ms\) (même résultat qu'avec le TCI).</p></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · avec frottement</p><div class='exo-q'><p>Même situation, mais une force de frottement constante \(f=4\U{N}\) s'oppose au mouvement. Calculer \(v_B\).</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(W(\vec f)=-4\times2=-8\U{J}\). TEC : \(\frac12\times2\times v_B^2=20-8=12\), donc \(v_B=\sqrt{12}\approx3{,}46\ms\).</p></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · la distance de freinage</p><div class='exo-q'><p>Une voiture de \(1000\U{kg}\) roulant à \(20\ms\) freine jusqu'à l'arrêt. La force de freinage, constante, vaut \(8000\U{N}\).</p>
+<ol class='q' start='1'><li>Calculer le travail de la force de freinage.</li><li>En déduire la distance de freinage.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>TEC : \(0-\frac12\times1000\times400=W(\vec f)\), donc \(W(\vec f)=-2\times10^5\U{J}\) (\(\vec P\) et \(\vec R\) ne travaillent pas).</li><li>\(-f\,d=-2\times10^5\), donc \(d=25\U{m}\).</li></ol></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · la chute libre</p><div class='exo-q'><p>Une pierre est lâchée sans vitesse d'une hauteur de \(20\U{m}\). On néglige l'air. On prend \(g=10\mss\). Avec quelle vitesse touche-t-elle le sol ?</p></div><details><summary>Voir la correction</summary><div class='copie'><p>TEC : \(\frac12mv^2=mgh\), donc \(v=\sqrt{2gh}=\sqrt{400}=20\ms\).</p></div></details></div>
+</div></section>
+<section class='lesson' id='p2-c2' data-part='Partie C · Les théorèmes énergétiques' data-title='Énergie potentielle et énergie mécanique' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie C · Étape 6 <span class='meta'>20 min</span></p><h2>Énergie potentielle et énergie mécanique</h2></header>
+<div class='lbody'><p class='objectif'>Calculer une énergie mécanique, utiliser sa conservation et interpréter sa diminution par les frottements.</p>
+<div class='retenir'><p class='lab'>À retenir · Énergie potentielle de pesanteur et énergie mécanique</p><p>Axe vertical \((Oz)\) orienté vers le haut ; origine choisie comme référence (\(E_p=0\) en \(z=0\)) :</p>
+<p class='disp'>\[E_p=m\,g\,z\qquad E_m=E_c+E_p=\frac12mv^2+mgz\]</p>
+<ul><li>Sans frottement, l'énergie mécanique se <strong>conserve</strong> : \(E_m(A)=E_m(B)\).</li><li>Avec frottements, elle diminue : \(E_m(B)-E_m(A)=W(\vec f)&lt;0\). L'énergie perdue devient de la chaleur.</li></ul></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Écris toujours ta référence : « on prend \(E_p=0\) au sol ». Sans elle, les valeurs de \(E_p\) n'ont pas de sens.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 6</p><p><strong>Conservation de l'énergie mécanique</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · la balle lancée vers le haut</p><p>Une balle est lancée verticalement vers le haut à \(10\ms\) depuis le sol (référence de l'énergie potentielle). On néglige l'air. On prend \(g=10\mss\). Calculer la hauteur maximale atteinte.</p><div class='copie'><p class='lab'>Solution rédigée</p><p>Sans frottement, \(E_m\) se conserve entre le départ (\(z=0\), \(v=10\ms\)) et le sommet (\(v=0\)) : \(\frac12mv_0^2=mgz_{\max}\), donc \(z_{\max}=\dfrac{v_0^2}{2g}=\dfrac{100}{20}=5\U{m}\).</p></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · le skateur</p><div class='exo-q'><p>Un skateur de \(50\U{kg}\) arrive en bas d'une rampe à \(8\ms\). On prend \(g=10\mss\).</p>
+<ol class='q' start='1'><li>Sans frottement, quelle hauteur peut-il atteindre ?</li><li>En réalité, il monte de \(2{,}8\U{m}\). Calculer l'énergie perdue.</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(z_{\max}=\dfrac{v^2}{2g}=\dfrac{64}{20}=3{,}2\U{m}\).</li><li>\(E_m\) au départ : \(\frac12\times50\times64=1600\U{J}\) ; au sommet : \(50\times10\times2{,}8=1400\U{J}\). Énergie perdue : \(200\U{J}\).</li></ol></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · le pendule simple</p><div class='exo-q'><p>Un pendule de longueur \(\ell=1\U{m}\) est lâché sans vitesse quand le fil fait \(60°\) avec la verticale. On néglige les frottements. On prend \(g=10\mss\). Calculer la vitesse de la masse au passage par la verticale.</p></div><details><summary>Voir la correction</summary><div class='copie'><p>La masse descend de \(h=\ell(1-\cos60°)=0{,}5\U{m}\). Conservation de \(E_m\) : \(\frac12mv^2=mgh\), donc \(v=\sqrt{2\times10\times0{,}5}=\sqrt{10}\approx3{,}16\ms\).</p></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · le toboggan</p><div class='exo-q'><p>Un objet de \(0{,}5\U{kg}\) part sans vitesse d'une hauteur de \(1{,}8\U{m}\) sur un toboggan et arrive en bas à \(5\ms\). On prend \(g=10\mss\). Y a-t-il des frottements ? Calculer l'énergie perdue.</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(E_m\) en haut : \(0{,}5\times10\times1{,}8=9\U{J}\) ; en bas : \(\frac12\times0{,}5\times25=6{,}25\U{J}\). \(E_m\) a diminué : il y a des frottements ; énergie perdue : \(2{,}75\U{J}\).</p></div></details></div>
+</div></section>
+<section class='lesson' id='p2-eval-c' data-part='Partie C · Les théorèmes énergétiques' data-title='Évaluation de la partie C' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie C · Consolidation <span class='meta'>40 min</span></p><h2>Évaluation : Les théorèmes énergétiques</h2></header>
+<div class='lbody'><p class='lead'>Cette évaluation vérifie que la partie est comprise. Traite-la comme un devoir : feuille, calculatrice, chronomètre, sans le cours.</p>
+<div class='chrono' data-min='40'><p class='chrono-lab'>Durée conseillée : 40 minutes</p><p class='chrono-t'>40:00</p><div class='chrono-b'><button type='button' class='btn c-start'>Démarrer</button><button type='button' class='btn ghost c-reset'>Remettre à zéro</button></div><p class='chrono-end' hidden>Temps écoulé : pose le stylo et corrige-toi.</p></div>
+<div class='exo eval'><p class='exo-n'>Exercice 1 · Le skieur <span class='pts'>10 pts</span></p><div class='exo-q'><p>Un skieur de \(80\U{kg}\) part sans vitesse du sommet \(A\) d'une piste rectiligne \(AB\) de longueur \(50\U{m}\) ; la dénivellation entre \(A\) et \(B\) vaut \(10\U{m}\). Sur \(AB\), les frottements sont négligeables. Il continue ensuite sur une piste horizontale \(BC\) où une force de frottement constante de \(200\U{N}\) s'oppose au mouvement. On prend \(g=10\mss\).</p>
+<ol class='q' start='1'><li>Calculer le travail du poids entre \(A\) et \(B\). Que vaut le travail de la réaction ?</li><li>Calculer la vitesse en \(B\) avec le TEC.</li><li>Quelle distance le skieur parcourt-il sur \(BC\) avant de s'arrêter ?</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>\(W(\vec P)=mgh=80\times10\times10=8000\U{J}\) ; \(W(\vec R)=0\) (réaction perpendiculaire au déplacement). <strong>(3 pts)</strong></li><li>\(\frac12mv_B^2=8000\), donc \(v_B=\sqrt{200}\approx14{,}1\ms\). <strong>(3 pts)</strong></li><li>Sur \(BC\) : \(0-8000=-200\,d\), donc \(d=40\U{m}\). <strong>(4 pts)</strong></li></ol></div></details></div>
+<div class='exo eval'><p class='exo-n'>Exercice 2 · La balle et l'énergie mécanique <span class='pts'>10 pts</span></p><div class='exo-q'><p>Une balle de \(200\U{g}\) est lancée verticalement vers le haut à \(8\ms\) depuis une hauteur de \(1{,}5\U{m}\). On prend \(E_p=0\) au sol. On prend \(g=10\mss\).</p>
+<ol class='q' start='1'><li>Calculer l'énergie mécanique au départ.</li><li>Sans frottement, calculer la hauteur maximale atteinte et la vitesse en touchant le sol.</li><li>En réalité, la balle monte jusqu'à \(4{,}2\U{m}\). Calculer l'énergie perdue pendant la montée et la valeur moyenne de la force de frottement de l'air.</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>\(E_m=\frac12\times0{,}2\times64+0{,}2\times10\times1{,}5=6{,}4+3=9{,}4\U{J}\). <strong>(3 pts)</strong></li><li>Au sommet : \(mgz_{\max}=9{,}4\), donc \(z_{\max}=4{,}7\U{m}\). Au sol : \(\frac12\times0{,}2\,v^2=9{,}4\), donc \(v=\sqrt{94}\approx9{,}70\ms\). <strong>(4 pts)</strong></li><li>Au sommet réel : \(E_m=0{,}2\times10\times4{,}2=8{,}4\U{J}\) ; perte : \(1\U{J}\). Montée de \(2{,}7\U{m}\) : \(f=\dfrac{1}{2{,}7}\approx0{,}37\U{N}\). <strong>(3 pts)</strong></li></ol></div></details></div>
+<div class='note'><label>Ma note sur 20 : <input type='number' class='score' min='0' max='20' step='0.25' inputmode='decimal' data-tot='20'></label><p class='note-msg' aria-live='polite'></p></div>
+</div></section>
+<section class='lesson' id='p2-d1' data-part='Partie D · La conservation de la quantité de mouvement' data-title='Système isolé et recul' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie D · Étape 7 <span class='meta'>15 min</span></p><h2>Système isolé et recul</h2></header>
+<div class='lbody'><p class='objectif'>Utiliser la conservation de la quantité de mouvement d'un système isolé pour calculer une vitesse de recul.</p>
+<div class='retenir'><p class='lab'>À retenir · Conservation de la quantité de mouvement</p><p>Si un système est isolé ou pseudo-isolé (\(\sum\vec F_{\text{ext}}=\vec 0\)), sa quantité de mouvement totale est constante :</p>
+<p class='disp'>\[\vec P_{\text{avant}}=\vec P_{\text{après}}\]</p>
+<p>Recul : un système au repos (\(\vec P=\vec 0\)) se sépare en deux parties, \(m_1\vec v_1+m_2\vec v_2=\vec 0\), donc \(\vec v_1=-\dfrac{m_2}{m_1}\vec v_2\) : les deux parties partent en sens opposés.</p></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Oriente un axe et garde les signes : une vitesse de recul négative est un bon résultat, elle dit « dans l'autre sens ».</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 7</p><p><strong>Le recul d'un fusil</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · le fusil</p><p>Un fusil de \(4\U{kg}\), au repos, tire horizontalement une balle de \(10\U{g}\) à \(400\ms\). Calculer la vitesse de recul du fusil.</p><div class='copie'><p class='lab'>Solution rédigée</p><p>Système {fusil + balle}, pseudo-isolé pendant le tir. Avant : \(\vec P=\vec 0\). Après : \(m_1\vec v_1+m_2\vec v_2=\vec 0\).</p>
+<p>Sur l'axe de la balle : \(v_1=-\dfrac{m_2}{m_1}v_2=-\dfrac{0{,}01}{4}\times400=-1\ms\). Le fusil recule à \(1\ms\).</p></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · les patineurs</p><div class='exo-q'><p>Deux patineurs immobiles sur la glace, A (\(60\U{kg}\)) et B (\(40\U{kg}\)), se poussent. B part à \(3\ms\). Calculer la vitesse de A (frottements négligés).</p></div><details><summary>Voir la correction</summary><div class='copie'><p>Système {A + B} pseudo-isolé, \(\vec P=\vec 0\) avant. Après : \(60\,v_A+40\times3=0\), donc \(v_A=-2\ms\) : A part à \(2\ms\) dans l'autre sens.</p></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · le canon</p><div class='exo-q'><p>Un canon de \(500\U{kg}\) tire horizontalement un obus de \(5\U{kg}\) à \(200\ms\). Calculer la vitesse de recul du canon.</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(v=-\dfrac{5\times200}{500}=-2\ms\) : le canon recule à \(2\ms\).</p></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · sauter d'une barque</p><div class='exo-q'><p>Un homme de \(70\U{kg}\) saute horizontalement à \(2\ms\) d'une barque de \(140\U{kg}\) immobile. Avec quelle vitesse la barque part-elle ? (On néglige les frottements de l'eau.)</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(70\times2+140\,v=0\), donc \(v=-1\ms\) : la barque part à \(1\ms\) dans le sens opposé.</p></div></details></div>
+</div></section>
+<section class='lesson' id='p2-d2' data-part='Partie D · La conservation de la quantité de mouvement' data-title='Chocs mous et chocs élastiques' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie D · Étape 8 <span class='meta'>20 min</span></p><h2>Chocs mous et chocs élastiques</h2></header>
+<div class='lbody'><p class='objectif'>Calculer les vitesses après un choc mou ou élastique et faire le bilan d'énergie cinétique.</p>
+<div class='retenir'><p class='lab'>À retenir · Les deux types de chocs</p><p>Dans tout choc, la quantité de mouvement du système se conserve : \(m_1\vec v_1+m_2\vec v_2=m_1\vec v_1\,'+m_2\vec v_2\,'\).</p>
+<ul><li><strong>Choc mou</strong> : les deux corps restent accrochés, \(v'=\dfrac{m_1v_1+m_2v_2}{m_1+m_2}\). L'énergie cinétique <strong>n'est pas conservée</strong> : une partie devient chaleur et déformation.</li><li><strong>Choc élastique</strong> : l'énergie cinétique <strong>est conservée</strong>. Si la cible est au repos : \(v_1'=\dfrac{m_1-m_2}{m_1+m_2}\,v_1\) et \(v_2'=\dfrac{2m_1}{m_1+m_2}\,v_1\).</li></ul></div>
+<div class='prof'><p class='lab'>Le mot du prof</p><p>Deux masses égales en choc élastique échangent leurs vitesses : c'est le principe du pendule de Newton.</p></div>
+<h3>La vidéo</h3>
+<div class='video-attente'><p class='lab'>Vidéo 8</p><p><strong>Chocs mous et chocs élastiques</strong></p><p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>
+<h3>Exemple corrigé</h3>
+<div class='exemple'><p class='exo-n'>Exemple · deux wagons qui s'attellent</p><p>Un wagon de \(2\U{t}\) roulant à \(3\ms\) heurte un wagon de \(1\U{t}\) immobile ; ils restent attelés.</p>
+<ol class='q' start='1'><li>Calculer leur vitesse commune.</li><li>Comparer les énergies cinétiques avant et après le choc.</li></ol><div class='copie'><p class='lab'>Solution rédigée</p><ol class='q' start='1'><li>Conservation de \(\vec P\) : \(2000\times3=3000\,v'\), donc \(v'=2\ms\).</li><li>Avant : \(\frac12\times2000\times9=9000\U{J}\) ; après : \(\frac12\times3000\times4=6000\U{J}\). Perte de \(3000\U{J}\) : choc <strong>mou</strong>.</li></ol></div></div>
+<h3>Exercice d'application</h3>
+<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>
+<div class='exo appli'><p class='exo-n'>Application · deux billes, choc élastique</p><div class='exo-q'><p>Une bille de \(100\U{g}\) à \(2\ms\) heurte une bille de \(300\U{g}\) immobile. Le choc est élastique. Calculer les vitesses après le choc et vérifier la conservation de l'énergie cinétique.</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(v_1'=\dfrac{0{,}1-0{,}3}{0{,}4}\times2=-1\ms\) (la petite bille rebondit) ; \(v_2'=\dfrac{0{,}2}{0{,}4}\times2=1\ms\).</p>
+<p>\(E_c\) avant : \(\frac12\times0{,}1\times4=0{,}2\U{J}\) ; après : \(0{,}05+0{,}15=0{,}2\U{J}\). Elle est bien conservée.</p></div></details></div>
+<h3>À toi de jouer</h3>
+<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>
+<div class='exo'><p class='exo-n'>Exercice 1 · masses égales</p><div class='exo-q'><p>Deux boules de même masse ; la première arrive à \(v_1\) sur la seconde, immobile. Le choc est élastique. Que se passe-t-il ?</p></div><details><summary>Voir la correction</summary><div class='copie'><p>\(v_1'=\dfrac{m-m}{2m}v_1=0\) et \(v_2'=\dfrac{2m}{2m}v_1=v_1\) : la première s'arrête, la seconde repart avec la vitesse \(v_1\).</p></div></details></div>
+<div class='exo'><p class='exo-n'>Exercice 2 · la balle dans le bloc</p><div class='exo-q'><p>Une balle de \(20\U{g}\) à \(300\ms\) s'enfonce dans un bloc de bois de \(980\U{g}\) immobile sur la glace.</p>
+<ol class='q' start='1'><li>Calculer la vitesse de l'ensemble juste après le choc.</li><li>Quel pourcentage de l'énergie cinétique a été perdu ?</li></ol></div><details><summary>Voir la correction</summary><div class='copie'><ol class='q' start='1'><li>\(0{,}02\times300=1\times v'\), donc \(v'=6\ms\).</li><li>Avant : \(\frac12\times0{,}02\times9\times10^4=900\U{J}\) ; après : \(\frac12\times1\times36=18\U{J}\). Perte : \(882\U{J}\), soit \(98\) % de l'énergie.</li></ol></div></details></div>
+</div></section>
+<section class='lesson' id='p2-eval-d' data-part='Partie D · La conservation de la quantité de mouvement' data-title='Évaluation de la partie D' hidden>
+<header class='lhead'><p class='eyebrow'>P2 · Partie D · Consolidation <span class='meta'>40 min</span></p><h2>Évaluation : La conservation de la quantité de mouvement</h2></header>
+<div class='lbody'><p class='lead'>Cette évaluation vérifie que la partie est comprise. Traite-la comme un devoir : feuille, calculatrice, chronomètre, sans le cours.</p>
+<div class='chrono' data-min='40'><p class='chrono-lab'>Durée conseillée : 40 minutes</p><p class='chrono-t'>40:00</p><div class='chrono-b'><button type='button' class='btn c-start'>Démarrer</button><button type='button' class='btn ghost c-reset'>Remettre à zéro</button></div><p class='chrono-end' hidden>Temps écoulé : pose le stylo et corrige-toi.</p></div>
+<div class='exo eval'><p class='exo-n'>Exercice 1 · Le patineur et le ballon <span class='pts'>10 pts</span></p><div class='exo-q'><p>Un patineur de \(50\U{kg}\), immobile sur la glace, lance horizontalement un ballon de \(2\U{kg}\) à \(10\ms\). On prend \(g=10\mss\).</p>
+<ol class='q' start='1'><li>Montrer que le système {patineur + ballon} est pseudo-isolé pendant le lancer.</li><li>Calculer la vitesse du patineur juste après le lancer.</li><li>Le patineur s'arrête après avoir glissé sur \(2\U{m}\). En supposant la force de frottement constante, calculer sa valeur (par le TEC).</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>Les forces extérieures sont les poids et la réaction de la glace, verticales, qui se compensent (frottements négligeables pendant le lancer). <strong>(2 pts)</strong></li><li>\(\vec P=\vec 0\) avant : \(50\,v+2\times10=0\), donc \(v=-0{,}4\ms\) (sens opposé au ballon). <strong>(4 pts)</strong></li><li>TEC : \(0-\frac12\times50\times0{,}16=-f\times2\), donc \(f=2\U{N}\). <strong>(4 pts)</strong></li></ol></div></details></div>
+<div class='exo eval'><p class='exo-n'>Exercice 2 · Les deux pendules <span class='pts'>10 pts</span></p><div class='exo-q'><p>Deux boules identiques de \(100\U{g}\) sont suspendues à des fils de même longueur et se touchent au repos. On écarte la boule \(B_1\) et on la lâche sans vitesse d'une hauteur \(h=20\U{cm}\) au-dessus de sa position de repos. On néglige les frottements. On prend \(g=10\mss\).</p>
+<ol class='q' start='1'><li>Calculer la vitesse \(v_1\) de \(B_1\) juste avant le choc.</li><li>Le choc est élastique. Donner les vitesses juste après le choc. À quelle hauteur remonte \(B_2\) ?</li><li>On recommence avec des boules en pâte à modeler qui restent collées (choc mou). Calculer leur vitesse commune, la hauteur atteinte et l'énergie perdue dans le choc.</li></ol></div><details><summary>Correction et barème</summary><div class='copie'><ol class='q' start='1'><li>Conservation de \(E_m\) : \(v_1=\sqrt{2gh}=\sqrt{4}=2\ms\). <strong>(2 pts)</strong></li><li>Masses égales : \(v_1'=0\) et \(v_2'=2\ms\). \(B_2\) remonte à \(h=\dfrac{v_2'^2}{2g}=20\U{cm}\). <strong>(4 pts)</strong></li><li>\(0{,}1\times2=0{,}2\,v'\), donc \(v'=1\ms\) ; \(h'=\dfrac{1}{20}=5\U{cm}\). \(E_c\) : \(0{,}2\U{J}\) avant, \(\frac12\times0{,}2\times1=0{,}1\U{J}\) après : \(0{,}1\U{J}\) perdu. <strong>(4 pts)</strong></li></ol></div></details></div>
+<div class='note'><label>Ma note sur 20 : <input type='number' class='score' min='0' max='20' step='0.25' inputmode='decimal' data-tot='20'></label><p class='note-msg' aria-live='polite'></p></div>
+</div></section>
+    <div class="pager">
+      <a class="btn ghost" id="prev" href="#">← Étape précédente</a>
+      <div class="right">
+        <p class="done-note" id="done-note" hidden>Étape validée ✓</p>
+        <button type="button" class="linkbtn" id="undo" hidden>Annuler</button>
+        <a class="btn" id="next" href="#">Étape suivante →</a>
+      </div>
+    </div>
+    <footer class="foot">MathNexus Education · « L'excellence par le travail et la persévérance »</footer>
+  </main>
+</div>
+<script>
+var PARCOURS_KEY = "ts2-p2";
+
+(function(){
+  var lessons = Array.prototype.slice.call(document.querySelectorAll('.lesson'));
+  var ids = lessons.map(function(s){ return s.id; });
+  var KEY = PARCOURS_KEY;
+  var done = {};
+  try { done = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ done = {}; }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(done)); } catch(e){} }
+
+  // ----- sommaire -----
+  var nav = document.getElementById('nav'), html = '', part = null, n = 0;
+  lessons.forEach(function(s){
+    var p = s.dataset.part || '';
+    if (p !== part){ if (part !== null) html += '</ol>'; html += (p ? '<p class="nav-part">' + p + '</p>' : '') + '<ol class="nav-list">'; part = p; }
+    var num = s.id === 'accueil' ? 'i' : String(++n);
+    html += '<li><a href="#' + s.id + '" data-id="' + s.id + '"><span class="nav-n">' + num + '</span><span>' + s.dataset.title + '</span></a></li>';
+  });
+  nav.innerHTML = html + '</ol>';
+  var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
+  var total = ids.length - 1;
+
+  links.forEach(function(a){ a.dataset.num = a.querySelector('.nav-n').textContent; });
+  var resetBtn = document.getElementById('reset');
+
+  function refreshProgress(){
+    var c = 0;
+    links.forEach(function(a){
+      var d = !!done[a.dataset.id] && a.dataset.id !== 'accueil';
+      a.classList.toggle('done', d);
+      a.querySelector('.nav-n').textContent = d ? '✓' : a.dataset.num;
+      if (d) c++;
+    });
+    document.getElementById('prog-fill').style.width = (100 * c / total) + '%';
+    document.getElementById('prog-txt').textContent = c + ' étape' + (c > 1 ? 's' : '') + ' validée' + (c > 1 ? 's' : '') + ' sur ' + total;
+    document.getElementById('mini-prog').textContent = c + ' / ' + total;
+    resetBtn.hidden = c === 0;
+    disarmReset();
+  }
+
+  // remise à zéro : deux appuis, sans fenêtre de confirmation
+  var armed = false, armTimer = null;
+  function disarmReset(){ armed = false; clearTimeout(armTimer); resetBtn.textContent = 'Remettre ma progression à zéro'; resetBtn.classList.remove('warn'); }
+  resetBtn.addEventListener('click', function(){
+    if (!armed){ armed = true; resetBtn.textContent = 'Appuie encore pour tout effacer'; resetBtn.classList.add('warn'); armTimer = setTimeout(disarmReset, 5000); return; }
+    done = {}; save(); refreshProgress(); refreshDone();
+  });
+
+  // ----- formules : rendues à l'ouverture de l'étape -----
+  var typeset = {};
+  function renderMath(el){
+    if (typeset[el.id] || !window.MathJax || !MathJax.typesetPromise) return;
+    typeset[el.id] = true;
+    MathJax.typesetPromise([el]).catch(function(){ typeset[el.id] = false; });
+  }
+
+  var side = document.getElementById('side'), scrim = document.getElementById('scrim'), menuBtn = document.getElementById('menu-btn');
+  function closeMenu(){ side.classList.remove('open'); scrim.hidden = true; menuBtn.setAttribute('aria-expanded','false'); }
+  menuBtn.addEventListener('click', function(){
+    var o = !side.classList.contains('open');
+    side.classList.toggle('open', o); scrim.hidden = !o; menuBtn.setAttribute('aria-expanded', String(o));
+  });
+  scrim.addEventListener('click', closeMenu);
+
+  var prev = document.getElementById('prev'), next = document.getElementById('next'), doneNote = document.getElementById('done-note'), undo = document.getElementById('undo');
+  var current = 0;
+  function refreshDone(){ var d = !!done[ids[current]] && current > 0; doneNote.hidden = !d; undo.hidden = !d; }
+  undo.addEventListener('click', function(){ delete done[ids[current]]; save(); refreshProgress(); refreshDone(); });
+  function show(id, scroll){
+    var i = ids.indexOf(id); if (i < 0) i = 0;
+    current = i;
+    document.querySelectorAll('video').forEach(function(v){ try { v.pause(); } catch(e){} });
+    lessons.forEach(function(s, k){ s.hidden = k !== i; });
+    links.forEach(function(a){ if (a.dataset.id === ids[i]) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    renderMath(lessons[i]);
+    prev.hidden = i === 0;
+    if (i > 0) prev.setAttribute('href', '#' + ids[i-1]);
+    var last = i === ids.length - 1;
+    next.setAttribute('href', last ? '#accueil' : '#' + ids[i+1]);
+    next.textContent = i === 0 ? 'Commencer le parcours →' : (last ? 'Valider et revenir au début' : "J'ai compris, étape suivante →");
+    refreshDone();
+    closeMenu();
+    if (scroll) window.scrollTo(0, 0);
+  }
+  next.addEventListener('click', function(){ if (current > 0){ done[ids[current]] = true; save(); refreshProgress(); } });
+  window.addEventListener('hashchange', function(){ show(location.hash.slice(1), true); });
+
+  // ----- chronomètres : calculés sur l'heure réelle, donc justes même si l'onglet passe en arrière-plan -----
+  document.querySelectorAll('.chrono').forEach(function(c){
+    var totalS = (+c.dataset.min || 15) * 60, left = totalS, timer = null, endAt = 0;
+    var t = c.querySelector('.chrono-t'), b = c.querySelector('.c-start'), r = c.querySelector('.c-reset'), end = c.querySelector('.chrono-end');
+    function draw(){ var m = Math.floor(left / 60), s = left % 60; t.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s; }
+    function stop(){ clearInterval(timer); timer = null; b.textContent = left === totalS ? 'Démarrer' : 'Reprendre'; }
+    function tick(){
+      left = Math.max(0, Math.ceil((endAt - Date.now()) / 1000)); draw();
+      if (left <= 0){ stop(); b.textContent = 'Terminé'; end.hidden = false; }
+    }
+    b.addEventListener('click', function(){
+      if (timer){ tick(); if (timer) stop(); return; }
+      if (left === 0) return;
+      end.hidden = true; b.textContent = 'Pause';
+      endAt = Date.now() + left * 1000;
+      timer = setInterval(tick, 250);
+    });
+    r.addEventListener('click', function(){ clearInterval(timer); timer = null; left = totalS; draw(); b.textContent = 'Démarrer'; end.hidden = true; });
+    document.addEventListener('visibilitychange', function(){ if (timer && !document.hidden) tick(); });
+  });
+
+  // corrections : formules rendues à l'ouverture
+  document.querySelectorAll('.exo details').forEach(function(d){
+    d.addEventListener('toggle', function(){
+      if (!d.open || !d.classList.contains('tex2jax_ignore')) return;
+      d.classList.remove('tex2jax_ignore');
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([d]).catch(function(){});
+    });
+  });
+
+  // notes des évaluations
+  document.querySelectorAll('.score').forEach(function(inp){
+    var msg = inp.closest('.note').querySelector('.note-msg'), tot = +inp.dataset.tot;
+    var sk = KEY + ':' + inp.closest('.lesson').id;
+    try { var old = localStorage.getItem(sk); if (old !== null) inp.value = old; } catch(e){}
+    function upd(){
+      var v = parseFloat(String(inp.value).replace(',', '.'));
+      if (isNaN(v)){ msg.textContent = ''; msg.className = 'note-msg'; return; }
+      try { localStorage.setItem(sk, String(v)); } catch(e){}
+      if (v >= 0.6 * tot){ msg.textContent = 'Partie comprise : tu peux passer à la suite.'; msg.className = 'note-msg ok'; }
+      else { msg.textContent = 'Pas encore : refais les exercices des étapes de cette partie, puis recommence l\u2019évaluation.'; msg.className = 'note-msg ko'; }
+    }
+    inp.addEventListener('input', upd); upd();
+  });
+
+  if (lessons.length < 2){ document.querySelector('.pager').hidden = true; document.querySelector('.prog').hidden = true; }
+  refreshProgress();
+  show(location.hash.slice(1) || 'accueil', true);
+  // si MathJax arrive après le premier affichage
+  var tries = 0, wait = setInterval(function(){
+    if (window.MathJax && MathJax.typesetPromise){ clearInterval(wait); renderMath(lessons[current]); }
+    else if (++tries > 100) clearInterval(wait);
+  }, 150);
+})();
+
+</script>
+</body>
+</html>

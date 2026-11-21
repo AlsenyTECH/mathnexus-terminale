@@ -1,0 +1,38 @@
+{
+ "id": "p2-a2",
+ "titre": "Le principe de l'inertie",
+ "phrases": [
+  [
+   "Référentiels galiléens et principe de l'inertie.",
+   "Principe de l'inertie"
+  ],
+  [
+   "Un mouvement se décrit toujours dans un référentiel. Pour un objet sur Terre, on prend le référentiel terrestre. Pour un satellite, le géocentrique. Pour une planète, l'héliocentrique.",
+   "\\text{terrestre}\\ \\cdot\\ \\text{géocentrique}\\ \\cdot\\ \\text{héliocentrique}"
+  ],
+  [
+   "Le principe de l'inertie : si les forces extérieures se compensent, le centre d'inertie est immobile, ou en mouvement rectiligne uniforme.",
+   "\\sum\\vec F_{\\text{ext}}=\\vec 0\\iff\\vec v_G=\\vec{\\text{cte}}"
+  ],
+  [
+   "Il marche dans les deux sens. Si un objet avance en ligne droite à vitesse constante, alors les forces se compensent.",
+   "\\text{MRU}\\Rightarrow\\sum\\vec F=\\vec 0"
+  ],
+  [
+   "Exemple : une voiture roule à vitesse constante sur une route droite et horizontale. Les frottements valent cinq cents newtons.",
+   "f=500\\ \\mathrm N"
+  ],
+  [
+   "Les forces se compensent : le poids et la réaction verticale s'annulent, et la force motrice compense les frottements. Elle vaut donc cinq cents newtons.",
+   "F=f=500\\ \\mathrm N"
+  ],
+  [
+   "Un piège courant : croire qu'il faut une force dans le sens du mouvement pour avancer. Non : à vitesse constante, la somme des forces est nulle.",
+   "\\vec v=\\text{cte}\\ \\Rightarrow\\ \\sum\\vec F=\\vec 0"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

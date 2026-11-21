@@ -1,0 +1,42 @@
+{
+ "id": "p1-c3",
+ "titre": "Lire un enregistrement",
+ "phrases": [
+  [
+   "Lire un enregistrement.",
+   "Lire un enregistrement"
+  ],
+  [
+   "Sur un enregistrement, les positions du mobile sont marquées à intervalles de temps égaux, notés tau.",
+   "\\tau=\\text{durée entre deux points}"
+  ],
+  [
+   "Si les distances entre deux points successifs sont égales, le mouvement est uniforme.",
+   "M_iM_{i+1}=\\text{cte}\\ \\Rightarrow\\ \\text{MRU}"
+  ],
+  [
+   "Si elles augmentent toujours de la même quantité, delta d, le mouvement est uniformément varié, et delta d égale a tau carré.",
+   "\\Delta d=a\\,\\tau^2"
+  ],
+  [
+   "Exemple : tau égale vingt millisecondes, et les distances valent un, un virgule quatre, un virgule huit, deux virgule deux centimètres.",
+   "1{,}0\\ ;\\ 1{,}4\\ ;\\ 1{,}8\\ ;\\ 2{,}2\\ \\mathrm{cm}"
+  ],
+  [
+   "Elles augmentent de zéro virgule quatre centimètre, soit quatre millimètres. Donc a égale quatre millimètres divisés par tau carré.",
+   "a=\\dfrac{4\\times10^{-3}}{(0{,}02)^2}=10\\ \\mathrm{m\\cdot s^{-2}}"
+  ],
+  [
+   "La vitesse au point M deux est la distance de M un à M trois, divisée par deux tau : trois virgule deux centimètres sur quarante millisecondes, soit zéro virgule huit mètre par seconde.",
+   "v_2=\\dfrac{M_1M_3}{2\\tau}=0{,}8\\ \\mathrm{m\\cdot s^{-1}}"
+  ],
+  [
+   "Le réflexe : tout convertir en mètres et en secondes avant de calculer.",
+   "\\mathrm{cm}\\to\\mathrm m\\qquad \\mathrm{ms}\\to\\mathrm s"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

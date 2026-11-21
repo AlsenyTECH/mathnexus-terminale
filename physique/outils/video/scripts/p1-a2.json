@@ -1,0 +1,38 @@
+{
+ "id": "p1-a2",
+ "titre": "Dériver pour trouver la vitesse et l'accélération",
+ "phrases": [
+  [
+   "Dériver pour trouver la vitesse et l'accélération.",
+   "Vitesse et accélération"
+  ],
+  [
+   "Le vecteur vitesse est la dérivée du vecteur position par rapport au temps. Ses coordonnées sont les dérivées de x et de y.",
+   "v_x=\\dot x\\qquad v_y=\\dot y"
+  ],
+  [
+   "Le vecteur accélération est la dérivée du vecteur vitesse. Ses coordonnées sont les dérivées de v x et de v y.",
+   "a_x=\\dot v_x\\qquad a_y=\\dot v_y"
+  ],
+  [
+   "Reprenons x égale deux t, et y égale t carré moins un. On dérive : v x égale deux, v y égale deux t.",
+   "\\vec v\\,(2\\,;\\,2t)"
+  ],
+  [
+   "À t égale un seconde, le vecteur vitesse a pour coordonnées deux et deux. Sa valeur est racine de quatre plus quatre, soit deux racine de deux, environ deux virgule huit mètres par seconde.",
+   "v=\\sqrt{2^2+2^2}\\approx 2{,}83\\ \\mathrm{m\\cdot s^{-1}}"
+  ],
+  [
+   "On dérive encore : a x égale zéro, a y égale deux. L'accélération est constante, elle vaut deux mètres par seconde carrée.",
+   "\\vec a\\,(0\\,;\\,2)\\quad a=2\\ \\mathrm{m\\cdot s^{-2}}"
+  ],
+  [
+   "Le vecteur vitesse est toujours tangent à la trajectoire. Fais toujours la phrase : je dérive x, je dérive y, puis je calcule la norme.",
+   "v=\\sqrt{v_x^2+v_y^2}"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}

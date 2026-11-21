@@ -1,0 +1,38 @@
+{
+ "id": "p2-a1",
+ "titre": "Centre d'inertie et quantité de mouvement",
+ "phrases": [
+  [
+   "Le centre d'inertie et la quantité de mouvement.",
+   "Centre d'inertie"
+  ],
+  [
+   "Le centre d'inertie d'un système est le barycentre de ses parties, chacune affectée de sa masse. Sur un axe, x G égale la somme des m x, divisée par la masse totale.",
+   "x_G=\\dfrac{m_1x_1+m_2x_2+\\cdots}{m_1+m_2+\\cdots}"
+  ],
+  [
+   "Exemple : une tige de soixante-douze centimètres et de masse m porte une masse deux m à l'extrémité A, et trois m à l'extrémité B.",
+   "m\\ (\\text{tige}),\\ 2m\\ (A),\\ 3m\\ (B)"
+  ],
+  [
+   "On place l'origine en A. La masse deux m est à zéro, la tige compte en son milieu, à trente-six centimètres, et la masse trois m est à soixante-douze centimètres.",
+   "x_A=0,\\ x_{\\text{tige}}=36,\\ x_B=72"
+  ],
+  [
+   "A G égale m fois trente-six, plus trois m fois soixante-douze, le tout divisé par six m. Les m se simplifient : on trouve quarante-deux centimètres.",
+   "AG=\\dfrac{36m+216m}{6m}=42\\ \\mathrm{cm}"
+  ],
+  [
+   "La quantité de mouvement d'un solide est le produit de sa masse par la vitesse de son centre d'inertie. C'est un vecteur.",
+   "\\vec p=m\\,\\vec v_G"
+  ],
+  [
+   "Pour un système, on additionne les vecteurs. Attention aux signes : deux objets qui vont en sens contraires se compensent en partie.",
+   "\\vec P=\\vec p_1+\\vec p_2"
+  ],
+  [
+   "À toi de jouer : fais l'exercice d'application, puis les exercices de l'étape.",
+   "À toi de jouer"
+  ]
+ ]
+}
