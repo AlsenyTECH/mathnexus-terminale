@@ -28,29 +28,30 @@ def _split_math(t):
     out.append((t[i:], False))
     return out
 
+def _marques(t):
+    t = re.sub(r"\*\*(.+?)\*\*", "\x01\\1\x02", t)
+    return re.sub(r"__(.+?)__", "\x03\\1\x04", t)
+
 def inl_html(t):
+    t = _marques(t)
     r = []
     for seg, isM in _split_math(t):
         if isM:
             r.append("\\(" + html.escape(seg, quote=False) + "\\)")
         else:
-            seg = html.escape(seg, quote=False)
-            seg = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", seg)
-            seg = re.sub(r"__(.+?)__", r"<em>\1</em>", seg)
-            r.append(seg)
-    return "".join(r)
+            r.append(html.escape(seg, quote=False))
+    return "".join(r).replace("\x01", "<strong>").replace("\x02", "</strong>").replace("\x03", "<em>").replace("\x04", "</em>")
 
 def inl_tex(t):
+    t = _marques(t)
     r = []
     for seg, isM in _split_math(t):
         if isM:
             r.append("$" + seg.replace("°", "^{\\circ}") + "$")
         else:
             seg = seg.replace("%", "\\%").replace("&", "\\&").replace("#", "\\#")
-            seg = re.sub(r"\*\*(.+?)\*\*", r"\\textbf{\1}", seg)
-            seg = re.sub(r"__(.+?)__", r"\\emph{\1}", seg)
             r.append(seg)
-    return "".join(r)
+    return "".join(r).replace("\x01", "\\textbf{").replace("\x02", "}").replace("\x03", "\\emph{").replace("\x04", "}")
 
 def _items(lines, pat):
     items = []
@@ -66,11 +67,17 @@ def _item_html(it):
 def _item_tex(it):
     return "\\\\\n".join(inl_tex(x) for x in it.split("\n"))
 
+GRAPHES = {}   # id -> spécification (remplie par contenu/graphes.py)
+
 def md(s):
     out = []
     for b in _blocks(s):
         lines = b.split("\n"); f = lines[0].lstrip()
-        if f.startswith("$$"):
+        m = re.match(r"\[\[(graphe|simu):([\w-]+)\]\]", f)
+        if m:
+            from contenu import graphes
+            out.append(graphes.svg(m.group(2)) if m.group(1) == "graphe" else graphes.simu(m.group(2)))
+        elif f.startswith("$$"):
             out.append("<p class='disp'>\\[" + html.escape(b.strip().strip("$").strip(), quote=False) + "\\]</p>")
         elif f.startswith("|"):
             rows = [[c.strip() for c in ln.strip().strip("|").split("|")] for ln in lines if ln.strip()]
@@ -91,7 +98,12 @@ def md_tex(s):
     out = []
     for b in _blocks(s):
         lines = b.split("\n"); f = lines[0].lstrip()
-        if f.startswith("$$"):
+        m = re.match(r"\[\[(graphe|simu):([\w-]+)\]\]", f)
+        if m:
+            if m.group(1) == "graphe":
+                from contenu import graphes
+                out.append(graphes.tikz(m.group(2)))
+        elif f.startswith("$$"):
             out.append("\\[" + b.strip().strip("$").strip() + "\\]")
         elif f.startswith("|"):
             rows = [[c.strip() for c in ln.strip().strip("|").split("|")] for ln in lines if ln.strip()]
@@ -123,6 +135,37 @@ def cours(s):
 def soustitre(t):
     return "<h3>%s</h3>" % t
 
+def qcm(items, titre="Question d'entrée", intro=""):
+    h = ["<div class='qcm'><p class='lab'>%s</p>%s" % (titre, ("<p class='muted'>%s</p>" % intro) if intro else "")]
+    for q, opts, ok, expl in items:
+        h.append("<div class='q1' data-ok='%d'><p class='qq'>%s</p><div class='opts'>" % (ok, inl_html(q)))
+        for k, o in enumerate(opts):
+            h.append("<button type='button' class='opt' data-k='%d'>%s</button>" % (k, inl_html(o)))
+        h.append("</div><p class='qfb' hidden></p><div class='qex' hidden>%s</div></div>" % md(expl))
+    h.append("</div>")
+    return "".join(h)
+
+def indices(lst):
+    if not lst: return ""
+    h = ["<div class='indices'><p class='lab'>Besoin d'aide ? Ouvre les indices un par un</p>"]
+    for k, t in enumerate(lst, 1):
+        h.append("<details class='indice'><summary>Indice %d</summary>%s</details>" % (k, md(t)))
+    return "".join(h) + "</div>"
+
+def verif(checks):
+    if not checks: return ""
+    h = ["<div class='verif'><p class='lab'>Vérifie tes résultats</p>"]
+    for c in checks:
+        data = {"v": c["val"], "t": c.get("tol", 0.03), "e": [[a, inl_html(b)] for a, b in c.get("err", [])]}
+        h.append("<div class='chk' data-c='%s'><label>%s = <input type='text' inputmode='decimal' autocomplete='off'></label> <span class='u'>%s</span> "
+                 "<button type='button' class='btn ghost small'>Vérifier</button><p class='cfb' aria-live='polite'></p></div>" % (
+                     html.escape(json.dumps(data), quote=True), inl_html(c["label"]), inl_html(c.get("unite", ""))))
+    return "".join(h) + "</div>"
+
+def pieges(lst):
+    if not lst: return ""
+    return "<div class='pieges'><p class='lab'>Les pièges</p><ul>%s</ul></div>" % "".join("<li>%s</li>" % inl_html(x) for x in lst)
+
 # ---------------------------------------------------------------- rendu d'une étape
 def _video(v, num):
     f = os.path.join(ICI, "videos", v["id"] + ".mp4")
@@ -132,18 +175,24 @@ def _video(v, num):
     return ("<div class='video-attente'><p class='lab'>Vidéo %s</p><p><strong>%s</strong></p>"
             "<p>La vidéo arrive bientôt. En attendant, lis le cours et l'exemple : ils disent la même chose.</p></div>") % (num, v["titre"])
 
-def _exo(n, titre, enonce, corr, cls="exo"):
-    return ("<div class='%s'><p class='exo-n'>%s</p><div class='exo-q'>%s</div>"
+def _exo(n, titre, enonce, corr, cls="exo", avant=""):
+    return ("<div class='%s'><p class='exo-n'>%s</p><div class='exo-q'>%s</div>%s"
             "<details><summary>Voir la correction</summary><div class='copie'>%s</div></details></div>") % (
-        cls, (n + (" · " + titre if titre else "")), md(enonce), md(corr))
+        cls, (n + (" · " + titre if titre else "")), md(enonce), avant, md(corr))
 
 def etape_html(chap, partie, e, num):
     h = ["<section class='lesson' id='%s' data-part='Partie %s · %s' data-title='%s' hidden>" % (
         e["id"], partie["lettre"], html.escape(partie["titre"], quote=True), html.escape(e["titre"], quote=True))]
     h.append("<header class='lhead'><p class='eyebrow'>%s · Partie %s · Étape %d <span class='meta'>%d min</span></p><h2>%s</h2></header>" % (
         chap["code"], partie["lettre"], num, e["duree"], e["titre"]))
-    h.append("<div class='lbody'><p class='objectif'>%s</p>" % e["objectif"])
+    h.append("<div class='lbody'>")
+    if e.get("flash"):
+        h.append(qcm(e["flash"], "Questions flash", "Trois questions rapides sur ce que tu as déjà vu. Réponds sans chercher dans le cours."))
+    h.append("<p class='objectif'>%s</p>" % e["objectif"])
+    if e.get("entree"):
+        h.append(qcm(e["entree"], "Question d'entrée", "Réponds avant de lire le cours : te tromper ici n'est pas grave, c'est ce qui fait retenir."))
     h += e["cours"]
+    h.append(pieges(e.get("pieges")))
     h.append(soustitre("La vidéo"))
     h.append(_video(e["video"], num))
     ex = e["exemple"]
@@ -153,11 +202,11 @@ def etape_html(chap, partie, e, num):
     ap = e["application"]
     h.append(soustitre("Exercice d'application"))
     h.append("<p class='consigne'>Fais-le avec l'aide de l'exemple, puis compare avec la correction.</p>")
-    h.append(_exo("Application", ap[0], ap[1], ap[2], "exo appli"))
+    h.append(_exo("Application", ap[0], ap[1], ap[2], "exo appli", indices(e.get("indices")) + verif(e.get("rep_app"))))
     h.append(soustitre("À toi de jouer"))
     h.append("<p class='consigne'>Seul, sur une feuille, sans regarder l'exemple. Ouvre la correction seulement à la fin.</p>")
     for k, x in enumerate(e["exos"], 1):
-        h.append(_exo("Exercice %d" % k, x[0], x[1], x[2]))
+        h.append(_exo("Exercice %d" % k, x[0], x[1], x[2], "exo", verif(e.get("rep_exos", {}).get(k))))
     h.append("</div></section>")
     return "\n".join(h)
 
@@ -241,7 +290,7 @@ def page(titre, marque, sous, nav_extra, corps, key, desc):
         <a class="btn" id="next" href="#">Étape suivante →</a>
       </div>
     </div>
-    <footer class="foot">MathNexus Education · « L'excellence par le travail et la persévérance »</footer>
+    <footer class="foot">MathNexus Education · « L'excellence par le travail et la persévérance »<br>Voix des vidéos : « Pierre », corpus UPMC (licence CC BY-SA 4.0), synthèse Piper.</footer>
   </main>
 </div>
 <script>
@@ -251,7 +300,7 @@ var PARCOURS_KEY = %s;
 </body>
 </html>
 """ % (titre, desc, lire("modele/style.css"), lire("modele/extra.css"), MATHJAX_CFG, marque, titre, sous, nav_extra, corps,
-       json.dumps(key), lire("modele/site.js"))
+       json.dumps(key), __import__("contenu.graphes", fromlist=["x"]).SIMU_JS + lire("modele/site.js"))
 
 def accueil_chap(chap):
     parts = "".join("<li><strong>Partie %s</strong> · %s (%d étapes + évaluation)</li>" % (
@@ -261,12 +310,12 @@ def accueil_chap(chap):
 <header class='lhead'><p class='eyebrow'>Bienvenue · %s</p><h2>%s</h2></header><div class='lbody'>
 <p class='lead'>%s</p>
 <div class='howto'>
-<div><p class='num'>1</p><p><strong>Lis le cours</strong> de l'étape. Les encadrés rouges sont à savoir par cœur.</p></div>
+<div><p class='num'>1</p><p><strong>Réponds à la question d'entrée</strong>, puis lis le cours. Les encadrés rouges sont à savoir par cœur ; les pièges sont ceux des copies.</p></div>
 <div><p class='num'>2</p><p><strong>Regarde la vidéo</strong>, puis l'exemple corrigé ligne par ligne.</p></div>
-<div><p class='num'>3</p><p><strong>Fais l'exercice d'application</strong> en t'aidant de l'exemple.</p></div>
-<div><p class='num'>4</p><p><strong>Fais seul les exercices</strong> « À toi de jouer », puis ouvre la correction.</p></div>
+<div><p class='num'>3</p><p><strong>Fais l'exercice d'application</strong> : ouvre les indices un par un si tu bloques, et vérifie tes résultats dans les cases.</p></div>
+<div><p class='num'>4</p><p><strong>Fais seul les exercices</strong> « À toi de jouer » : vérifie tes réponses, puis compare ta rédaction à la correction.</p></div>
 </div>
-<p>À la fin de chaque partie, une <strong>évaluation chronométrée</strong> vérifie que tout est compris. Note-toi honnêtement avec le barème : en dessous de 12 sur 20, refais les étapes de la partie avant d'avancer.</p>
+<p>Chaque partie commence par des <strong>questions flash</strong> sur ce que tu as déjà vu, pour ne rien oublier, et se termine par une <strong>évaluation chronométrée</strong>. Note-toi honnêtement avec le barème : en dessous de 12 sur 20, refais les étapes de la partie avant d'avancer. Le chapitre se termine par une <strong>évaluation complète</strong> de deux heures, avec des extraits du bac.</p>
 <h3>Le plan</h3><ul>%s</ul>
 <div class='retenir'><p class='lab'>La série à imprimer</p><p>Les exercices « À toi de jouer » et les évaluations du chapitre sont réunis dans une série PDF à imprimer, avec le corrigé à la fin : <a href='%s'>télécharger la série %s (PDF)</a>.</p></div>
 <div class='prof'><p class='lab'>Le mot du prof</p><p>Une étape par jour vaut mieux que tout le chapitre la veille du devoir. Ta progression est gardée sur cet appareil.</p></div>
@@ -280,6 +329,15 @@ def build_chapitre(chap):
             n += 1
             secs.append(etape_html(chap, p, e, n))
         secs.append(eval_html(chap, p))
+    if chap.get("final"):
+        fp = dict(lettre="Z", titre="Évaluation complète du chapitre", evaluation=chap["final"])
+        h = eval_html(chap, fp)
+        h = h.replace("data-part='Partie Z · Évaluation complète du chapitre' data-title='Évaluation de la partie Z'",
+                      "data-part='Bilan du chapitre' data-title='Évaluation complète du chapitre'")
+        h = h.replace("%s · Partie Z · Consolidation" % chap["code"], "%s · Bilan du chapitre" % chap["code"])
+        h = h.replace("Évaluation : Évaluation complète du chapitre", "Évaluation complète : %s" % chap["titre"])
+        h = h.replace("Cette évaluation vérifie que la partie est comprise.", "Ce sujet mélange toutes les parties du chapitre, comme au bac.")
+        secs.append(h)
     nav_extra = "<p class='brand-sub'><a href='index.html'>← Tous les chapitres</a></p>"
     out = page("%s · %s" % (chap["code"], chap["titre"]), "%s · %s" % (chap["code"], chap["titre_court"]),
                "Sciences physiques · Terminale S2", nav_extra, "\n".join(secs), "ts2-" + chap["code"].lower(),
@@ -370,6 +428,13 @@ def build_serie(chap, compile_pdf):
             k += 1
             en.append("\\Exo{%d}{%s (synthèse)}{%s}\n%s" % (k, inl_tex(x["titre"]), _pt(x["pts"]), md_tex(x["enonce"])))
             co.append("\\Exo{%d}{%s (synthèse)}{%s}\n%s" % (k, inl_tex(x["titre"]), _pt(x["pts"]), md_tex(x["corr"])))
+    if chap.get("final"):
+        en.append("\\sujet{Évaluation complète du chapitre (%d min)}" % chap["final"]["duree"])
+        co.append("\\sujet{Évaluation complète du chapitre}")
+        for x in chap["final"]["exos"]:
+            k += 1
+            en.append("\\Exo{%d}{%s}{%s}\n%s" % (k, inl_tex(x["titre"]), _pt(x["pts"]), md_tex(x["enonce"])))
+            co.append("\\Exo{%d}{%s}{%s}\n%s" % (k, inl_tex(x["titre"]), _pt(x["pts"]), md_tex(x["corr"])))
     tex = lire("outils/latex/serie_pre.tex") % {"code": chap["code"], "titre": chap["titre"]}
     tex += "\\mntitreserie{%s}{%s}\n\n" % (chap["code"], chap["titre"])
     tex += "\n\n".join(en)
@@ -390,8 +455,15 @@ def build_serie(chap, compile_pdf):
 
 # ---------------------------------------------------------------- main
 def main():
-    from contenu import p1, p2
+    from contenu import p1, p2, p1x, p2x
     chaps = [p1.CHAP, p2.CHAP]
+    for c, x in ((p1.CHAP, p1x), (p2.CHAP, p2x)):
+        for p in c["parties"]:
+            if p["lettre"] in x.FLASH:
+                p["etapes"][0]["flash"] = x.FLASH[p["lettre"]]
+            for e in p["etapes"]:
+                e.update(x.EXTRA.get(e["id"], {}))
+        c["final"] = x.FINAL
     for c in chaps:
         n = build_chapitre(c)
         k = build_serie(c, "--pdf" in sys.argv)

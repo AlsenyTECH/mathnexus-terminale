@@ -2,6 +2,7 @@
 """Monte une vidéo d'étape à partir de TON enregistrement audio.
 
     python3 outils/video/monter.py p1-a1 enregistrements/p1-a1.m4a
+    python3 outils/video/monter.py p1-a1 --pierre   # narration par la voix « Pierre » (voix.py)
     python3 build.py        # la vidéo apparaît alors dans l'étape
 
 Principe : l'enregistrement suit les phrases de outils/video/scripts/<id>.json, séparées par
@@ -51,14 +52,18 @@ header{display:flex;align-items:center;gap:18px;padding:22px 40px;border-bottom:
 header img{height:64px}
 header .t{font-family:'Caveat',cursive;font-size:44px;color:#bd1f2b;font-weight:700;line-height:1}
 header .c{margin-left:auto;font-size:22px;color:#586381;font-weight:600}
-main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px 60px;text-align:center;font-size:54px;color:#1c3bb0}
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px 60px;text-align:center}
+.h{font-size:30px;color:#8a93ad}
+#m{font-size:54px;color:#1c3bb0}
 footer{padding:14px 40px;font-size:18px;color:#586381;background:#fff;border-top:1px solid #d6ddec}
 </style>
 <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],macros:{vect:['\\overrightarrow{#1}',1]}},svg:{fontCache:'none'}};</script>
 <script src="%(a)s/mathjax/tex-svg.js"></script></head><body>
 <header><img src="%(a)s/logo.png"><span class="t">%(titre)s</span><span class="c">%(chap)s</span></header>
-<main id="m"></main><footer>MathNexus Education · Sciences physiques TS2</footer>
-<script>var e=%(ecran)s;var m=document.getElementById('m');
+<main><div id="hist"></div><div id="m"></div></main><footer>MathNexus Education · Sciences physiques TS2</footer>
+<script>var e=%(ecran)s, hist=%(hist)s;var hd=document.getElementById('hist');
+hist.forEach(function(x){var d=document.createElement('div');d.className='h';d.innerHTML='\\('+x+'\\)';hd.appendChild(d);});
+var m=document.getElementById('m');
 if(/[\\^_{}]|\\[a-zA-Z]/.test(e)){m.innerHTML='\\('+e+'\\)';}else{m.textContent=e;m.style.fontFamily="'Caveat',cursive";m.style.fontSize='72px';m.style.color='#bd1f2b';}
 </script></body></html>"""
 
@@ -73,7 +78,10 @@ def images(script, dossier):
         pg = b.new_page(viewport={"width": 1280, "height": 720})
         for k, (voix, ecran) in enumerate(script["phrases"]):
             h = os.path.join(dossier, "s%02d.html" % k)
-            open(h, "w", encoding="utf-8").write(PAGE % {"a": a, "titre": script["titre"], "chap": chap, "ecran": json.dumps(ecran)})
+            maths = lambda t: bool(re.search(r"[\\^_{}]", t))
+            prev = [e for _, e in script["phrases"][max(1, k - 2):k] if maths(e)] if maths(ecran) else []
+            open(h, "w", encoding="utf-8").write(PAGE % {"a": a, "titre": script["titre"], "chap": chap,
+                                                          "ecran": json.dumps(ecran), "hist": json.dumps(prev)})
             pg.goto("file://" + h)
             pg.wait_for_function("!window.MathJax || !MathJax.startup || MathJax.startup.promise", timeout=10000)
             pg.evaluate("window.MathJax && MathJax.startup ? MathJax.startup.promise : null")
@@ -85,10 +93,34 @@ def images(script, dossier):
     return fichiers
 
 
+def synthese(script, dossier):
+    """Voix Pierre : chaque phrase fixe la durée de son plan (plancher 4,4 s), pause 0,6 s."""
+    sys.path.insert(0, ICI)
+    from voix import dire
+    import wave
+    morceaux, c, t = [], [], 0.0
+    for k, (voix, _) in enumerate(script["phrases"]):
+        f = os.path.join(dossier, "v%02d.wav" % k)
+        d = dire(voix, f)
+        plan = max(d + 0.6, 4.4)
+        morceaux.append((f, plan)); t += plan; c.append(t)
+    sortie = os.path.join(dossier, "voix.wav")
+    entrees = sum([["-i", f] for f, _ in morceaux], [])
+    filtres = "".join("[%d:a]apad=whole_dur=%.3f[a%d];" % (k, p, k) for k, (_, p) in enumerate(morceaux))
+    filtres += "".join("[a%d]" % k for k in range(len(morceaux))) + "concat=n=%d:v=0:a=1[o]" % len(morceaux)
+    subprocess.run(["ffmpeg", "-v", "error", "-y"] + entrees + ["-filter_complex", filtres, "-map", "[o]", sortie], check=True)
+    return sortie, c[:-1]
+
+
 def main(vid, audio):
     script = json.load(open(os.path.join(ICI, "scripts", vid + ".json"), encoding="utf-8"))
-    n = len(script["phrases"]); total = duree(audio)
-    c = coupes(audio, n, total)
+    n = len(script["phrases"])
+    if audio == "--pierre":
+        audio, c = synthese(script, tempfile.mkdtemp())
+        total = duree(audio)
+    else:
+        total = duree(audio)
+        c = coupes(audio, n, total)
     if c is None:
         poids = [len(v) for v, _ in script["phrases"]]; s = sum(poids); c = []; acc = 0
         for w in poids[:-1]:

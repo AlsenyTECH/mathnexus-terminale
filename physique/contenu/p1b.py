@@ -16,6 +16,9 @@ D1 = dict(
         - $\omega$ : pulsation ($\mathrm{rad\cdot s^{-1}}$) ; période $T=\dfrac{2\pi}{\omega}$ (s) ; fréquence $N=\dfrac1T$ (Hz).
         - $\varphi$ : phase à l'origine (rad), fixée par l'état du mobile à $t=0$.
         """),
+        cours(r"""
+        [[simu:phase]]
+        """),
         retenir("Trouver φ", r"""
         1. $x_0=X_m\cos\varphi$ donne $\cos\varphi$, donc deux valeurs opposées $\pm\alpha$.
         2. $v_0=-X_m\,\omega\sin\varphi$ : le **sens du mouvement** à $t=0$ choisit. Sens positif ($v_0>0$) : $\sin\varphi<0$. Sens négatif : $\sin\varphi>0$.
@@ -129,7 +132,9 @@ D2 = dict(
     """),
     exos=[
         ("à partir de la courbe x(t)", r"""
-        La courbe $x(t)$ d'un mobile est une sinusoïde : elle part de $0$ à $t=0$ en montant, atteint son maximum $2\U{cm}$ à $t=0{,}1\U{s}$, repasse à $0$ à $t=0{,}2\U{s}$ et atteint $-2\U{cm}$ à $t=0{,}3\U{s}$.
+        La courbe ci-dessous donne l'élongation $x(t)$ d'un mobile en mouvement rectiligne sinusoïdal.
+
+        [[graphe:p1-d2-x]]
 
         1. Déterminer $X_m$, $T$ et $\omega$.
         2. Déterminer $\varphi$ et écrire $x(t)$.
@@ -170,7 +175,9 @@ EVAL_D = dict(duree=40, exos=[
     4. $v_0=-0{,}03\times5\pi\sin(-\frac{\pi}{3})\approx0{,}408\ms$ ; $v_{\max}=0{,}15\pi\approx0{,}471\ms$. **(2 pts)**
     """),
     dict(titre="Dates de passage", pts=10, enonce=r"""
-    On reprend le mobile précédent : $x(t)=3\cos\left(5\pi t-\dfrac{\pi}{3}\right)$ ($x$ en cm, $t$ en s).
+    On reprend le mobile précédent : $x(t)=3\cos\left(5\pi t-\dfrac{\pi}{3}\right)$ ($x$ en cm, $t$ en s). Sa courbe est donnée ci-dessous.
+
+    [[graphe:p1-evd-x]]
 
     1. Déterminer les dates des deux premiers passages en $x=-1{,}5\U{cm}$ dans le sens positif.
     2. Calculer la valeur de la vitesse en ce point, de deux façons.

@@ -205,6 +205,35 @@ a.card:hover{border-color:var(--pen);background:var(--pen-bg)}
 .c-go{margin-top:auto;font-weight:700;color:var(--pen)}
 .muted{color:var(--muted)}
 .foot{max-width:860px;margin:36px auto 0;padding:0 22px;color:var(--muted);font-size:.85rem;text-align:center}
+.qcm{border:1px solid var(--line);border-left:4px solid var(--pen);border-radius:4px;background:var(--surface);padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+.qcm .lab{color:var(--pen);margin:0}
+.qcm > p.muted{margin:0;font-size:.95rem}
+.q1{border-top:1px dashed var(--line);padding-top:10px}
+.qq{margin:0 0 8px;font-weight:600}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1.5px solid var(--line);background:var(--paper);border-radius:4px;padding:8px 12px;cursor:pointer;text-align:left;line-height:1.3;max-width:100%}
+.opt:hover{border-color:var(--pen)}
+.opt.bon{border-color:var(--prof);background:var(--prof-bg);color:var(--prof);font-weight:700}
+.opt.faux{border-color:var(--rouge);background:var(--rouge-bg);color:var(--rouge)}
+.qfb,.cfb{margin:8px 0 0;font-weight:700}
+.qfb.ok,.cfb.ok{color:var(--prof)} .qfb.ko,.cfb.ko{color:var(--rouge)}
+.qex{margin-top:6px;color:var(--muted);font-size:.97rem}
+.qex p{margin:4px 0}
+.indices,.verif{border-top:1px dashed var(--line);padding-top:8px;display:flex;flex-direction:column;gap:6px}
+.indices .lab,.verif .lab{color:var(--muted);margin:0}
+.indice summary{cursor:pointer;color:var(--prof);font-weight:700}
+.indice p{margin:4px 0 4px 1em}
+.chk label{font-weight:600}
+.chk input{font:inherit;width:7.5em;padding:5px 8px;border:1.5px solid var(--line);border-radius:4px;background:var(--surface);color:var(--ink)}
+.btn.small{padding:5px 10px;font-size:.92rem}
+.chk .cfb{margin:4px 0 0}
+.pieges{border:2px dashed var(--rouge);border-radius:4px;padding:10px 16px;background:var(--surface)}
+.pieges .lab{color:var(--rouge)} .pieges ul{margin:4px 0;padding-left:1.2em}
+.graphe{margin:4px 0;max-width:100%;overflow-x:auto}
+.graphe svg{display:block;max-width:100%;height:auto}
+.simu{border:1px solid var(--line);border-radius:4px;background:var(--surface);padding:12px 16px}
+.simu input[type=range]{width:100%}
+.simu .ctl{display:grid;grid-template-columns:auto minmax(0,1fr) 5em;gap:8px;align-items:center}
 
 </style>
 <script>window.MathJax = {
@@ -252,11 +281,36 @@ a.card:hover{border-color:var(--pen);background:var(--pen-bg)}
         <a class="btn" id="next" href="#">Étape suivante →</a>
       </div>
     </div>
-    <footer class="foot">MathNexus Education · « L'excellence par le travail et la persévérance »</footer>
+    <footer class="foot">MathNexus Education · « L'excellence par le travail et la persévérance »<br>Voix des vidéos : « Pierre », corpus UPMC (licence CC BY-SA 4.0), synthèse Piper.</footer>
   </main>
 </div>
 <script>
 var PARCOURS_KEY = "ts2-accueil";
+
+window.SIMU = window.SIMU || {};
+SIMU.phase = function(el){
+  var xm = el.querySelector('#s-xm'), tt = el.querySelector('#s-t'), ph = el.querySelector('#s-phi'), svg = el.querySelector('.s-svg'), txt = el.querySelector('.s-txt');
+  function frac(k){ if (k === 0) return '0'; var g = function(a,b){ return b ? g(b, a % b) : a; }, d = g(Math.abs(k), 12), n = k / d, q = 12 / d;
+    return (n < 0 ? '−' : '') + (Math.abs(n) === 1 ? '' : Math.abs(n)) + 'π' + (q === 1 ? '' : '/' + q); }
+  function draw(){
+    var A = +xm.value, T = +tt.value, k = +ph.value, p = k * Math.PI / 12, w = 2 * Math.PI / T;
+    xm.nextElementSibling.textContent = String(A).replace('.', ',');
+    tt.nextElementSibling.textContent = String(T).replace('.', ',');
+    ph.nextElementSibling.textContent = frac(k);
+    var X = function(t){ return 40 + t * 540; }, Y = function(x){ return 130 - x * 22; }, s = '';
+    s += "<line x1='40' y1='130' x2='590' y2='130' stroke='var(--ink)'/><line x1='40' y1='15' x2='40' y2='245' stroke='var(--ink)'/>";
+    s += "<line x1='40' y1='" + Y(A) + "' x2='590' y2='" + Y(A) + "' stroke='var(--grid)' stroke-dasharray='4 4'/><line x1='40' y1='" + Y(-A) + "' x2='590' y2='" + Y(-A) + "' stroke='var(--grid)' stroke-dasharray='4 4'/>";
+    s += "<text x='586' y='148' font-size='13' text-anchor='end' fill='var(--muted)'>t = 1 s</text><text x='46' y='24' font-size='13' fill='var(--muted)'>x (cm)</text>";
+    var pts = []; for (var i = 0; i <= 300; i++){ var t = i / 300; pts.push(X(t).toFixed(1) + ',' + Y(A * Math.cos(w * t + p)).toFixed(1)); }
+    s += "<polyline points='" + pts.join(' ') + "' fill='none' stroke='var(--pen)' stroke-width='2.4'/>";
+    var x0 = A * Math.cos(p), v0 = -A * w * Math.sin(p);
+    s += "<circle cx='40' cy='" + Y(x0).toFixed(1) + "' r='5' fill='var(--rouge)'/>";
+    svg.innerHTML = s;
+    var sens = Math.abs(Math.sin(p)) < 1e-9 ? 'il est à une extrémité, sa vitesse est nulle' : (v0 > 0 ? 'il part dans le sens positif (la courbe monte)' : 'il part dans le sens négatif (la courbe descend)');
+    txt.innerHTML = 'À t = 0 : x₀ = X<sub>m</sub> cos φ = ' + x0.toFixed(2).replace('.', ',') + ' cm, et ' + sens + '. Change le signe de φ : x₀ ne bouge pas, mais le sens s’inverse.';
+  }
+  [xm, tt, ph].forEach(function(r){ r.addEventListener('input', draw); }); draw();
+};
 
 (function(){
   var lessons = Array.prototype.slice.call(document.querySelectorAll('.lesson'));
@@ -387,6 +441,45 @@ var PARCOURS_KEY = "ts2-accueil";
     }
     inp.addEventListener('input', upd); upd();
   });
+
+  // QCM : retour immédiat
+  document.querySelectorAll('.q1').forEach(function(q){
+    var ok = +q.dataset.ok, fb = q.querySelector('.qfb'), ex = q.querySelector('.qex');
+    q.querySelectorAll('.opt').forEach(function(b){
+      b.addEventListener('click', function(){
+        var k = +b.dataset.k;
+        q.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('bon','faux'); });
+        b.classList.add(k === ok ? 'bon' : 'faux');
+        if (k !== ok) q.querySelectorAll('.opt')[ok].classList.add('bon');
+        fb.hidden = false; fb.className = 'qfb ' + (k === ok ? 'ok' : 'ko');
+        fb.textContent = k === ok ? 'Juste !' : 'Pas tout à fait : lis l’explication.';
+        ex.hidden = false;
+        if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([ex]).catch(function(){});
+      });
+    });
+  });
+
+  // vérification des réponses numériques, avec messages ciblés sur les erreurs typiques
+  function proche(x, v, t){ return Math.abs(x - v) <= (v === 0 ? 0.01 : t * Math.abs(v)) + 1e-12; }
+  document.querySelectorAll('.chk').forEach(function(c){
+    var d = JSON.parse(c.dataset.c), inp = c.querySelector('input'), fb = c.querySelector('.cfb');
+    function go(){
+      var raw = String(inp.value).trim().replace(/\s/g, '').replace(',', '.');
+      if (!raw){ fb.textContent = ''; return; }
+      var x = Number(raw);
+      if (isNaN(x)){ fb.className = 'cfb ko'; fb.textContent = 'Écris un nombre (virgule ou point).'; return; }
+      if (proche(x, d.v, d.t)){ fb.className = 'cfb ok'; fb.textContent = 'Juste ✓'; return; }
+      for (var i = 0; i < d.e.length; i++){
+        if (proche(x, d.e[i][0], d.t)){ fb.className = 'cfb ko'; fb.innerHTML = d.e[i][1]; if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fb]).catch(function(){}); return; }
+      }
+      fb.className = 'cfb ko'; fb.textContent = 'Pas encore. Vérifie les unités et les signes, puis ouvre un indice ou la correction.';
+    }
+    c.querySelector('button').addEventListener('click', go);
+    inp.addEventListener('keydown', function(e){ if (e.key === 'Enter') go(); });
+  });
+
+  // simulations
+  document.querySelectorAll('[data-simu]').forEach(function(el){ if (window.SIMU && SIMU[el.dataset.simu]) SIMU[el.dataset.simu](el); });
 
   if (lessons.length < 2){ document.querySelector('.pager').hidden = true; document.querySelector('.prog').hidden = true; }
   refreshProgress();

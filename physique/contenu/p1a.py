@@ -46,6 +46,8 @@ A1 = dict(
     """, r"""
     1. À $t=1\U{s}$ : $x=2\times1=2\U{m}$ et $y=1^2-1=0$. Le mobile est en $M(2\,;\,0)$ et $OM=\sqrt{2^2+0^2}=2\U{m}$.
     2. De $x=2t$ on tire $t=\dfrac{x}{2}$. On remplace : $y=\left(\dfrac{x}{2}\right)^2-1$, soit $y=\dfrac{x^2}{4}-1$. La trajectoire est une **portion de parabole** ($x\geq0$ car $t\geq0$).
+
+    [[graphe:p1-a1-traj]]
     """),
     application=("une droite", r"""
     Les équations horaires d'un mobile sont $x=3t+1$ et $y=-2t+4$ (unités SI).
@@ -493,6 +495,8 @@ C3 = dict(
 
         | $t$ (s) | 0 | 1 | 2 | 3 | 4 | 5 |
         | $v$ ($\mathrm{m\cdot s^{-1}}$) | 2 | 4 | 6 | 8 | 8 | 8 |
+
+        [[graphe:p1-c3-v]]
 
         1. Décrire les deux phases du mouvement. Calculer l'accélération de la première.
         2. Le mobile part de $O$. Calculer la distance parcourue entre $0$ et $3\U{s}$.

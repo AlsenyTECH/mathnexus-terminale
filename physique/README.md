@@ -10,10 +10,8 @@ Chaque chapitre a sa **série PDF à imprimer** (exercices + évaluations, corri
 
 ## Publier
 
-Ce dossier est la partie physique du site https://alsenytech.github.io/mathnexus-terminale/
-(adresse : `…/mathnexus-terminale/physique/`). Le site est statique : `index.html`, `p1.html`,
-`p2.html`, `scripts.html`, `assets/`, `videos/`, `series/`. Les commandes ci-dessous se lancent
-depuis ce dossier `physique/`.
+Le site est statique : `index.html`, `p1.html`, `p2.html`, `scripts.html`, `assets/`, `videos/`, `series/`.
+Avec GitHub Pages : *Settings → Pages → Deploy from a branch → main, / (root)*.
 Il fonctionne aussi hors connexion (MathJax et polices embarqués) : ouvrir `index.html`.
 
 ## Construire
@@ -31,6 +29,8 @@ Ne pas modifier les .html à la main : ils sont écrasés à chaque build.
 build.py                 générateur (mini-markup → HTML et LaTeX)
 contenu/p1a.py, p1b.py   P1 : parties A-B-C et D-E (cours, vidéos, exemples, exercices, évaluations)
 contenu/p2a.py, p2b.py   P2 : parties A-B et C-D
+contenu/p1x.py, p2x.py   questions d'entrée, indices, réponses vérifiées, pièges, questions flash, évaluation complète
+contenu/graphes.py       graphes (SVG et pgfplots) et simulations
 contenu/p1.py, p2.py     assemblage des chapitres
 modele/                  style.css (cahier quadrillé / tableau noir), extra.css, site.js
 outils/latex/            mathnexus.sty, logo, préambule des séries
@@ -46,7 +46,18 @@ Chaque étape est un dictionnaire : `objectif`, `cours` (briques `retenir`, `pro
 Le texte utilise un mini-markup : `$...$` formule, `$$...$$` formule centrée, `- ` liste,
 `1. ` questions, `| a | b |` tableau, `**gras**`. Macros : `\vect{}`, `\U{}`, `\ms`, `\mss`, `\dd`.
 
-## Vidéos (voix de MathNexus)
+## Vidéos
+
+Narration actuelle : voix « Pierre » (Piper `fr_FR-upmc-medium`, locuteur 1, CC BY-SA 4.0 — attribution affichée en pied de page).
+
+```bash
+export VOIX_DIR=~/voices/vits-piper-fr_FR-upmc-medium   # archive sherpa-onnx « vits-piper-fr_FR-upmc-medium »
+python3 outils/video/monter.py p1-a1 --pierre
+```
+
+Une autre voix au même format (.onnx Piper, par exemple celle de MathNexus après entraînement) se branche avec `VOIX_ONNX` et `VOIX_LOCUTEUR`.
+
+### Avec un enregistrement
 
 1. Ouvrir `scripts.html` : un texte par vidéo, phrases numérotées.
 2. Enregistrer un fichier par vidéo (`p1-a1.m4a`…) avec **2 s de silence entre deux phrases**.

@@ -80,6 +80,11 @@ C2 = dict(
         - Sans frottement, l'énergie mécanique se **conserve** : $E_m(A)=E_m(B)$.
         - Avec frottements, elle diminue : $E_m(B)-E_m(A)=W(\vec f)<0$. L'énergie perdue devient de la chaleur.
         """),
+        cours(r"""
+        Exemple : balle de $2\U{kg}$ lâchée de $5\U{m}$ ($E_m=100\U{J}$ sans frottement). Pendant la chute, $E_p$ diminue, $E_c$ augmente, leur somme reste constante :
+
+        [[graphe:p2-c2-em]]
+        """),
         prof(r"""
         Écris toujours ta référence : « on prend $E_p=0$ au sol ». Sans elle, les valeurs de $E_p$ n'ont pas de sens.
         """),

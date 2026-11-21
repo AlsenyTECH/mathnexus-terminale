@@ -129,6 +129,45 @@
     inp.addEventListener('input', upd); upd();
   });
 
+  // QCM : retour immédiat
+  document.querySelectorAll('.q1').forEach(function(q){
+    var ok = +q.dataset.ok, fb = q.querySelector('.qfb'), ex = q.querySelector('.qex');
+    q.querySelectorAll('.opt').forEach(function(b){
+      b.addEventListener('click', function(){
+        var k = +b.dataset.k;
+        q.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('bon','faux'); });
+        b.classList.add(k === ok ? 'bon' : 'faux');
+        if (k !== ok) q.querySelectorAll('.opt')[ok].classList.add('bon');
+        fb.hidden = false; fb.className = 'qfb ' + (k === ok ? 'ok' : 'ko');
+        fb.textContent = k === ok ? 'Juste !' : 'Pas tout à fait : lis l’explication.';
+        ex.hidden = false;
+        if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([ex]).catch(function(){});
+      });
+    });
+  });
+
+  // vérification des réponses numériques, avec messages ciblés sur les erreurs typiques
+  function proche(x, v, t){ return Math.abs(x - v) <= (v === 0 ? 0.01 : t * Math.abs(v)) + 1e-12; }
+  document.querySelectorAll('.chk').forEach(function(c){
+    var d = JSON.parse(c.dataset.c), inp = c.querySelector('input'), fb = c.querySelector('.cfb');
+    function go(){
+      var raw = String(inp.value).trim().replace(/\s/g, '').replace(',', '.');
+      if (!raw){ fb.textContent = ''; return; }
+      var x = Number(raw);
+      if (isNaN(x)){ fb.className = 'cfb ko'; fb.textContent = 'Écris un nombre (virgule ou point).'; return; }
+      if (proche(x, d.v, d.t)){ fb.className = 'cfb ok'; fb.textContent = 'Juste ✓'; return; }
+      for (var i = 0; i < d.e.length; i++){
+        if (proche(x, d.e[i][0], d.t)){ fb.className = 'cfb ko'; fb.innerHTML = d.e[i][1]; if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([fb]).catch(function(){}); return; }
+      }
+      fb.className = 'cfb ko'; fb.textContent = 'Pas encore. Vérifie les unités et les signes, puis ouvre un indice ou la correction.';
+    }
+    c.querySelector('button').addEventListener('click', go);
+    inp.addEventListener('keydown', function(e){ if (e.key === 'Enter') go(); });
+  });
+
+  // simulations
+  document.querySelectorAll('[data-simu]').forEach(function(el){ if (window.SIMU && SIMU[el.dataset.simu]) SIMU[el.dataset.simu](el); });
+
   if (lessons.length < 2){ document.querySelector('.pager').hidden = true; document.querySelector('.prog').hidden = true; }
   refreshProgress();
   show(location.hash.slice(1) || 'accueil', true);

@@ -1,6 +1,7 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[nowatermark]{mathnexus}
 \usepackage{enumitem}
+\usepackage{pgfplots}\pgfplotsset{compat=1.17}
 \mnsetup{type={Série d'exercices},niveau={Terminale S2},matiere={Physique},chapnum={P1},chapitre={Cinématique du point},auteur={MathNexus},annee={2026--2027}}
 \newgeometry{left=1.4cm,right=1.4cm,top=3.1cm,bottom=1.9cm,headheight=2.0cm,headsep=0.35cm,footskip=0.8cm}
 \fancyhead[L]{\raisebox{-0.35\height}{\includegraphics[height=1.75cm]{logo.png}}}
@@ -156,6 +157,11 @@ La vitesse d'un mobile en ligne droite est donnée par le tableau :
 $v$ ($\mathrm{m\cdot s^{-1}}$) & 2 & 4 & 6 & 8 & 8 & 8\\\hline
 \end{tabular}\end{center}
 
+\begin{center}\begin{tikzpicture}\begin{axis}[width=13cm,height=6cm,axis lines=middle,xmin=0,xmax=5.6,ymin=0,ymax=9.5,xtick={1,2,3,4,5},ytick={2,4,6,8},grid=major,grid style={mngrey!25},tick label style={font=\small},xlabel={t (s)},ylabel={v (m/s)},xlabel style={at={(ticklabel* cs:1)},anchor=south east},ylabel style={at={(ticklabel* cs:1)},anchor=south west},/pgf/number format/use comma]
+\addplot[domain=0:3,samples=160,very thick,mnblue]{2+2*x};
+\addplot[domain=3:5,samples=160,very thick,mnblue]{8};
+\end{axis}\end{tikzpicture}\end{center}
+
 \begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Décrire les deux phases du mouvement. Calculer l'accélération de la première.
 \item Le mobile part de $O$. Calculer la distance parcourue entre $0$ et $3\U{s}$.
 \end{enumerate}
@@ -198,8 +204,12 @@ $x(t)=0{,}02\cos\left(50t+\dfrac{\pi}{6}\right)$ (SI).
 \end{enumerate}
 
 \Exo{21}{À partir de la courbe x(t)}{}
-La courbe $x(t)$ d'un mobile est une sinusoïde : elle part de $0$ à $t=0$ en montant, atteint son maximum $2\U{cm}$ à $t=0{,}1\U{s}$, repasse à $0$ à $t=0{,}2\U{s}$ et atteint $-2\U{cm}$ à $t=0{,}3\U{s}$.
+La courbe ci-dessous donne l'élongation $x(t)$ d'un mobile en mouvement rectiligne sinusoïdal.
 
+
+\begin{center}\begin{tikzpicture}\begin{axis}[width=13cm,height=6cm,axis lines=middle,xmin=0,xmax=0.85,ymin=-2.8,ymax=2.8,xtick={0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8},ytick={-2,-1,1,2},grid=major,grid style={mngrey!25},tick label style={font=\small},xlabel={t (s)},ylabel={x (cm)},xlabel style={at={(ticklabel* cs:1)},anchor=south east},ylabel style={at={(ticklabel* cs:1)},anchor=south west},/pgf/number format/use comma]
+\addplot[domain=0:0.8,samples=160,very thick,mnblue]{2*cos(deg(5*pi*x-pi/2))};
+\end{axis}\end{tikzpicture}\end{center}
 
 \begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Déterminer $X_m$, $T$ et $\omega$.
 \item Déterminer $\varphi$ et écrire $x(t)$.
@@ -224,8 +234,12 @@ Un mobile vérifie l'équation différentielle $\ddot x+25\pi^2x=0$ (SI). Son am
 \end{enumerate}
 
 \Exo{24}{Dates de passage (synthèse)}{10}
-On reprend le mobile précédent : $x(t)=3\cos\left(5\pi t-\dfrac{\pi}{3}\right)$ ($x$ en cm, $t$ en s).
+On reprend le mobile précédent : $x(t)=3\cos\left(5\pi t-\dfrac{\pi}{3}\right)$ ($x$ en cm, $t$ en s). Sa courbe est donnée ci-dessous.
 
+
+\begin{center}\begin{tikzpicture}\begin{axis}[width=13cm,height=6cm,axis lines=middle,xmin=0,xmax=0.85,ymin=-3.6,ymax=3.6,xtick={0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8},ytick={-3,-1.5,1.5,3},grid=major,grid style={mngrey!25},tick label style={font=\small},xlabel={t (s)},ylabel={x (cm)},xlabel style={at={(ticklabel* cs:1)},anchor=south east},ylabel style={at={(ticklabel* cs:1)},anchor=south west},/pgf/number format/use comma]
+\addplot[domain=0:0.8,samples=160,very thick,mnblue]{3*cos(deg(5*pi*x-pi/3))};
+\end{axis}\end{tikzpicture}\end{center}
 
 \begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Déterminer les dates des deux premiers passages en $x=-1{,}5\U{cm}$ dans le sens positif.
 \item Calculer la valeur de la vitesse en ce point, de deux façons.
@@ -276,6 +290,46 @@ Une meule de rayon $10\U{cm}$, initialement au repos, est mise en rotation avec 
 \item On coupe le moteur : la meule s'arrête après 50 tours, d'un mouvement uniformément retardé. Calculer l'accélération angulaire de freinage et la durée du freinage.
 \end{enumerate}
 
+\sujet{Évaluation complète du chapitre (120 min)}
+
+\Exo{31}{Mouvement plan et base de Frenet}{8}
+Dans un repère $(O;\vec i,\vec j)$, un mobile a pour équations horaires $x=3t$ et $y=-t^2+4t$ ($x$, $y$ en m, $t$ en s, $t\geq0$).
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Déterminer l'équation de la trajectoire.
+\item Déterminer les vecteurs vitesse et accélération.
+\item À $t=1\U{s}$, calculer $v$, $a_t$ et $a_n$. Le mouvement est-il accéléré ou retardé à cette date ?
+\item Calculer le rayon de courbure à $t=1\U{s}$.
+\item Déterminer la position et la vitesse du mobile au sommet de la trajectoire.
+\end{enumerate}
+
+\Exo{32}{Le triple saut (d'après bac 2018)}{5}
+\emph{Extrait du bac S2 2018, exercice 3, question 3.1.} Dans la course d'élan, l'athlète, partie sans vitesse initiale, parcourt $32\U{m}$ pour arriver au point A de la ligne d'envol avec une vitesse horizontale $\vec v_1$ de norme $8\ms$. Le mouvement est supposé rectiligne uniformément varié pour cette phase.
+
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Évaluer l'accélération du mouvement et le temps mis par l'athlète sur ce parcours. (question du bac)
+\item Écrire l'équation horaire $x(t)$ de la course d'élan (origine au départ).
+\item Quelle est la vitesse de l'athlète à mi-parcours ($16\U{m}$) ? Pourquoi n'est-elle pas égale à $4\ms$ ?
+\end{enumerate}
+
+\Exo{33}{Le lancer du poids (bac 2012)}{7}
+\emph{Extrait du bac S2 2012, exercice 3, partie 3.1 (figures redessinées).} L'origine des dates est prise au moment du lancer. L'entraîneur a obtenu les graphes des composantes horizontale $v_x$ et verticale $v_y$ du vecteur vitesse du centre d'inertie du boulet.
+
+
+\begin{center}\begin{tikzpicture}\begin{axis}[width=13cm,height=6cm,axis lines=middle,xmin=0,xmax=2.6,ymin=0,ymax=12,xtick={0.5,1,1.5,2,2.5},ytick={2,4,6,8,10},grid=major,grid style={mngrey!25},tick label style={font=\small},xlabel={t (s)},ylabel={vx (m/s)},xlabel style={at={(ticklabel* cs:1)},anchor=south east},ylabel style={at={(ticklabel* cs:1)},anchor=south west},/pgf/number format/use comma]
+\addplot[domain=0:2.05,samples=160,very thick,mnblue]{10};
+\end{axis}\end{tikzpicture}\end{center}
+
+\begin{center}\begin{tikzpicture}\begin{axis}[width=13cm,height=6cm,axis lines=middle,xmin=0,xmax=3,ymin=-12,ymax=12,xtick={0.5,1,1.5,2,2.5},ytick={-10,-5,5,10},grid=major,grid style={mngrey!25},tick label style={font=\small},xlabel={t (s)},ylabel={vy (m/s)},xlabel style={at={(ticklabel* cs:1)},anchor=south east},ylabel style={at={(ticklabel* cs:1)},anchor=south west},/pgf/number format/use comma]
+\addplot[domain=0:2.05,samples=160,very thick,mnblue]{9-9.8*x};
+\end{axis}\end{tikzpicture}\end{center}
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item Avec la figure 1, déterminer la composante $v_{0x}$ à $t=0$ et la nature du mouvement de la projection du centre d'inertie sur l'axe $Ox$.
+\item Avec la figure 2, déterminer la composante $v_{0y}$ à $t=0$ et la nature du mouvement de la projection sur l'axe $Oy$. Calculer l'accélération $a_y$.
+\item Exprimer $v_{0x}$ et $v_{0y}$ en fonction de la valeur $V_0$ du vecteur vitesse initiale et de l'angle $\alpha$ qu'il fait avec l'horizontale.
+\item En déduire $V_0$ et $\alpha$.
+\end{enumerate}
+
 \newpage
 \mntitreserie{}{Corrigé de la série P1}
 
@@ -283,7 +337,7 @@ Une meule de rayon $10\U{cm}$, initialement au repos, est mise en rotation avec 
 
 \Exo{1}{Un cercle}{}
 \begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $x^2+y^2=16\cos^2(2t)+16\sin^2(2t)=16\,(\cos^2+\sin^2)=16$.
-\item $x^2+y^2=4^2$ : la trajectoire est le **cercle de centre $O$ et de rayon $4\U{m}$**.
+\item $x^2+y^2=4^2$ : la trajectoire est le \textbf{cercle de centre $O$ et de rayon $4\U{m}$}.
 \end{enumerate}
 
 \Exo{2}{Lire une parabole}{}
@@ -470,6 +524,29 @@ $\omega_0=\dfrac{1200\times2\pi}{60}=40\pi$ et $\omega=100\pi\U{rad\cdot s^{-1}}
 \begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $\dot\theta=5\times8=40\U{rad\cdot s^{-1}}$. $\theta=\frac12\times5\times64=160\U{rad}$, soit $\approx25{,}5$ tours. \textbf{(4 pts)}
 \item $v=0{,}1\times40=4\ms$ ; $a_t=0{,}1\times5=0{,}5\mss$ ; $a_n=0{,}1\times1600=160\mss$. \textbf{(4 pts)}
 \item $\theta=100\pi\U{rad}$ ; $0-40^2=2\,\ddot\theta_2\times100\pi$, donc $\ddot\theta_2=-\dfrac{8}{\pi}\approx-2{,}55\U{rad\cdot s^{-2}}$. Durée : $t=\dfrac{40}{8/\pi}=5\pi\approx15{,}7\U{s}$. \textbf{(4 pts)}
+\end{enumerate}
+
+\sujet{Évaluation complète du chapitre}
+
+\Exo{31}{Mouvement plan et base de Frenet}{8}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $t=\dfrac{x}{3}$, donc $y=-\dfrac{x^2}{9}+\dfrac{4}{3}x$ : parabole. \textbf{(1 pt)}
+\item $\vec v\,(3\,;\,-2t+4)$ et $\vec a\,(0\,;\,-2)$. \textbf{(1,5 pt)}
+\item À $1\U{s}$ : $\vec v\,(3\,;\,2)$, $v=\sqrt{13}\approx3{,}61\ms$. $a_t=\dfrac{3\times0+2\times(-2)}{3{,}61}\approx-1{,}11\mss<0$ : \textbf{retardé}. $a_n=\dfrac{|3\times(-2)-2\times0|}{3{,}61}\approx1{,}66\mss$. \textbf{(3 pts)}
+\item $\rho=\dfrac{13}{1{,}66}\approx7{,}81\U{m}$. \textbf{(1 pt)}
+\item Sommet : $v_y=0$ à $t=2\U{s}$, point $(6\,;\,4)$, vitesse $v=3\ms$ (horizontale). \textbf{(1,5 pt)}
+\end{enumerate}
+
+\Exo{32}{Le triple saut (d'après bac 2018)}{5}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $v_1^2-0=2a\,d$, donc $a=\dfrac{64}{64}=1\mss$ ; $v_1=a\,t$, donc $t=8\U{s}$. \textbf{(2 pts)}
+\item $x=\frac12t^2$ (SI). \textbf{(1 pt)}
+\item $v^2=2\times1\times16=32$, donc $v\approx5{,}66\ms$. La vitesse n'est pas proportionnelle à la distance : elle l'est au temps ($v=at$), et l'athlète met plus de temps sur la première moitié. \textbf{(2 pts)}
+\end{enumerate}
+
+\Exo{33}{Le lancer du poids (bac 2012)}{7}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=*,start=1]\item $v_{0x}=10\ms$ ; $v_x$ est constante : mouvement \textbf{rectiligne uniforme} sur $Ox$. \textbf{(1,5 pt)}
+\item $v_{0y}=9\ms$ ; $v_y$ est une fonction affine décroissante du temps : mouvement \textbf{rectiligne uniformément varié} (décéléré puis accéléré). Pente : $a_y=\dfrac{0-9}{0{,}92}\approx-9{,}8\mss$. \textbf{(2 pts)}
+\item $v_{0x}=V_0\cos\alpha$ et $v_{0y}=V_0\sin\alpha$. \textbf{(1,5 pt)}
+\item $V_0=\sqrt{10^2+9^2}\approx13{,}5\ms$ ; $\tan\alpha=\dfrac{9}{10}$, donc $\alpha\approx42^{\circ}$ (valeurs du corrigé officiel). \textbf{(2 pts)}
 \end{enumerate}
 \label{mnlast}
 \end{document}
