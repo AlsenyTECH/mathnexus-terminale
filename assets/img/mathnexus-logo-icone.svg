@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="244 104 536 586" width="536" height="586">
+<title>MathNexus</title>
+<defs>
+  <linearGradient id="bk" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#3FE0FF"/><stop offset="0.55" stop-color="#1EA2FF"/><stop offset="1" stop-color="#0A78F0"/>
+  </linearGradient>
+  <clipPath id="noHouse"><path d="M0 0H1024V1024H0Z M402 420 H622 V547 L512 616 L402 547 Z" clip-rule="evenodd"/></clipPath>
+</defs>
+
+<g fill="none" stroke="#0B5E95" stroke-width="16">
+  <g clip-path="url(#noHouse)">
+    <ellipse cx="512" cy="395" rx="118" ry="276"/>
+    <ellipse cx="512" cy="392" rx="274" ry="110" transform="rotate(33 512 392)"/>
+    <ellipse cx="512" cy="392" rx="274" ry="110" transform="rotate(-33 512 392)"/>
+  </g>
+  <!-- murs et pointe du crayon (le toit est formé par les orbites) -->
+  <path d="M394 352 V551 L512 626 L630 551 V352" stroke-linejoin="miter"/>
+</g>
+<!-- partie basse de l'orbite verticale, visible sous la pointe -->
+<circle cx="287" cy="324" r="17" fill="#fff" stroke="#0B5E95" stroke-width="10"/>
+<circle cx="512" cy="381" r="57" fill="#0B5E95"/>
+<!-- livre ouvert -->
+<path d="M508 466 C 487 449, 452 441, 418 443 L418 546 C 454 546, 489 556, 508 582 Z" fill="url(#bk)"/>
+<path d="M516 466 C 537 449, 572 441, 606 443 L606 546 C 570 546, 535 556, 516 582 Z" fill="url(#bk)"/>
+
+</svg>
