@@ -210,6 +210,8 @@ def etape_html(chap, partie, e, num):
     h.append("</div></section>")
     return "\n".join(h)
 
+TITRES = {}
+
 def eval_html(chap, partie):
     ev = partie["evaluation"]; eid = "%s-eval-%s" % (chap["code"].lower(), partie["lettre"].lower())
     tot = sum(x["pts"] for x in ev["exos"])
@@ -225,6 +227,14 @@ def eval_html(chap, partie):
         h.append("<div class='exo eval'><p class='exo-n'>Exercice %d · %s <span class='pts'>%s pts</span></p><div class='exo-q'>%s</div>"
                  "<details><summary>Correction et barème</summary><div class='copie'>%s</div></details></div>" % (
                      k, x["titre"], _pt(x["pts"]), md(x["enonce"]), md(x["corr"])))
+    rev = [(k, x["revoir"]) for k, x in enumerate(ev["exos"], 1) if x.get("revoir")]
+    if rev:
+        rows = "".join("<tr><td>Exercice %d · %s</td><td>%s</td></tr>" % (
+            k, inl_html(q), ", ".join("<a href='#%s'>%s</a>" % (eid_, TITRES.get(eid_, eid_)) for eid_ in ids))
+            for k, r in rev for q, ids in r)
+        h.append("<div class='retenir'><p class='lab'>Mon bilan : quoi revoir ?</p><p>Corrige-toi question par question. "
+                 "Pour chaque question ratée, reprends l'étape indiquée avant de passer à la suite.</p>"
+                 "<div class='table-wrap'><table><thead><tr><th>Si tu as raté…</th><th>Revois l'étape</th></tr></thead><tbody>%s</tbody></table></div></div>" % rows)
     h.append("<div class='note'><label>Ma note sur %d : <input type='number' class='score' min='0' max='%d' step='0.25' inputmode='decimal' data-tot='%d'></label>"
              "<p class='note-msg' aria-live='polite'></p></div>" % (tot, tot, tot))
     h.append("</div></section>")
@@ -315,7 +325,7 @@ def accueil_chap(chap):
 <div><p class='num'>3</p><p><strong>Fais l'exercice d'application</strong> : ouvre les indices un par un si tu bloques, et vérifie tes résultats dans les cases.</p></div>
 <div><p class='num'>4</p><p><strong>Fais seul les exercices</strong> « À toi de jouer » : vérifie tes réponses, puis compare ta rédaction à la correction.</p></div>
 </div>
-<p>Chaque partie commence par des <strong>questions flash</strong> sur ce que tu as déjà vu, pour ne rien oublier, et se termine par une <strong>évaluation chronométrée</strong>. Note-toi honnêtement avec le barème : en dessous de 12 sur 20, refais les étapes de la partie avant d'avancer. Le chapitre se termine par une <strong>évaluation complète</strong> de deux heures, avec des extraits du bac.</p>
+<p>Chaque partie commence par des <strong>questions flash</strong> sur ce que tu as déjà vu, pour ne rien oublier, et se termine par une <strong>évaluation chronométrée</strong>. Note-toi honnêtement avec le barème : en dessous de 12 sur 20, refais les étapes de la partie avant d'avancer. Le chapitre se termine par <strong>deux évaluations complètes</strong> de deux heures qui balaient tout le chapitre (avec des extraits du bac) : la première pour t'entraîner, la seconde, quelques jours plus tard, pour vérifier que tout est acquis. Un tableau te dit quelles étapes revoir selon les questions ratées.</p>
 <h3>Le plan</h3><ul>%s</ul>
 <div class='retenir'><p class='lab'>La série à imprimer</p><p>Les exercices « À toi de jouer » et les évaluations du chapitre sont réunis dans une série PDF à imprimer, avec le corrigé à la fin : <a href='%s'>télécharger la série %s (PDF)</a>.</p></div>
 <div class='prof'><p class='lab'>Le mot du prof</p><p>Une étape par jour vaut mieux que tout le chapitre la veille du devoir. Ta progression est gardée sur cet appareil.</p></div>
@@ -329,14 +339,17 @@ def build_chapitre(chap):
             n += 1
             secs.append(etape_html(chap, p, e, n))
         secs.append(eval_html(chap, p))
-    if chap.get("final"):
-        fp = dict(lettre="Z", titre="Évaluation complète du chapitre", evaluation=chap["final"])
+    for k, fin in enumerate(chap.get("finals", []), 1):
+        fp = dict(lettre="Z%d" % k, titre="Évaluation %d du chapitre" % k, evaluation=fin)
         h = eval_html(chap, fp)
-        h = h.replace("data-part='Partie Z · Évaluation complète du chapitre' data-title='Évaluation de la partie Z'",
-                      "data-part='Bilan du chapitre' data-title='Évaluation complète du chapitre'")
-        h = h.replace("%s · Partie Z · Consolidation" % chap["code"], "%s · Bilan du chapitre" % chap["code"])
-        h = h.replace("Évaluation : Évaluation complète du chapitre", "Évaluation complète : %s" % chap["titre"])
-        h = h.replace("Cette évaluation vérifie que la partie est comprise.", "Ce sujet mélange toutes les parties du chapitre, comme au bac.")
+        role = "entraînement" if k == 1 else "contrôle"
+        h = h.replace("data-part='Partie Z%d · Évaluation %d du chapitre' data-title='Évaluation de la partie Z%d'" % (k, k, k),
+                      "data-part='Bilan du chapitre' data-title='Évaluation %d (%s)'" % (k, role))
+        h = h.replace("%s · Partie Z%d · Consolidation" % (chap["code"], k), "%s · Bilan du chapitre · Évaluation %d" % (chap["code"], k))
+        h = h.replace("Évaluation : Évaluation %d du chapitre" % k, "Évaluation %d : %s" % (k, chap["titre"]))
+        h = h.replace("Cette évaluation vérifie que la partie est comprise.",
+                      "Ce sujet balaie tout le chapitre, comme un devoir de deux heures. Évaluation %d : %s." % (
+                          k, "fais-la après la dernière partie, pour t'entraîner" if k == 1 else "fais-la quelques jours plus tard, sans revoir le cours : elle dit si le chapitre est acquis"))
         secs.append(h)
     nav_extra = "<p class='brand-sub'><a href='index.html'>← Tous les chapitres</a></p>"
     out = page("%s · %s" % (chap["code"], chap["titre"]), "%s · %s" % (chap["code"], chap["titre_court"]),
@@ -428,10 +441,10 @@ def build_serie(chap, compile_pdf):
             k += 1
             en.append("\\Exo{%d}{%s (synthèse)}{%s}\n%s" % (k, inl_tex(x["titre"]), _pt(x["pts"]), md_tex(x["enonce"])))
             co.append("\\Exo{%d}{%s (synthèse)}{%s}\n%s" % (k, inl_tex(x["titre"]), _pt(x["pts"]), md_tex(x["corr"])))
-    if chap.get("final"):
-        en.append("\\sujet{Évaluation complète du chapitre (%d min)}" % chap["final"]["duree"])
-        co.append("\\sujet{Évaluation complète du chapitre}")
-        for x in chap["final"]["exos"]:
+    for j, fin in enumerate(chap.get("finals", []), 1):
+        en.append("\\newpage\\sujet{Évaluation %d du chapitre (%d min)}" % (j, fin["duree"]))
+        co.append("\\sujet{Évaluation %d du chapitre}" % j)
+        for x in fin["exos"]:
             k += 1
             en.append("\\Exo{%d}{%s}{%s}\n%s" % (k, inl_tex(x["titre"]), _pt(x["pts"]), md_tex(x["enonce"])))
             co.append("\\Exo{%d}{%s}{%s}\n%s" % (k, inl_tex(x["titre"]), _pt(x["pts"]), md_tex(x["corr"])))
@@ -463,7 +476,10 @@ def main():
                 p["etapes"][0]["flash"] = x.FLASH[p["lettre"]]
             for e in p["etapes"]:
                 e.update(x.EXTRA.get(e["id"], {}))
-        c["final"] = x.FINAL
+        c["finals"] = x.FINALS
+        for p in c["parties"]:
+            for e in p["etapes"]:
+                TITRES[e["id"]] = e["titre"]
     for c in chaps:
         n = build_chapitre(c)
         k = build_serie(c, "--pdf" in sys.argv)

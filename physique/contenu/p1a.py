@@ -514,10 +514,12 @@ EVAL_C = dict(duree=45, exos=[
     1. Écrire les équations horaires de la voiture et du bus.
     2. À quelle date et à quelle distance du feu la voiture rattrape-t-elle le bus ? Quelle est alors sa vitesse ?
     3. À quelle date l'écart entre les deux véhicules est-il maximal ? Calculer cet écart.
+    4. Après le rattrapage, la voiture freine depuis $30\ms$ avec une décélération constante de $5\mss$. Calculer sa distance de freinage sans calculer la durée, puis justifier la nature du mouvement.
     """, corr=r"""
     1. Voiture : $x_V=0{,}75\,t^2$. Bus : $x_B=15t$. **(2 pts)**
-    2. $0{,}75t^2=15t\iff t=20\U{s}$ ($t\neq0$). $x=300\U{m}$. Vitesse : $v_V=1{,}5\times20=30\ms$. **(4 pts)**
-    3. L'écart $x_B-x_V$ augmente tant que le bus va plus vite que la voiture : il est maximal quand $v_V=15\ms$, soit $t=10\U{s}$. Écart : $150-75=75\U{m}$. **(4 pts)**
+    2. $0{,}75t^2=15t\iff t=20\U{s}$ ($t\neq0$). $x=300\U{m}$. Vitesse : $v_V=1{,}5\times20=30\ms$. **(3 pts)**
+    3. L'écart $x_B-x_V$ augmente tant que le bus va plus vite que la voiture : il est maximal quand $v_V=15\ms$, soit $t=10\U{s}$. Écart : $150-75=75\U{m}$. **(3 pts)**
+    4. Relation indépendante du temps : $0-30^2=2\times(-5)\times d$, donc $d=90\U{m}$. $a\cdot v<0$ : mouvement **retardé**. **(2 pts)**
     """),
     dict(titre="Un enregistrement", pts=10, enonce=r"""
     On enregistre le mouvement rectiligne d'un mobile avec $\tau=50\U{ms}$ : $M_0M_1=2{,}0\U{cm}$, $M_1M_2=3{,}0\U{cm}$, $M_2M_3=4{,}0\U{cm}$, $M_3M_4=5{,}0\U{cm}$.

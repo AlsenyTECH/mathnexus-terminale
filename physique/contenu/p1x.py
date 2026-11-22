@@ -99,48 +99,4 @@ FLASH = {
       ("La vitesse d'un mobile sinusoïdal est nulle :", ["au centre", "aux extrémités", "jamais"], 1, "Aux extrémités, le mobile fait demi-tour.")],
 }
 
-FINAL = dict(duree=120, exos=[
-    dict(titre="Mouvement plan et base de Frenet", pts=8, enonce=r"""
-    Dans un repère $(O;\vec i,\vec j)$, un mobile a pour équations horaires $x=3t$ et $y=-t^2+4t$ ($x$, $y$ en m, $t$ en s, $t\geq0$).
-
-    1. Déterminer l'équation de la trajectoire.
-    2. Déterminer les vecteurs vitesse et accélération.
-    3. À $t=1\U{s}$, calculer $v$, $a_t$ et $a_n$. Le mouvement est-il accéléré ou retardé à cette date ?
-    4. Calculer le rayon de courbure à $t=1\U{s}$.
-    5. Déterminer la position et la vitesse du mobile au sommet de la trajectoire.
-    """, corr=r"""
-    1. $t=\dfrac{x}{3}$, donc $y=-\dfrac{x^2}{9}+\dfrac{4}{3}x$ : parabole. **(1 pt)**
-    2. $\vec v\,(3\,;\,-2t+4)$ et $\vec a\,(0\,;\,-2)$. **(1,5 pt)**
-    3. À $1\U{s}$ : $\vec v\,(3\,;\,2)$, $v=\sqrt{13}\approx3{,}61\ms$. $a_t=\dfrac{3\times0+2\times(-2)}{3{,}61}\approx-1{,}11\mss<0$ : **retardé**. $a_n=\dfrac{|3\times(-2)-2\times0|}{3{,}61}\approx1{,}66\mss$. **(3 pts)**
-    4. $\rho=\dfrac{13}{1{,}66}\approx7{,}81\U{m}$. **(1 pt)**
-    5. Sommet : $v_y=0$ à $t=2\U{s}$, point $(6\,;\,4)$, vitesse $v=3\ms$ (horizontale). **(1,5 pt)**
-    """),
-    dict(titre="Le triple saut (d'après bac 2018)", pts=5, enonce=r"""
-    __Extrait du bac S2 2018, exercice 3, question 3.1.__ Dans la course d'élan, l'athlète, partie sans vitesse initiale, parcourt $32\U{m}$ pour arriver au point A de la ligne d'envol avec une vitesse horizontale $\vec v_1$ de norme $8\ms$. Le mouvement est supposé rectiligne uniformément varié pour cette phase.
-
-    1. Évaluer l'accélération du mouvement et le temps mis par l'athlète sur ce parcours. (question du bac)
-    2. Écrire l'équation horaire $x(t)$ de la course d'élan (origine au départ).
-    3. Quelle est la vitesse de l'athlète à mi-parcours ($16\U{m}$) ? Pourquoi n'est-elle pas égale à $4\ms$ ?
-    """, corr=r"""
-    1. $v_1^2-0=2a\,d$, donc $a=\dfrac{64}{64}=1\mss$ ; $v_1=a\,t$, donc $t=8\U{s}$. **(2 pts)**
-    2. $x=\frac12t^2$ (SI). **(1 pt)**
-    3. $v^2=2\times1\times16=32$, donc $v\approx5{,}66\ms$. La vitesse n'est pas proportionnelle à la distance : elle l'est au temps ($v=at$), et l'athlète met plus de temps sur la première moitié. **(2 pts)**
-    """),
-    dict(titre="Le lancer du poids (bac 2012)", pts=7, enonce=r"""
-    __Extrait du bac S2 2012, exercice 3, partie 3.1 (figures redessinées).__ L'origine des dates est prise au moment du lancer. L'entraîneur a obtenu les graphes des composantes horizontale $v_x$ et verticale $v_y$ du vecteur vitesse du centre d'inertie du boulet.
-
-    [[graphe:bac12-vx]]
-
-    [[graphe:bac12-vy]]
-
-    1. Avec la figure 1, déterminer la composante $v_{0x}$ à $t=0$ et la nature du mouvement de la projection du centre d'inertie sur l'axe $Ox$.
-    2. Avec la figure 2, déterminer la composante $v_{0y}$ à $t=0$ et la nature du mouvement de la projection sur l'axe $Oy$. Calculer l'accélération $a_y$.
-    3. Exprimer $v_{0x}$ et $v_{0y}$ en fonction de la valeur $V_0$ du vecteur vitesse initiale et de l'angle $\alpha$ qu'il fait avec l'horizontale.
-    4. En déduire $V_0$ et $\alpha$.
-    """, corr=r"""
-    1. $v_{0x}=10\ms$ ; $v_x$ est constante : mouvement **rectiligne uniforme** sur $Ox$. **(1,5 pt)**
-    2. $v_{0y}=9\ms$ ; $v_y$ est une fonction affine décroissante du temps : mouvement **rectiligne uniformément varié** (décéléré puis accéléré). Pente : $a_y=\dfrac{0-9}{0{,}92}\approx-9{,}8\mss$. **(2 pts)**
-    3. $v_{0x}=V_0\cos\alpha$ et $v_{0y}=V_0\sin\alpha$. **(1,5 pt)**
-    4. $V_0=\sqrt{10^2+9^2}\approx13{,}5\ms$ ; $\tan\alpha=\dfrac{9}{10}$, donc $\alpha\approx42°$ (valeurs du corrigé officiel). **(2 pts)**
-    """),
-])
+from contenu.p1f import FINALS  # noqa: E402
